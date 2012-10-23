@@ -47,11 +47,6 @@ tbody tr:nth-child(odd) td {
 tbody td {
     background-color: white;
 }
-
-#output {
-    border: 1px solid black;
-    padding: 20px;
-}
 </style>
 <script>
 /*jslint sloppy:true browser:true */
@@ -229,15 +224,13 @@ function parse(delay) {
 
         document.getElementById('tokens').value = '';
 
-        var pre = $("#output");
-
         try {
 
             result = esprima.parse(code, options);
 
             // Code gen
-            pre.html(escodegen.generate(result));
-
+            var generated = escodegen.generate(result);
+            outputcode.setValue(generated);
             str = JSON.stringify(result, adjustRegexLiteral, 4);
             options.tokens = true;
             document.getElementById('tokens').value = JSON.stringify(esprima.parse(code, options).tokens,
@@ -248,7 +241,7 @@ function parse(delay) {
             str = e.name + ': ' + e.message;
 
             // Code gen
-            pre.html(str);
+            outputcode.setValue(str);
         }
 
         el = document.getElementById('syntax');
@@ -321,7 +314,7 @@ var answer = 6 * 7;
     <li id="tab_code">
     <h3><a id="show_code">Escodegen</a></h3>
     <div class="tab">
-        <pre id="output"></pre>
+        <textarea id="outputcode" rows="20" readonly></textarea>
     </div>
     </li>
 </ul>
@@ -424,6 +417,18 @@ try {
         matchBrackets: true,
         onChange: parse
     });
+
+    var outputcodeE = document.getElementById('outputcode');
+
+    window.outputcode = CodeMirror(function(elt) {
+      outputcodeE.parentNode.replaceChild(elt, outputcodeE);
+    }, {
+        mode: 'javascript',
+        lineNumbers: true,
+        readOnly: true
+    });
+
+
 
     (function () {
         'use strict';
