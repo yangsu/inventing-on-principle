@@ -7,6 +7,7 @@
 <script src="javascript/platform.js"></script>
 <script src="javascript/checkenv.js"></script>
 <script src="javascript/esprima.js"></script>
+<script src="javascript/escodegen.js"></script>
 <script src="javascript/json2.js"></script>
 <script src="javascript/codemirror/lib/codemirror.js"></script>
 <script src="javascript/codemirror/mode/javascript/javascript.js"></script>
@@ -45,6 +46,11 @@ tbody tr:nth-child(odd) td {
 
 tbody td {
     background-color: white;
+}
+
+#output {
+    border: 1px solid black;
+    padding: 20px;
 }
 </style>
 <script>
@@ -223,9 +229,15 @@ function parse(delay) {
 
         document.getElementById('tokens').value = '';
 
+        var pre = $("#output");
+
         try {
 
             result = esprima.parse(code, options);
+
+            // Code gen
+            pre.html(escodegen.generate(result));
+
             str = JSON.stringify(result, adjustRegexLiteral, 4);
             options.tokens = true;
             document.getElementById('tokens').value = JSON.stringify(esprima.parse(code, options).tokens,
@@ -234,6 +246,9 @@ function parse(delay) {
         } catch (e) {
             updateTree();
             str = e.name + ': ' + e.message;
+
+            // Code gen
+            pre.html(str);
         }
 
         el = document.getElementById('syntax');
@@ -303,6 +318,12 @@ var answer = 6 * 7;
         <input id="url" type="text" readonly onclick="this.select()">
     </div>
     </li>
+    <li id="tab_code">
+    <h3><a id="show_code">Escodegen</a></h3>
+    <div class="tab">
+        <pre id="output"></pre>
+    </div>
+    </li>
 </ul>
 </div>
 
@@ -338,6 +359,7 @@ window.onload = function () {
         id('tab_syntax').className = '';
         id('tab_tokens').className = '';
         id('tab_url').className = '';
+        id('tab_code').className = '';
         parse(1);
     };
 
@@ -346,6 +368,7 @@ window.onload = function () {
         id('tab_syntax').className = 'active';
         id('tab_tokens').className = '';
         id('tab_url').className = '';
+        id('tab_code').className = '';
     };
 
     id('show_tokens').onclick = function () {
@@ -353,6 +376,7 @@ window.onload = function () {
         id('tab_syntax').className = '';
         id('tab_tokens').className = 'active';
         id('tab_url').className = '';
+        id('tab_code').className = '';
     };
 
     id('show_url').onclick = function () {
@@ -360,6 +384,15 @@ window.onload = function () {
         id('tab_syntax').className = '';
         id('tab_tokens').className = '';
         id('tab_url').className = 'active';
+        id('tab_code').className = '';
+    };
+
+    id('show_code').onclick = function () {
+        id('tab_tree').className = '';
+        id('tab_syntax').className = '';
+        id('tab_tokens').className = '';
+        id('tab_url').className = '';
+        id('tab_code').className = 'active';
     };
 };
 </script>
