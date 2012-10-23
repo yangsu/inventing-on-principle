@@ -1,0 +1,1 @@
+https://github.com/Constellation/escodegen/blob/master/escodegen.js
