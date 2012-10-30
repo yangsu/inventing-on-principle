@@ -219,40 +219,37 @@ $(document).ready(function(){
     }, delay || 811);
   }
 
-  window.onload = function () {
-    var id, el;
-    try {
-      parse(1);
-    } catch (e) {}
+  try {
+    parse(1);
+  } catch (e) {}
 
-    $('#show_tree, #show_syntax, #show_tokens, #show_url, #show_code').click(function (e) {
-      $('#tab_tree, #tab_syntax, #tab_tokens, #tab_url, #tab_code').removeClass('active');
-      $(e.target).parents('li').addClass('active');
+  $('#show_tree, #show_syntax, #show_tokens, #show_url, #show_code').click(function (e) {
+    $('#tab_tree, #tab_syntax, #tab_tokens, #tab_url, #tab_code').removeClass('active');
+    $(e.target).parents('li').addClass('active');
+  });
+
+  try {
+    function quickParse() {
+      parse(1);
+    }
+
+    $('#comment, #raw, #range, #loc, #tokens').bind('change', quickParse);
+
+    window.checkEnv();
+
+    window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+      lineNumbers: true,
+      matchBrackets: true,
+      onChange: parse
     });
 
-    try {
-      function quickParse() {
-        parse(1);
-      }
+    window.outputcode = CodeMirror.fromTextArea(document.getElementById('outputcode'), {
+      mode: 'javascript',
+      lineNumbers: true,
+      readOnly: true
+    });
 
-      $('#comment, #raw, #range, #loc, #tokens').bind('change', quickParse);
-
-      window.checkEnv();
-
-      window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true,
-        matchBrackets: true,
-        onChange: parse
-      });
-
-      window.outputcode = CodeMirror.fromTextArea(document.getElementById('outputcode'), {
-        mode: 'javascript',
-        lineNumbers: true,
-        readOnly: true
-      });
-
-    } catch (e) {
-      console.log('CodeMirror failed to initialize');
-    }
-  };
+  } catch (e) {
+    console.log('CodeMirror failed to initialize');
+  }
 });
