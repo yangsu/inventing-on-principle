@@ -279,8 +279,8 @@
                     outputcode.setValue(generated);
                     str = JSON.stringify(result, adjustRegexLiteral, 4);
                     options.tokens = true;
-                    document.getElementById('tokens').value = JSON.stringify(esprima.parse(code, options).tokens,
-                        adjustRegexLiteral, 4);
+                    var tokens = esprima.parse(code, options).tokens;
+                    $('#tokens').val(JSON.stringify(tokens, adjustRegexLiteral, 4));
                     updateTree(result);
                 } catch (e) {
                     updateTree();
@@ -290,11 +290,8 @@
                     outputcode.setValue(str);
                 }
 
-                el = document.getElementById('syntax');
-                el.value = str;
-
-                el = document.getElementById('url');
-                el.value = location.protocol + "//" + location.host + location.pathname + '?code=' + encodeURIComponent(code);
+                $('#syntax').val(str);
+                $('#url').val(location.protocol + "//" + location.host + location.pathname + '?code=' + encodeURIComponent(code));
 
                 parseId = undefined;
             }, delay || 811);
