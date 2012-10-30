@@ -12,10 +12,6 @@ window.inventingOnPrinciple = {
 $(document).ready(function(){
   inventingOnPrinciple.init();
 
-  /*jslint sloppy:true browser:true */
-  /*global esprima:true, YAHOO:true */
-  var parseId;
-
   function updateTree(syntax) {
 
     if (window.tree) {
@@ -27,21 +23,18 @@ $(document).ready(function(){
       return;
     }
 
-    if (document.getElementById('tab_tree').className !== 'active') {
+    if (!$('#tab_tree').hasClass('active')) {
       return;
     }
 
     window.tree = new YAHOO.widget.TreeView("treeview");
-    document.getElementById('collapse').onclick = function () {
+    $('#collapse').click(function () {
       window.tree.collapseAll();
-    };
-    document.getElementById('expand').onclick = function () {
-      window.tree.expandAll();
-    };
+    });
 
-    function isArray(o) {
-      return (typeof Array.isArray === 'function') ? Array.isArray(o) : Object.prototype.toString.apply(o) === '[object Array]';
-    }
+    $('#expand').click(function () {
+      window.tree.expandAll();
+    });
 
     function convert(name, node) {
       var result, i, key, value, child;
@@ -52,14 +45,12 @@ $(document).ready(function(){
           type: 'Text',
           label: name + ': ' + node
         };
-
       case 'number':
       case 'boolean':
         return {
           type: 'Text',
           label: name + ': ' + String(node)
         };
-
       case 'object':
         if (!node) {
           return {
@@ -79,7 +70,7 @@ $(document).ready(function(){
           expanded: true,
           children: []
         };
-        if (isArray(node)) {
+        if (_.isArray(node)) {
           if (node.length === 2 && name === 'range') {
             result.label = name + ': [' + node[0] + ', ' + node[1] + ']';
           } else {
@@ -88,7 +79,7 @@ $(document).ready(function(){
               key = String(i);
               value = node[i];
               child = convert(key, value);
-              if (isArray(child.children) && child.children.length === 1) {
+              if (_.isArray(child.children) && child.children.length === 1) {
                 result.children.push(child.children[0]);
               } else {
                 result.children.push(convert(key, value));
@@ -104,21 +95,13 @@ $(document).ready(function(){
               children: [],
               data: node
             });
-            for (key in node) {
-              if (Object.prototype.hasOwnProperty.call(node, key)) {
-                if (key !== 'type') {
-                  value = node[key];
-                  result.children[0].children.push(convert(key, value));
-                }
-              }
-            }
+            _.each(node, function(value, key) {
+              result.children[0].children.push(convert(key, value));
+            });
           } else {
-            for (key in node) {
-              if (Object.prototype.hasOwnProperty.call(node, key)) {
-                value = node[key];
-                result.children.push(convert(key, value));
-              }
-            }
+            _.each(node, function(value, key) {
+              result.children.push(convert(key, value));
+            });
           }
         }
         return result;
@@ -158,82 +141,70 @@ $(document).ready(function(){
     window.tree.render();
   }
 
-  function parse(delay) {
-    if (parseId) {
-      window.clearTimeout(parseId);
+  var parse = _.throttle(function () {
+    var code, options, result, el, str;
+
+    // Special handling for regular expression literal since we need to
+    // convert it to a string literal, otherwise it will be decoded
+    // as object "{}" and the regular expression would be lost.
+
+    function adjustRegexLiteral(key, value) {
+      if (key === 'value' && value instanceof RegExp) {
+        value = value.toString();
+      }
+      return value;
     }
 
-    parseId = window.setTimeout(function () {
-      var code, options, result, el, str;
+    if (typeof window.editor === 'undefined') {
+      code = document.getElementById('code').value;
+    } else {
+      code = window.editor.getValue();
+    }
+    options = {
+      comment: document.getElementById('comment').checked,
+      raw: document.getElementById('raw').checked,
+      range: document.getElementById('range').checked,
+      loc: document.getElementById('loc').checked
+    };
 
-      // Special handling for regular expression literal since we need to
-      // convert it to a string literal, otherwise it will be decoded
-      // as object "{}" and the regular expression would be lost.
+    document.getElementById('tokens').value = '';
 
+    try {
 
-      function adjustRegexLiteral(key, value) {
-        if (key === 'value' && value instanceof RegExp) {
-          value = value.toString();
-        }
-        return value;
-      }
+      result = esprima.parse(code, options);
 
-      if (typeof window.editor === 'undefined') {
-        code = document.getElementById('code').value;
-      } else {
-        code = window.editor.getValue();
-      }
-      options = {
-        comment: document.getElementById('comment').checked,
-        raw: document.getElementById('raw').checked,
-        range: document.getElementById('range').checked,
-        loc: document.getElementById('loc').checked
-      };
+      var generated = escodegen.generate(result);
+      outputcode.setValue(generated);
 
-      document.getElementById('tokens').value = '';
+      str = JSON.stringify(result, adjustRegexLiteral, 4);
 
-      try {
+      options.tokens = true;
 
-        result = esprima.parse(code, options);
+      var tokens = esprima.parse(code, options).tokens;
+      $('#tokens').val(JSON.stringify(tokens, adjustRegexLiteral, 4));
 
-        // Code gen
-        var generated = escodegen.generate(result);
-        outputcode.setValue(generated);
-        str = JSON.stringify(result, adjustRegexLiteral, 4);
-        options.tokens = true;
-        var tokens = esprima.parse(code, options).tokens;
-        $('#tokens').val(JSON.stringify(tokens, adjustRegexLiteral, 4));
-        updateTree(result);
-      } catch (e) {
-        updateTree();
-        str = e.name + ': ' + e.message;
+      updateTree(result);
+    } catch (e) {
+      updateTree();
 
-        // Code gen
-        outputcode.setValue(str);
-      }
+      str = e.name + ': ' + e.message;
 
-      $('#syntax').val(str);
-      $('#url').val(location.protocol + "//" + location.host + location.pathname + '?code=' + encodeURIComponent(code));
+      // Code gen
+      outputcode.setValue(str);
+    }
 
-      parseId = undefined;
-    }, delay || 811);
-  }
-
-  try {
-    parse(1);
-  } catch (e) {}
+    $('#syntax').val(str);
+    $('#url').val(location.protocol + "//" + location.host + location.pathname + '?code=' + encodeURIComponent(code));
+  }, 10);
 
   $('#show_tree, #show_syntax, #show_tokens, #show_url, #show_code').click(function (e) {
     $('#tab_tree, #tab_syntax, #tab_tokens, #tab_url, #tab_code').removeClass('active');
     $(e.target).parents('li').addClass('active');
+    parse();
   });
 
   try {
-    function quickParse() {
-      parse(1);
-    }
-
-    $('#comment, #raw, #range, #loc, #tokens').bind('change', quickParse);
+    $('#comment, #raw, #range, #loc, #tokens').bind('change', parse);
 
     window.checkEnv();
 
@@ -252,4 +223,6 @@ $(document).ready(function(){
   } catch (e) {
     console.log('CodeMirror failed to initialize');
   }
+  parse();
+
 });
