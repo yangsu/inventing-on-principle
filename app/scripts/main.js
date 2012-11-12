@@ -144,17 +144,6 @@ $(document).ready(function(){
   var parse = _.throttle(function () {
     var code, options, result, el, str;
 
-    // Special handling for regular expression literal since we need to
-    // convert it to a string literal, otherwise it will be decoded
-    // as object "{}" and the regular expression would be lost.
-
-    function adjustRegexLiteral(key, value) {
-      if (key === 'value' && value instanceof RegExp) {
-        value = value.toString();
-      }
-      return value;
-    }
-
     if (typeof window.editor === 'undefined') {
       code = document.getElementById('code').value;
     } else {
@@ -176,12 +165,12 @@ $(document).ready(function(){
       var generated = escodegen.generate(result);
       outputcode.setValue(generated);
 
-      str = JSON.stringify(result, adjustRegexLiteral, 4);
+      str = JSON.stringify(result, window.util.adjustRegexLiteral, 4);
 
       options.tokens = true;
 
       var tokens = esprima.parse(code, options).tokens;
-      $('#tokens').val(JSON.stringify(tokens, adjustRegexLiteral, 4));
+      $('#tokens').val(JSON.stringify(tokens, window.util.adjustRegexLiteral, 4));
 
       updateTree(result);
     } catch (e) {
