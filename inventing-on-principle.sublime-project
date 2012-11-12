@@ -1,0 +1,19 @@
+{
+  "folders":
+  [
+    {
+      "path": "app",
+      "file_exclude_patterns": [".htaccess", "*.ico", ".buildignore", "404.html"],
+      "folder_exclude_patterns": ["vendor"]
+    },
+    {
+      "path": ".",
+      "file_exclude_patterns": ["*.sublime-workspace", ".gitattributes", ".npmignore"],
+      "folder_exclude_patterns": ["app"]
+    }
+  ],
+  "settings": {
+      "tab_size": 2,
+      "translate_tabs_to_spaces": true
+  }
+}
