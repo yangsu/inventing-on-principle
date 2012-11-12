@@ -32,7 +32,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
   switchTab: function (e) {
     this.$('li').removeClass('active');
     $(e.currentTarget).parents('li').addClass('active');
-    this.parse();
+    this.render();
   },
   parse: function () {
     var text, options;
@@ -53,28 +53,27 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
   renderUrl: function () {
     if (this.$urlTab.hasClass('active')) {
       this.$url.val(location.protocol + "//" + location.host + location.pathname + '?code=' + encodeURIComponent(this.model.text()));
-      console.log('renderUrl');
     }
   },
   renderTokens: function () {
     if (this.$tokensTab.hasClass('active')) {
       this.$tokens.val(this.model.tokens());
-      console.log('renderTokens');
     }
   },
   renderSyntax: function () {
     if (this.$syntaxTab.hasClass('active')) {
       this.$syntax.val(this.model.ast());
-      console.log('renderSyntax');
     }
   },
   renderGeneratedCode: function () {
     if (this.$codeTab.hasClass('active')) {
       inventingOnPrinciple.outputcode.setValue(this.model.generatedCode());
-      console.log('renderGeneratedCode');
     }
   },
   render: function () {
-    console.log('render');
+    this.renderUrl();
+    this.renderTokens();
+    this.renderSyntax();
+    this.renderGeneratedCode();
   }
 });
