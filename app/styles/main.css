@@ -1,11 +1,4 @@
 /* Will be compiled down to a single stylesheet with your sass files */
-<style>
-.ygtvfocus .ygtvlabel,
-.ygtvfocus .ygtvlabel:link,
-.ygtvfocus .ygtvlabel:visited,
-.ygtvfocus .ygtvlabel:hover {
-    background-color: #eee;
-}
 
 .highlight {
     background-color: #add8e6;

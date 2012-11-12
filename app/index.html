@@ -10,23 +10,13 @@
         <meta name="description" content=""/>
         <meta name="viewport" content="width=device-width"/>
         <link rel="stylesheet" type="text/css" href="scripts/vendor/codemirror/lib/codemirror.css"/>
-        <link rel="stylesheet" type="text/css" href="scripts/vendor/yui/treeview.css"/>
         <link rel="stylesheet" type="text/css" href="scripts/vendor/tangle/TangleKit/TangleKit.css">
         <link rel="stylesheet" type="text/css" href="styles/style.css"/>
         <link rel="stylesheet" type="text/css" href="styles/parse.css"/>
         <link rel="stylesheet" href="styles/main.css"/>
     </head>
-    <body class="yui-skin-sam">
+    <body>
         <div id="main" class="container">
-            <div class="topbar">
-                <ul class="nav">
-                    <li><a href="index.html">&larr; Home</a></li>
-                    <li><a href="http://github.com/ariya/esprima">Code</a></li>
-                    <li><a href="doc/index.html">Documentation</a></li>
-                    <li><a href="http://issues.esprima.org">Issues</a></li>
-                </ul>
-            </div>
-
             <p id="calorieCalculator">
                 When you eat<span class="TKAdjustableNumber" data-var="cookies">cookies</span>,
                 you consume <b data-var="calories">calories</b>. That's<span data-var="dailyPercent" data-format="%.2f">%</span>of your recommended daily calories.
@@ -68,15 +58,6 @@
                         <textarea id="tokens" rows="20" readonly></textarea>
                     </div>
                 </li>
-                <li id="tab_tree">
-                    <h3><a id="show_tree" class="tab_link">Tree</a></h3>
-                    <div class="tab">
-                        <span style="margin-left: 500px;">
-                            <input type="button" id="expand" value="Expand All">
-                            <input type="button" id="collapse" value="Collapse All"></span>
-                        <div id="treeview"></div>
-                    </div>
-                </li>
                 <li id="tab_url">
                     <h3><a id="show_url" class="tab_link">URL</a></h3>
                     <div class="tab"><input id="url" type="text" readonly onclick="this.select()"></div>
@@ -107,8 +88,6 @@
         <script src="scripts/vendor/backbone-min.js"></script>
         <script src="scripts/vendor/codemirror/lib/codemirror.js"></script>
         <script src="scripts/vendor/codemirror/mode/javascript/javascript.js"></script>
-        <script src="scripts/vendor/yui/yahoo-dom-event.js"></script>
-        <script src="scripts/vendor/yui/treeview-min.js"></script>
         <script src="scripts/vendor/tangle/Tangle.js"></script>
         <script src="scripts/helpers/tangleWrapper.js"></script>
         <script src="scripts/helpers/utils.js"></script>
