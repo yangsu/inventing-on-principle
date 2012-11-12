@@ -12,7 +12,6 @@
         <link rel="stylesheet" href="scripts/vendor/codemirror/lib/codemirror.css"/>
         <link rel="stylesheet" href="scripts/vendor/tangle/TangleKit/TangleKit.css">
         <link rel="stylesheet" href="styles/style.css"/>
-        <link rel="stylesheet" href="styles/parse.css"/>
     </head>
     <body>
         <div id="main" class="container">
@@ -41,7 +40,16 @@
 
             <div class="tabs right">
             <ul>
-                <li id="tab_syntax" class="active">
+                <li id="tab_state" class="active">
+                    <h3><a id="show_state" class="tab_link">State</a></h3>
+                    <div class="tab">
+                        <article>
+                            <div class="header"><strong>Variables</strong></div>
+                            <ul id="vars"></ul>
+                        </article>
+                    </div>
+                </li>
+                <li id="tab_syntax">
                     <h3><a id="show_syntax" class="tab_link">Syntax</a></h3>
                     <div class="tab">
                         <pre id="syntax" class="pretext"></pre>
@@ -53,15 +61,15 @@
                         <pre id="tokens" class="pretext"></pre>
                     </div>
                 </li>
-                <li id="tab_url">
-                    <h3><a id="show_url" class="tab_link">URL</a></h3>
-                    <div class="tab"><input id="url" type="text" readonly onclick="this.select()"></div>
-                </li>
                 <li id="tab_code">
                     <h3><a id="show_code" class="tab_link">Escodegen</a></h3>
                     <div class="tab">
                         <textarea id="outputcode" rows="40" readonly></textarea>
                     </div>
+                </li>
+                <li id="tab_url">
+                    <h3><a id="show_url" class="tab_link">URL</a></h3>
+                    <div class="tab"><input id="url" type="text" readonly onclick="this.select()"></div>
                 </li>
             </ul>
             </div>
