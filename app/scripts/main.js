@@ -225,7 +225,7 @@ $(document).ready(function(){
   }
   parse();
 
-  genTangle('calorieCalculator', {
+  genTangle('#calorieCalculator', {
     cookies : 3,
     caloriesPerCookie : 50,
     dailyCalories : 2100

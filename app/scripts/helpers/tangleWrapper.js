@@ -3,7 +3,7 @@
 var passthrough = function (value) { return value; };
 
 window.genTangle = function (selector, defaults, update) {
-  var tangle = new Tangle (document.getElementById(selector), {
+  var tangle = new Tangle ($(selector).get(0), {
     initialize: function () {
       var self = this;
       _.each(defaults, function (value, key) {
