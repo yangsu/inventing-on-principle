@@ -4,12 +4,25 @@ window.inventingOnPrinciple = {
   Collections: {},
   Views: {},
   Routers: {},
+  Templates: {},
   init: function() {
     this.model = new inventingOnPrinciple.Models.ApplicationModel();
     this.view = new inventingOnPrinciple.Views.ApplicationView({
       el: '#main',
       model: this.model
     });
+  },
+  getTemplate: function (templateName) {
+    var path = 'scripts/templates/' + templateName + ".ejs";
+
+    return function (context) {
+      if (!inventingOnPrinciple.Templates[path]) {
+        $.ajax({ url: path, async: false }).then(function(contents) {
+          inventingOnPrinciple.Templates[path] = _.template(contents);
+        });
+      }
+      return inventingOnPrinciple.Templates[path](context);
+    };
   }
 };
 
