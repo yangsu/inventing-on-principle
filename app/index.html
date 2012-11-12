@@ -13,49 +13,47 @@
         <link rel="stylesheet" href="scripts/vendor/tangle/TangleKit/TangleKit.css">
         <link rel="stylesheet" href="styles/style.css"/>
         <link rel="stylesheet" href="styles/parse.css"/>
-        <link rel="stylesheet" href="styles/main.css"/>
     </head>
     <body>
         <div id="main" class="container">
-            <p id="calorieCalculator">
-                When you eat<span class="TKAdjustableNumber" data-var="cookies">cookies</span>,
-                you consume <b data-var="calories">calories</b>. That's<span data-var="dailyPercent" data-format="%.2f">%</span>of your recommended daily calories.
-            </p>
+            <div class="left">
+                <h1>Parser <small>produces syntax tree</small></h1>
 
-            <h1>Parser <small>produces syntax tree</small></h1>
+                <p>Type ECMAScript code:</p>
 
-            <p>Esprima version<span id="version"></span>.</p>
+                <div>
+                    <textarea id="code" autofocus="autofocus" cols="70" rows="15" spellcheck="false"></textarea>
+                </div>
 
-            <p>Type ECMAScript code:</p>
+                <p id="codemirror" align="right">
+                    <small>The above code editor is based on<a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small>
+                </p>
 
-            <div>
-                <textarea id="code" autofocus="autofocus" cols="70" rows="15" spellcheck="false"></textarea>
+                <div class="options">
+                    <p>
+                        <label><input type="checkbox" id="raw">Preserve raw value of literals</label>
+                        <label><input type="checkbox" id="comment">Include comments</label>
+                    </p>
+                    <p>
+                        Syntax node location info (start, end):
+                        <label><input type="checkbox" id="range">Index-based range</label>
+                        <label><input type="checkbox" id="loc">Line and column-based</label>
+                    </p>
+                </div>
             </div>
 
-            <p id="codemirror" align="right">
-                <small>The above code editor is based on<a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small>
-            </p>
-            <p>
-                <label><input type="checkbox" id="raw">Preserve raw value of literals</label>
-                <label><input type="checkbox" id="comment">Include comments</label>
-            </p>
-            <p>
-                Syntax node location info (start, end):
-                <label><input type="checkbox" id="range">Index-based range</label>
-                <label><input type="checkbox" id="loc">Line and column-based</label>
-            </p>
-            <div class="tabs">
+            <div class="tabs right">
             <ul>
                 <li id="tab_syntax" class="active">
                     <h3><a id="show_syntax" class="tab_link">Syntax</a></h3>
                     <div class="tab">
-                        <textarea class="code" id="syntax" rows="20" readonly></textarea>
+                        <pre id="syntax" class="pretext"></pre>
                     </div>
                 </li>
                 <li id="tab_tokens">
                     <h3><a id="show_tokens" class="tab_link">Tokens</a></h3>
                     <div class="tab">
-                        <textarea id="tokens" rows="20" readonly></textarea>
+                        <pre id="tokens" class="pretext"></pre>
                     </div>
                 </li>
                 <li id="tab_url">
@@ -65,7 +63,7 @@
                 <li id="tab_code">
                     <h3><a id="show_code" class="tab_link">Escodegen</a></h3>
                     <div class="tab">
-                        <textarea id="outputcode" rows="20" readonly></textarea>
+                        <textarea id="outputcode" rows="40" readonly></textarea>
                     </div>
                 </li>
             </ul>

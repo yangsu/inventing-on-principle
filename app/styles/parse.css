@@ -1,12 +1,8 @@
-.tabs textarea {
-    padding: 7px 0px 7px 7px;
-}
-
 #url {
     font-family: Inconsolata, Monaco, Consolas, "Lucida Console", monospace;
     font-size: 13px;
     color: #555;
-    width: 80%;
+    width: 100%;
     border-width: 1px;
     border-style: solid;
     border-color: #aaa;
@@ -19,6 +15,9 @@
     display: block;
     margin-top: 30px;
     height: 1px;
+}
+
+.tabs textarea {
 }
 
 .tabs ul, .tabs li {
@@ -76,18 +75,12 @@
     left: 0;
     top: 29px;
     right: 0;
-    border-top: 1px solid #bbb;
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+    border-color: #bbb;
     z-index: 1;
-    padding: 25px 60px 50px 5px;
 }
 
-.pages div {
-    display: none;
-}
-
-.pages div.active {
-    display: block;
-}
 
 .tabs .active .tab {
     display: block;

@@ -14,6 +14,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
     this.$syntax = $('#syntax');
     this.$url = $('#url');
 
+    // Tabs
     this.$syntaxTab = $('#tab_syntax');
     this.$tokensTab = $('#tab_tokens');
     this.$urlTab = $('#tab_url');
@@ -57,12 +58,12 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
   },
   renderTokens: function () {
     if (this.$tokensTab.hasClass('active')) {
-      this.$tokens.val(this.model.tokens());
+      this.$tokens.html(this.model.tokens());
     }
   },
   renderSyntax: function () {
     if (this.$syntaxTab.hasClass('active')) {
-      this.$syntax.val(this.model.ast());
+      this.$syntax.html(this.model.ast());
     }
   },
   renderGeneratedCode: function () {

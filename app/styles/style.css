@@ -17,7 +17,7 @@ p {
 }
 
 ul {
-    padding-left: 20px;
+    padding-left: 0;
 }
 
 li {
@@ -57,9 +57,42 @@ h4 {
 }
 
 .code {
-    border-left: 3px solid #ddd;
-    margin: 5px 3px 8px 15px;
-    padding: 0 0 0 8px;
+
+}
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 960px;
+}
+
+textarea {
+    display: block;
+    font-family: Inconsolata, Monaco, Consolas, "Lucida Console", monospace;
+    font-size: 13px;
+    color: #555;
+    width: 97%;
+    padding: 7px;
+    margin: 0 auto;
+    overflow: auto;
+    border: 1px solid #bbb;
+}
+
+.highlight {
+    background-color: #add8e6;
+    background-color: rgba(173, 216, 230, 0.6);
+}
+
+.left, .right {
+  width: 50%;
+  position: relative;
+}
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
 }
 
 .CodeMirror {
@@ -71,65 +104,9 @@ h4 {
     height: 200px;
 }
 
-.container {
-    margin-left: auto;
-    margin-right: auto;
-    width: 960px;
+.pretext {
+  font-size: 12px;
+  line-height: 16px;
+  height: 300px;
+  overflow: auto;
 }
-
-.container .main {
-    width: 540px;
-    display: inline;
-    float: left;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-.container .sidebar {
-    width: 350px;
-    display: inline;
-    float: left;
-    margin-left: 30px;
-    margin-right: 10px;
-}
-
-.footer {
-    margin-top: 25px;
-    margin-bottom: 25px;
-    color: #555;
-    text-align: center;
-}
-
-textarea {
-    font-family: Inconsolata, Monaco, Consolas, "Lucida Console", monospace;
-    font-size: 13px;
-    color: #555;
-    width: 80%;
-    padding: 7px;
-    overflow: auto;
-}
-
-table {
-    width: 80%;
-    border: 1px solid #ccc;
-    border-spacing: 0;
-}
-
-thead {
-    font-weight: bold;
-}
-
-table th, table td {
-    border-left: 1px solid #ccc;
-    padding: 3px 3px 10px 3px;
-    text-align: center;
-}
-
-table td {
-    border-top: 1px solid #ccc;
-}
-
-tbody tr:nth-child(odd) td {
-    background-color: #eee;
-}
-

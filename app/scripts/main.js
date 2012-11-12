@@ -38,13 +38,4 @@ $(document).ready(function(){
   }
 
   inventingOnPrinciple.view.parse();
-
-  genTangle('#calorieCalculator', {
-    cookies : 3,
-    caloriesPerCookie : 50,
-    dailyCalories : 2100
-  }, function () {
-    this.calories = this.cookies * this.caloriesPerCookie;
-    this.dailyPercent = 100 * this.calories / this.dailyCalories;
-  });
 });
