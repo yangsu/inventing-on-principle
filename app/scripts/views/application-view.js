@@ -43,10 +43,10 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
       text = inventingOnPrinciple.codeEditor.getValue();
     }
     options = {
-      comment: this.$comment.attr('checked'),
-      raw: this.$raw.attr('checked'),
-      range: this.$range.attr('checked'),
-      loc: this.$loc.attr('checked')
+      comment: !!this.$comment.attr('checked'),
+      raw: !!this.$raw.attr('checked'),
+      range: !!this.$range.attr('checked'),
+      loc: !!this.$loc.attr('checked')
     };
     this.model.parse(text, options);
   },
