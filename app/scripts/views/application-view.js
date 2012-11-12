@@ -13,17 +13,20 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
     this.$tokens = $('#tokens');
     this.$syntax = $('#syntax');
     this.$url = $('#url');
+    this.$vars = $('#vars');
 
     // Tabs
     this.$syntaxTab = $('#tab_syntax');
     this.$tokensTab = $('#tab_tokens');
     this.$urlTab = $('#tab_url');
     this.$codeTab = $('#tab_code');
+    this.$stateTab = $('#tab_state');
 
     this.model
       .on('change:text', this.renderUrl, this)
       .on('change:tokens', this.renderTokens, this)
       .on('change:ast', this.renderSyntax, this)
+      .on('change:vars', this.renderVars, this)
       .on('change:generatedCode', this.renderGeneratedCode, this);
   },
   events: {
@@ -71,10 +74,22 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
       inventingOnPrinciple.outputcode.setValue(this.model.generatedCode());
     }
   },
+  renderVars: function () {
+    var self = this;
+    self.$vars.empty();
+    console.log(self.model.get('vars').toVars());
+    _.each(self.model.get('vars').toVars(), function (varDec) {
+      var li = $('<li></li>')
+        .append($('<strong></strong>').html(varDec.name))
+        .append($('<span></span>').html(varDec.init.name || varDec.init.value));
+      self.$vars.append(li);
+    });
+  },
   render: function () {
     this.renderUrl();
     this.renderTokens();
     this.renderSyntax();
     this.renderGeneratedCode();
+    this.renderVars();
   }
 });

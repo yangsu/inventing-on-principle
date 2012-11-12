@@ -1,20 +1,48 @@
 inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
   initialize: function () {
+    this.set('vars', new inventingOnPrinciple.Collections.VariableCollection);
+  },
+  extractVars: function (ast) {
+    var self = this;
+    if (_.isArray(ast)) {
+      _.each(ast, function (item) {
+        self.extractVars(item);
+      })
+    } else if (_.isObject(ast)) {
+      if (ast.type == 'VariableDeclaration') {
+        self.get('vars').add(new inventingOnPrinciple.Models.VariableModel(ast), { silent: true });
+        console.log(self.get('vars'));
+      } else {
+        _.each(ast, function (item) {
+          if (_.isObject(item)) {
+            self.extractVars(item);
+          }
+        })
+      }
+    }
   },
   parse: function (text, options) {
-    var ast, generated;
+    var parsedResult, ast, generated, vars;
     try {
       options.tokens = true;
-      ast = window.esprima.parse(text, options);
-
+      parsedResult = window.esprima.parse(text, options);
+      ast = _.omit(parsedResult, 'tokens');
       this.set({
         text: text,
-        tokens: ast.tokens,
-        ast: _.omit(ast, 'tokens')
+        tokens: parsedResult.tokens,
+        ast: ast
       });
 
+      vars = this.get('vars');
+      vars.reset([], { silent: true });
+      this.extractVars(ast);
+
+      if (vars && vars.length) {
+        this.trigger('change:vars');
+      }
+
       try {
-        generated = window.escodegen.generate(ast);
+        generated = window.escodegen.generate(ast.body);
         this.set({
           generatedCode: generated
         });
