@@ -37,7 +37,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
   parse: function () {
     var text, options;
 
-    if (_inventingOnPrinciple.codeEditor === 'undefined') {
+    if (_.isUndefined(inventingOnPrinciple.codeEditor)) {
       text = this.$code.val();
     } else {
       text = inventingOnPrinciple.codeEditor.getValue();
