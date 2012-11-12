@@ -1,3 +1,6 @@
 [submodule "app/scripts/vendor/codemirror"]
 	path = app/scripts/vendor/codemirror
 	url = git://github.com/marijnh/CodeMirror.git
+[submodule "app/scripts/vendor/tangle"]
+	path = app/scripts/vendor/tangle
+	url = git@github.com:yangsu/Tangle.git
