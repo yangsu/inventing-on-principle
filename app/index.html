@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="styles/main.css"/>
     </head>
     <body class="yui-skin-sam">
-        <div class="container">
+        <div id="main" class="container">
             <div class="topbar">
                 <ul class="nav">
                     <li><a href="index.html">&larr; Home</a></li>
@@ -57,19 +57,19 @@
             <div class="tabs">
             <ul>
                 <li id="tab_syntax" class="active">
-                    <h3><a id="show_syntax">Syntax</a></h3>
+                    <h3><a id="show_syntax" class="tab_link">Syntax</a></h3>
                     <div class="tab">
                         <textarea class="code" id="syntax" rows="20" readonly></textarea>
                     </div>
                 </li>
                 <li id="tab_tokens">
-                    <h3><a id="show_tokens">Tokens</a></h3>
+                    <h3><a id="show_tokens" class="tab_link">Tokens</a></h3>
                     <div class="tab">
                         <textarea id="tokens" rows="20" readonly></textarea>
                     </div>
                 </li>
                 <li id="tab_tree">
-                    <h3><a id="show_tree">Tree</a></h3>
+                    <h3><a id="show_tree" class="tab_link">Tree</a></h3>
                     <div class="tab">
                         <span style="margin-left: 500px;">
                             <input type="button" id="expand" value="Expand All">
@@ -78,11 +78,11 @@
                     </div>
                 </li>
                 <li id="tab_url">
-                    <h3><a id="show_url">URL</a></h3>
+                    <h3><a id="show_url" class="tab_link">URL</a></h3>
                     <div class="tab"><input id="url" type="text" readonly onclick="this.select()"></div>
                 </li>
                 <li id="tab_code">
-                    <h3><a id="show_code">Escodegen</a></h3>
+                    <h3><a id="show_code" class="tab_link">Escodegen</a></h3>
                     <div class="tab">
                         <textarea id="outputcode" rows="20" readonly></textarea>
                     </div>
