@@ -27,7 +27,7 @@ $(document).ready(function(){
       }
     });
 
-    window.outputcode = CodeMirror.fromTextArea(document.getElementById('outputcode'), {
+    inventingOnPrinciple.outputcode = CodeMirror.fromTextArea(document.getElementById('outputcode'), {
       mode: 'javascript',
       lineNumbers: true,
       readOnly: true

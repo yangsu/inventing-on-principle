@@ -1,31 +1,46 @@
 inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
   initialize: function () {
+    // Input
     this.$code = $('#code');
+
+    // Options
     this.$comment = $('#comment');
     this.$loc = $('#loc');
     this.$range = $('#range');
     this.$raw = $('#raw');
+
+    // Output
     this.$tokens = $('#tokens');
-    this.$tab_link = $('.tab_link');
     this.$syntax = $('#syntax');
     this.$url = $('#url');
+
+    this.$syntaxTab = $('#tab_syntax');
+    this.$tokensTab = $('#tab_tokens');
+    this.$urlTab = $('#tab_url');
+    this.$codeTab = $('#tab_code');
+
+    this.model
+      .on('change:text', this.renderUrl, this)
+      .on('change:tokens', this.renderTokens, this)
+      .on('change:ast', this.renderSyntax, this)
+      .on('change:generatedCode', this.renderGeneratedCode, this);
   },
   events: {
     'change input[type=checkbox]': 'parse',
     'click .tab_link': 'switchTab'
   },
   switchTab: function (e) {
-    this.$tab_link.parents('li').removeClass('active');
+    this.$('li').removeClass('active');
     $(e.currentTarget).parents('li').addClass('active');
     this.parse();
   },
   parse: function () {
-    var code, options, result, el, str;
+    var text, options;
 
-    if (typeof inventingOnPrinciple.codeEditor === 'undefined') {
-      code = this.$code.val();
+    if (_inventingOnPrinciple.codeEditor === 'undefined') {
+      text = this.$code.val();
     } else {
-      code = inventingOnPrinciple.codeEditor.getValue();
+      text = inventingOnPrinciple.codeEditor.getValue();
     }
     options = {
       comment: this.$comment.attr('checked'),
@@ -33,31 +48,33 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
       range: this.$range.attr('checked'),
       loc: this.$loc.attr('checked')
     };
-
-    this.$tokens.val('');
-
-    try {
-
-      result = window.esprima.parse(code, options);
-
-      var generated = window.escodegen.generate(result);
-      window.outputcode.setValue(generated);
-
-      str = JSON.stringify(result, window.util.adjustRegexLiteral, 4);
-
-      options.tokens = true;
-
-      var tokens = window.esprima.parse(code, options).tokens;
-      this.$tokens.val(JSON.stringify(tokens, window.util.adjustRegexLiteral, 4));
-
-    } catch (e) {
-
-      str = e.name + ': ' + e.message;
-
-      window.outputcode.setValue(str);
+    this.model.parse(text, options);
+  },
+  renderUrl: function () {
+    if (this.$urlTab.hasClass('active')) {
+      this.$url.val(location.protocol + "//" + location.host + location.pathname + '?code=' + encodeURIComponent(this.model.text()));
+      console.log('renderUrl');
     }
-
-    this.$syntax.val(str);
-    this.$url.val(location.protocol + "//" + location.host + location.pathname + '?code=' + encodeURIComponent(code));
+  },
+  renderTokens: function () {
+    if (this.$tokensTab.hasClass('active')) {
+      this.$tokens.val(this.model.tokens());
+      console.log('renderTokens');
+    }
+  },
+  renderSyntax: function () {
+    if (this.$syntaxTab.hasClass('active')) {
+      this.$syntax.val(this.model.ast());
+      console.log('renderSyntax');
+    }
+  },
+  renderGeneratedCode: function () {
+    if (this.$codeTab.hasClass('active')) {
+      inventingOnPrinciple.outputcode.setValue(this.model.generatedCode());
+      console.log('renderGeneratedCode');
+    }
+  },
+  render: function () {
+    console.log('render');
   }
 });
