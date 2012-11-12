@@ -1,0 +1,3 @@
+[submodule "app/scripts/vendor/codemirror"]
+	path = app/scripts/vendor/codemirror
+	url = git://github.com/marijnh/CodeMirror.git
