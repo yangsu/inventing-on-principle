@@ -84,11 +84,12 @@ textarea {
 }
 
 .left, .right {
-  width: 50%;
+  width: 49%;
   position: relative;
 }
 .left {
   float: left;
+  margin: 5px;
 }
 
 .right {
@@ -101,7 +102,7 @@ textarea {
 }
 
 .CodeMirror-scroll {
-    height: 200px;
+    height: 350px;
 }
 
 .pretext {

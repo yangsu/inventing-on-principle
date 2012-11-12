@@ -13,8 +13,6 @@
 .tabs {
     position: relative;
     display: block;
-    margin-top: 30px;
-    height: 1px;
 }
 
 .tabs textarea {
@@ -75,9 +73,7 @@
     left: 0;
     top: 29px;
     right: 0;
-    border-width: 0 1px 1px 1px;
-    border-style: solid;
-    border-color: #bbb;
+    border: 1px solid #bbb;
     z-index: 1;
 }
 
