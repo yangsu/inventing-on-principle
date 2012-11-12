@@ -2,30 +2,28 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
   initialize: function () {
   },
   parse: function (text, options) {
-    if (this.get('text') !== text) {
-      var ast, generated;
+    var ast, generated;
+    try {
+      options.tokens = true;
+      ast = window.esprima.parse(text, options);
+
+      this.set({
+        text: text,
+        tokens: ast.tokens,
+        ast: _.omit(ast, 'tokens')
+      });
+
       try {
-        options.tokens = true;
-        ast = window.esprima.parse(text, options);
-
+        generated = window.escodegen.generate(ast);
         this.set({
-          text: text,
-          tokens: ast.tokens,
-          ast: _.omit(ast, 'tokens')
+          generatedCode: generated
         });
-
-        try {
-          generated = window.escodegen.generate(ast);
-          this.set({
-            generatedCode: generated
-          });
-        } catch (e) {
-          console.log('gen Error', e);
-        }
-
       } catch (e) {
-        console.log('parse Error', e);
+        console.log('gen Error', e);
       }
+
+    } catch (e) {
+      console.log('parse Error', e);
     }
   },
   tokens: function () {
