@@ -79,7 +79,7 @@ textarea {
 }
 
 .highlight {
-    background-color: #add8e6;
+    background-color: #add8e6 !important;
     background-color: rgba(173, 216, 230, 0.6);
 }
 

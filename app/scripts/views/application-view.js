@@ -78,9 +78,11 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
     var self = this;
     self.$vars.empty();
     self.model.get('vars').each(function (varDec) {
-      self.$vars.append(new inventingOnPrinciple.Views.VariableView({
+      var view = new inventingOnPrinciple.Views.VariableView({
         model: varDec
-      }).render().$el);
+      });
+      self.$vars.append(view.render().$el);
+      view.initTangle();
     });
   },
   render: function () {

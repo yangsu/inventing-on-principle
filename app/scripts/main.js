@@ -51,4 +51,7 @@ $(document).ready(function(){
   }
 
   inventingOnPrinciple.view.parse();
+
+
+
 });

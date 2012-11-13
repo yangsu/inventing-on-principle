@@ -1,6 +1,11 @@
 inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
   initialize: function () {
-    this.set('vars', new inventingOnPrinciple.Collections.VariableCollection);
+    var col = new inventingOnPrinciple.Collections.VariableCollection;
+    col.on('change', this.processUpdate, this);
+    this.set('vars', col);
+  },
+  processUpdate: function () {
+    debugger;
   },
   extractVars: function (ast) {
     var self = this;
@@ -23,6 +28,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
   },
   parse: function (text, options) {
     var parsedResult, ast, generated, vars;
+    if (inventingOnPrinciple.updating) return;
     try {
       options.tokens = true;
       parsedResult = window.esprima.parse(text, options);
