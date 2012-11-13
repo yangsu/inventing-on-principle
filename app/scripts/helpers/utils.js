@@ -13,5 +13,17 @@
     return value;
   };
 
+  /**
+   * Convert codeMirror location object to 0 based index for lines
+   * @param  {Location Object} loc has both 'line' and 'ch' positions
+   * @return {Location Object}     normalized location
+   */
+  util.convertLoc = function (loc) {
+    return {
+      line: loc.line - 1,
+      ch:   loc.column
+    };
+  };
+
   window.util = util;
 })(jQuery, _, Backbone)
