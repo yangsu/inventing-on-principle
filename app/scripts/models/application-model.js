@@ -48,7 +48,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
       }
 
       try {
-        generated = window.escodegen.generate(ast.body);
+        generated = window.escodegen.generate(ast);
         this.set({
           generatedCode: generated
         });
