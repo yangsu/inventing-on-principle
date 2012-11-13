@@ -38,21 +38,14 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
     $(e.currentTarget).parents('li').addClass('active');
     this.render();
   },
-  parse: function () {
-    var text, options;
-
+  parse: function (editor) {
+    var text;
     if (_.isUndefined(inventingOnPrinciple.codeEditor)) {
       text = this.$code.val();
     } else {
       text = inventingOnPrinciple.codeEditor.getValue();
     }
-    options = {
-      comment: !!this.$comment.attr('checked'),
-      raw: !!this.$raw.attr('checked'),
-      range: !!this.$range.attr('checked'),
-      loc: !!this.$loc.attr('checked')
-    };
-    this.model.parse(text, options);
+    this.model.parse(text, editor);
   },
   renderUrl: function () {
     if (this.$urlTab.hasClass('active')) {

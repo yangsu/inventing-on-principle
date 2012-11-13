@@ -1,4 +1,12 @@
 inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
+  markers: [],
+  parsingOptions: {
+    comment: true,
+    loc: true,
+    range: true,
+    raw: true,
+    tokens: true
+  },
   initialize: function () {
     var col = new inventingOnPrinciple.Collections.VariableCollection;
     col.on('change', this.processUpdate, this);
@@ -26,12 +34,11 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
       }
     }
   },
-  parse: function (text, options) {
+  parse: function (text, editor) {
     var parsedResult, ast, generated, vars;
     if (inventingOnPrinciple.updating) return;
     try {
-      options.tokens = true;
-      parsedResult = window.esprima.parse(text, options);
+      parsedResult = window.esprima.parse(text, this.parsingOptions);
       ast = _.omit(parsedResult, 'tokens');
       this.set({
         text: text,
