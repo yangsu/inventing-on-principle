@@ -5,13 +5,16 @@ inventingOnPrinciple.Views.VariableView = Backbone.View.extend({
   className: 'varDec',
   events: {
     'click .TKAdjustableNumber > span': 'onMouseDown',
-    'mouseup .TKAdjustableNumber': 'onMouseUp'
+    'mouseup .num': 'onMouseUp'
   },
   onMouseDown: function (e) {
     console.log('onMouseDown', e.target);
   },
   onMouseUp: function (e) {
-    console.log('onMouseUp', e.target);
+    var $e = $(e.currentTarget).find('.TKAdjustableNumber')
+      , v = $e.attr('data-var')
+      , value = $e.children('span').html();
+    // this.model.setVar(v, value);
   },
   initTangle: function () {
     var self = this;

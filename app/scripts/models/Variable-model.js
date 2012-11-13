@@ -3,8 +3,8 @@ inventingOnPrinciple.Models.VariableModel = Backbone.Model.extend({
     var self = this;
     function convert(loc) {
       return {
-        line: loc.line,
-        ch:   loc.column- 2
+        line: loc.line - 1,
+        ch:   (loc.column - 0)
       };
     }
 
@@ -18,7 +18,7 @@ inventingOnPrinciple.Models.VariableModel = Backbone.Model.extend({
         var to1 = convert(dec.init.loc.end);
 
         inventingOnPrinciple.updating = true;
-        // inventingOnPrinciple.codeEditor.replaceRange(value + "", from, to);
+        inventingOnPrinciple.codeEditor.replaceRange(value + "", from1, to1);
         inventingOnPrinciple.updating = false;
       }
     });
