@@ -38,6 +38,9 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
     $(e.currentTarget).parents('li').addClass('active');
     this.render();
   },
+  trackCursor: function (editor) {
+    this.model.trackCursor(editor);
+  },
   parse: function (editor) {
     var text;
     if (_.isUndefined(inventingOnPrinciple.codeEditor)) {

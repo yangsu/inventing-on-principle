@@ -35,8 +35,11 @@ $(document).ready(function(){
     inventingOnPrinciple.codeEditor = CodeMirror.fromTextArea(document.getElementById("code"), {
       lineNumbers: true,
       matchBrackets: true,
-      onChange: function () {
-        inventingOnPrinciple.view.parse();
+      onCursorActivity: function (editor) {
+        inventingOnPrinciple.view.trackCursor(editor);
+      },
+      onChange: function (editor) {
+        inventingOnPrinciple.view.parse(editor);
       }
     });
 
@@ -51,7 +54,4 @@ $(document).ready(function(){
   }
 
   inventingOnPrinciple.view.parse();
-
-
-
 });

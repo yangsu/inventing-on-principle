@@ -78,9 +78,12 @@ textarea {
   border: 1px solid #bbb;
 }
 
-.highlight {
-  background-color: #add8e6 !important;
-  background-color: rgba(173, 216, 230, 0.6);
+.highlight, .identifier {
+  background-color: rgba(255, 255, 122, 0.4) !important;
+}
+.identifier {
+  border: 1px solid #ffcc99;
+  margin: -1px;
 }
 
 .left, .right {

@@ -34,6 +34,69 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
       }
     }
   },
+  // Executes visitor on the object and its children (recursively).
+  traverse: function traverse(object, visitor, master) {
+    var parent = master || []
+      , path;
+
+    if (visitor.call(null, object, parent) === false) {
+      return;
+    }
+
+    _.each(object, function (child, key) {
+      path = [ object ];
+      path.push(parent);
+      if (_.isObject(child)) {
+        traverse(child, visitor, path);
+      }
+    });
+  },
+  clearMarkers: function () {
+    _.invoke(this.markers, 'clear');
+    this.markers = [];
+  },
+  trackCursor: function (editor) {
+    var self = this
+      , pos = editor.indexFromPos(editor.getCursor())
+      , code = editor.getValue()
+      , ast = self.get('ast')
+      , node, id;
+
+    self.clearMarkers();
+
+    if (ast === null) {
+      return;
+    }
+
+    self.traverse(ast, function (node, path) {
+      if (node.type !== esprima.Syntax.Identifier) {
+        return;
+      }
+      if (pos >= node.range[0] && pos <= node.range[1]) {
+        self.markers.push(editor.markText(
+          window.util.convertLoc(node.loc.start),
+          window.util.convertLoc(node.loc.end),
+          'identifier'
+        ));
+        id = node;
+      }
+    });
+
+    if (!_.isUndefined(id)) {
+      self.traverse(self.get('ast'), function (node, path) {
+        if (node.type !== esprima.Syntax.Identifier) {
+          return;
+        }
+        if (node !== id && node.name === id.name) {
+          self.markers.push(editor.markText(
+            window.util.convertLoc(node.loc.start),
+            window.util.convertLoc(node.loc.end),
+            'highlight'
+          ));
+        }
+      });
+    }
+  },
   parse: function (text, editor) {
     var parsedResult, ast, generated, vars;
     if (inventingOnPrinciple.updating) return;
