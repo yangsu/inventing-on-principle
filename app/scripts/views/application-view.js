@@ -41,7 +41,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
   trackCursor: function (editor) {
     this.model.trackCursor(editor);
   },
-  parse: function (editor) {
+  parse: function (editor, changeInfo) {
     var text;
     if (_.isUndefined(inventingOnPrinciple.codeEditor)) {
       text = this.$code.val();

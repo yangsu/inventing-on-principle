@@ -38,8 +38,8 @@ $(document).ready(function(){
       onCursorActivity: function (editor) {
         inventingOnPrinciple.view.trackCursor(editor);
       },
-      onChange: function (editor) {
-        inventingOnPrinciple.view.parse(editor);
+      onChange: function (editor, changeInfo) {
+        inventingOnPrinciple.view.parse(editor, changeInfo);
       }
     });
 
