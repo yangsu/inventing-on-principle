@@ -1,8 +1,6 @@
 inventingOnPrinciple.Views.VariableView = Backbone.View.extend({
 
   template: inventingOnPrinciple.getTemplate('variable'),
-  tagName: 'span',
-  className: 'varDec',
   events: {
     'click .TKAdjustableNumber > span': 'onMouseDown',
     'mouseup .num': 'onMouseUp'

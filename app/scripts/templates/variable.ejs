@@ -1,6 +1,6 @@
 <% for (var i = 0, l = arguments[0].declarations.length; i < l; i++) { %>
 <% var dec = arguments[0].declarations[i]; %>
-<div>
+<div class="varDec">
     <strong><%= dec.id.name %> = </strong>
     <% if (dec.init.type == 'Identifier') { %>
     <span class="var"><%= dec.init.name %></span>
