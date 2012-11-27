@@ -21,45 +21,51 @@
                     <textarea id="code" autofocus="autofocus" cols="70" rows="20" spellcheck="false"></textarea>
                 </div>
 
+                <button id="run">Run</button>
                 <p id="codemirror" align="right">
                     <small>The above code editor is based on<a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small>
                 </p>
+                <div id="consoleContainer">
+                    <strong>Console</strong>
+                    <pre id="console"></pre>
+                </div>
             </div>
 
             <div class="tabs right">
-            <ul>
-                <li id="tab_state" class="active">
-                    <h3><a id="show_state" class="tab_link">State</a></h3>
-                    <div class="tab">
-                        <article>
-                            <div class="header"><strong>Variables</strong></div>
-                            <div id="vars"></div>
-                        </article>
-                    </div>
-                </li>
-                <li id="tab_syntax">
-                    <h3><a id="show_syntax" class="tab_link">Syntax</a></h3>
-                    <div class="tab">
-                        <pre id="syntax" class="pretext"></pre>
-                    </div>
-                </li>
-                <li id="tab_tokens">
-                    <h3><a id="show_tokens" class="tab_link">Tokens</a></h3>
-                    <div class="tab">
-                        <pre id="tokens" class="pretext"></pre>
-                    </div>
-                </li>
-                <li id="tab_code">
-                    <h3><a id="show_code" class="tab_link">Escodegen</a></h3>
-                    <div class="tab">
-                        <textarea id="outputcode" rows="40" readonly></textarea>
-                    </div>
-                </li>
-                <li id="tab_url">
-                    <h3><a id="show_url" class="tab_link">URL</a></h3>
-                    <div class="tab"><input id="url" type="text" readonly onclick="this.select()"></div>
-                </li>
-            </ul>
+
+                <ul>
+                    <li id="tab_state" class="active">
+                        <h3><a id="show_state" class="tab_link">State</a></h3>
+                        <div class="tab">
+                            <article>
+                                <div class="header"><strong>Variables</strong></div>
+                                <div id="vars"></div>
+                            </article>
+                        </div>
+                    </li>
+                    <li id="tab_syntax">
+                        <h3><a id="show_syntax" class="tab_link">Syntax</a></h3>
+                        <div class="tab">
+                            <pre id="syntax" class="pretext"></pre>
+                        </div>
+                    </li>
+                    <li id="tab_tokens">
+                        <h3><a id="show_tokens" class="tab_link">Tokens</a></h3>
+                        <div class="tab">
+                            <pre id="tokens" class="pretext"></pre>
+                        </div>
+                    </li>
+                    <li id="tab_code">
+                        <h3><a id="show_code" class="tab_link">Escodegen</a></h3>
+                        <div class="tab">
+                            <textarea id="outputcode" rows="40" readonly></textarea>
+                        </div>
+                    </li>
+                    <li id="tab_url">
+                        <h3><a id="show_url" class="tab_link">URL</a></h3>
+                        <div class="tab"><input id="url" type="text" readonly onclick="this.select()"></div>
+                    </li>
+                </ul>
             </div>
         </div>
 

@@ -31,7 +31,11 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
   },
   events: {
     'change input[type=checkbox]': 'parse',
-    'click .tab_link': 'switchTab'
+    'click .tab_link': 'switchTab',
+    'click #run': 'runCode'
+  },
+  runCode: function() {
+    console.log(inventingOnPrinciple.codeEditor.getValue());
   },
   switchTab: function (e) {
     this.$('li').removeClass('active');

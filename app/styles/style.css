@@ -198,3 +198,17 @@ textarea {
 .tabs .active .tab {
   display: block;
 }
+
+#consoleContainer {
+  margin: 0;
+  overflow: auto;
+  width: 100%;
+}
+
+#console {
+  overflow: auto;
+  height: 100px;
+  margin: 0;
+  display: block;
+  border: 1px solid #bbb;
+}
