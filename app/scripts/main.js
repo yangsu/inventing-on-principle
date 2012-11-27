@@ -60,7 +60,7 @@ $(document).ready(function(){
   console.log = function (message) {
     // DO MESSAGE HERE.
     var text = $console.html();
-    text += (message + '\n');
+    text += (message + ' ');
     $console.html(text);
 
     $console.scrollTop(
