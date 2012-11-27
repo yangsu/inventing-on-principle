@@ -4,7 +4,7 @@
     {
       "path": "app",
       "file_exclude_patterns": [".htaccess", "*.ico", ".buildignore", "404.html"],
-      "folder_exclude_patterns": ["vendor"]
+      "folder_exclude_patterns": []
     },
     {
       "path": ".",

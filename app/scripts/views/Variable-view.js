@@ -19,12 +19,14 @@ inventingOnPrinciple.Views.VariableView = Backbone.View.extend({
   initTangle: function () {
     var self = this;
     _.each(self.model.get('declarations'), function (dec) {
-      var defaults = {};
-      defaults[dec.id.name] = dec.init.value;
+      var defaults = {}
+        , name = dec.id.name;
+
+      defaults[name] = dec.init.value;
       if (dec.init.type == 'Literal') {
-        window.genTangle('span[data-container=' + dec.id.name + ']', defaults, function () {
-          // this[dec.id.name] = dec.init.value;
-          self.model.setVar(dec.id.name, this[dec.id.name]);
+        window.genTangle('span[data-container=' + name + ']', defaults, function () {
+          // this[name] = dec.init.value;
+          inventingOnPrinciple.model.setVar(name, this[name]);
         });
       }
     });

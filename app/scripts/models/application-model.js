@@ -11,28 +11,44 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
     var col = new inventingOnPrinciple.Collections.VariableCollection;
     col.on('change', this.processUpdate, this);
     this.set('vars', col);
+    this.on('change:ast', this.onASTChange, this)
+  },
+  onASTChange: function () {
+    try {
+      var generated = window.escodegen.generate(this.get('ast'));
+      this.set({
+        generatedCode: generated
+      });
+    } catch (e) {
+      console.log('gen Error', e);
+    }
   },
   processUpdate: function () {
     debugger;
   },
-  extractVars: function (ast) {
+  extractVars: function (ast, text) {
     var self = this;
-    if (_.isArray(ast)) {
-      _.each(ast, function (item) {
-        self.extractVars(item);
-      })
-    } else if (_.isObject(ast)) {
-      if (ast.type == 'VariableDeclaration') {
-        self.get('vars').add(new inventingOnPrinciple.Models.VariableModel(ast), { silent: true });
-        console.log(self.get('vars'));
-      } else {
-        _.each(ast, function (item) {
-          if (_.isObject(item)) {
-            self.extractVars(item);
-          }
-        })
+    // if (_.isArray(ast)) {
+    //   _.each(ast, function (item) {
+    //     self.extractVars(item);
+    //   })
+    // } else if (_.isObject(ast)) {
+    //   if (ast.type == 'VariableDeclaration') {
+    //   } else {
+    //     _.each(ast, function (item) {
+    //       if (_.isObject(item)) {
+    //         self.extractVars(item);
+    //       }
+    //     })
+    //   }
+    // }
+    window.falafel(text, function (node) {
+      if (node.type === 'VariableDeclaration') {
+      // node.update('fn(' + node.source() + ')');
+        var varModel = new inventingOnPrinciple.Models.VariableModel(node);
+        self.get('vars').add(varModel, { silent: true });
       }
-    }
+    });
   },
   // Executes visitor on the object and its children (recursively).
   traverse: function traverse(object, visitor, master) {
@@ -50,6 +66,29 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
         traverse(child, visitor, path);
       }
     });
+  },
+  setVar: function (key, value) {
+    var self = this
+      , changed = false;
+    var updated = window.falafel(this.get('text'), function (node) {
+      if (node.type === 'VariableDeclaration') {
+        _.each(node.declarations, function (dec) {
+          if (dec.id.name == key && dec.init.value != value) {
+
+            dec.init.value = value;
+            dec.init.update(value);
+
+            changed = true;
+          }
+        });
+      }
+    });
+
+    if (changed) {
+      inventingOnPrinciple.updating = true;
+      inventingOnPrinciple.codeEditor.setValue(updated.toString());
+      inventingOnPrinciple.updating = false;
+    }
   },
   clearMarkers: function () {
     _.invoke(this.markers, 'clear');
@@ -100,6 +139,8 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
   parse: function (text, editor) {
     var parsedResult, ast, generated, vars;
     if (inventingOnPrinciple.updating) return;
+    if (text == this.get('text')) return;
+
     try {
       parsedResult = window.esprima.parse(text, this.parsingOptions);
       ast = _.omit(parsedResult, 'tokens');
@@ -111,21 +152,11 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
 
       vars = this.get('vars');
       vars.reset([], { silent: true });
-      this.extractVars(ast);
+      this.extractVars(ast, text);
 
       if (vars && vars.length) {
         this.trigger('change:vars');
       }
-
-      try {
-        generated = window.escodegen.generate(ast);
-        this.set({
-          generatedCode: generated
-        });
-      } catch (e) {
-        console.log('gen Error', e);
-      }
-
     } catch (e) {
       console.log('parse Error', e);
     }
