@@ -35,7 +35,8 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
     'click #run': 'runCode'
   },
   runCode: function() {
-    console.log(inventingOnPrinciple.codeEditor.getValue());
+    $('#console').html('');
+    eval(inventingOnPrinciple.model.get('text'));
   },
   switchTab: function (e) {
     this.$('li').removeClass('active');

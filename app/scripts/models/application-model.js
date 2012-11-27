@@ -20,7 +20,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
         generatedCode: generated
       });
     } catch (e) {
-      console.log('gen Error', e);
+      // console.log('gen Error', e);
     }
   },
   processUpdate: function () {
@@ -88,6 +88,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
       inventingOnPrinciple.updating = true;
       this.set('text', updated.toString());
       inventingOnPrinciple.codeEditor.setValue(updated.toString());
+      inventingOnPrinciple.view.runCode();
       inventingOnPrinciple.updating = false;
     }
   },
@@ -139,8 +140,11 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
   },
   parse: function (text, editor) {
     var parsedResult, ast, generated, vars;
-    if (inventingOnPrinciple.updating) return;
     if (text == this.get('text')) return;
+
+    if (inventingOnPrinciple.updating) {
+      return;
+    }
 
     try {
       parsedResult = window.esprima.parse(text, this.parsingOptions);
@@ -158,8 +162,10 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
       if (vars && vars.length) {
         this.trigger('change:vars');
       }
+
+      inventingOnPrinciple.view.runCode();
     } catch (e) {
-      console.log('parse Error', e);
+      // console.log('parse Error', e);
     }
   },
   tokens: function () {
