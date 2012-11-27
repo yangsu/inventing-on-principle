@@ -86,6 +86,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
 
     if (changed) {
       inventingOnPrinciple.updating = true;
+      this.set('text', updated.toString());
       inventingOnPrinciple.codeEditor.setValue(updated.toString());
       inventingOnPrinciple.updating = false;
     }
