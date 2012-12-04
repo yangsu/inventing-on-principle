@@ -5,7 +5,7 @@
     <% if (dec.init.type == 'Identifier') { %>
     <span class="cm-variable-2"><%= dec.init.name %></span>
     <% } else if (dec.init.type == 'Literal') { %>
-    <span class="cm-number"><%= inventingOnPrinciple.getTemplate('tangleSpan')({ label: dec.name, value: dec.init.value }) %></span>
+    <span class="cm-number"><%= inventingOnPrinciple.getTemplate('tangleSpan')({ id: dec.id, label: dec.name, value: dec.init.value }) %></span>
     <% } %>
 </span>
 <% }); %>

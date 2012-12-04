@@ -89,8 +89,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
     self.model.ast.get('vars').each(function (varDec, i) {
       linenumber = varDec.get('loc').start.line - 1;
       var view = new inventingOnPrinciple.Views.VariableView({
-        model: varDec,
-        vid: i
+        model: varDec
       });
 
       lines[linenumber] = view;
@@ -99,8 +98,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
     self.model.ast.get('funs').each(function (funDec, i) {
       linenumber = funDec.get('loc').start.line - 1;
       var view = new inventingOnPrinciple.Views.FunctionView({
-        model: funDec,
-        fid: i
+        model: funDec
       });
       lines[linenumber] = view;
     });

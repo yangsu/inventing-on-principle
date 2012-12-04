@@ -12,8 +12,10 @@ inventingOnPrinciple.Models.VariableModel = Backbone.Model.extend({
     });
   },
   toDeclarations: function () {
-    return _.map(this.get('declarations'), function (dec) {
+    var self = this;
+    return _.map(this.get('declarations'), function (dec, i) {
       return {
+        id: self.cid + '-' + i,
         name: dec.id.name,
         init: dec.init,
         loc: dec.loc
