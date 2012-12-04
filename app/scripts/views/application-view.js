@@ -28,7 +28,8 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
       .on('change:text', this.renderUrl, this)
       .on('change:tokens', this.renderTokens, this)
       .on('change:ast', this.renderSyntax, this)
-      .on('change:vars', this.renderVars, this)
+      .on('change:vars', this.renderDeclarations, this)
+      .on('change:funs', this.renderDeclarations, this)
       .on('change:generatedCode', this.renderGeneratedCode, this);
   },
   events: {
@@ -81,34 +82,47 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
       inventingOnPrinciple.outputcode.setValue(this.model.generatedCode());
     }
   },
-  renderVars: function () {
+  renderDeclarations: function () {
     var self = this;
     self.$vars.empty();
-    var n = 0, currentN = 0;
+
+    var lines = [], linenumber;
     self.model.ast.get('vars').each(function (varDec) {
-      currentN = varDec.get('loc').start.line - 1;
-      while (n++ < currentN) {
-        self.$vars.append(self.spacer);
-      }
+      linenumber = varDec.get('loc').start.line - 1;
       var view = new inventingOnPrinciple.Views.VariableView({
         model: varDec
       });
-      self.$vars.append(view.render().$el);
-      view.initTangle();
+
+      lines[linenumber] = view;
     });
 
-    while (n++ < inventingOnPrinciple.codeEditor.lineCount()) {
-      self.$vars.append(self.spacer);
-    }
+    self.model.ast.get('funs').each(function (funDec) {
+      linenumber = funDec.get('loc').start.line - 1;
+      var view = new inventingOnPrinciple.Views.FunctionView({
+        model: funDec
+      });
+      lines[linenumber] = view;
+    });
+
+    _.each(lines, function (line) {
+      if (line) {
+        self.$vars.append(line.render().$el);
+        if (line.initTangle) {
+          line.initTangle();
+        }
+      } else {
+        self.$vars.append(self.spacer);
+      }
+    })
   },
   scrollVars: function (scrollInfo) {
-    this.$('#varsContainer').scrollTop(scrollInfo.y);
+    this.$('#decsContainer').scrollTop(scrollInfo.y);
   },
   render: function () {
     this.renderUrl();
     this.renderTokens();
     this.renderSyntax();
     this.renderGeneratedCode();
-    this.renderVars();
+    this.renderDeclarations();
   }
 });

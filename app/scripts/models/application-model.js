@@ -59,7 +59,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
     try {
       this.ast
         .setSource(text)
-        .extractVars();
+        .extractDeclarations();
 
     } catch (e) {
       console.log(e);

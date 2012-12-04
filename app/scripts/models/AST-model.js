@@ -55,10 +55,13 @@
       if (attributes && attributes.text) {
         this.setSource(attributes.text, options);
       }
+
       var vars = new inventingOnPrinciple.Collections.VariableCollection;
+      var funs = new inventingOnPrinciple.Collections.FunctionCollection;
 
       this.set({
-        vars: vars
+        vars: vars,
+        funs: funs
       }, { silent: true });
 
       var self = this;
@@ -105,21 +108,32 @@
     posttraverse: function (f) {
       this.traverse(null, f);
     },
-    extractVars: function () {
+    extractDeclarations: function () {
       var prevVars = this.get('vars').toJSON()
-        , vars = [];
+        , map = {};
 
       this.pretraverse(function (node) {
-        if (node.type === 'VariableDeclaration') {
-          var varModel = new inventingOnPrinciple.Models.VariableModel(node);
-          vars.push(varModel);
+        var type = node.type.slice(0, -11);
+        if (node.type.slice(-11) === 'Declaration') {
+          var model = new inventingOnPrinciple.Models[type + 'Model'](node);
+          if (map[type]) {
+            map[type].push(model);
+          } else {
+            map[type] = [model];
+          }
         }
       });
 
-      if (_.isEqual(prevVars, this.get('vars').toJSON())) {
-        this.get('vars').reset(vars);
-        this.trigger('change:vars', vars);
-      }
+      console.log(map);
+
+      // if (_.isEqual(prevVars, _.map())) {
+      var vars = map['Variable'];
+      this.get('vars').reset(vars);
+      this.trigger('change:vars', vars);
+      // }
+      var funs = map['Function'];
+      this.get('funs').reset(funs);
+      this.trigger('change:funs', funs);
     },
     onASTChange: function () {
       try {

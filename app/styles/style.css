@@ -211,7 +211,7 @@ textarea {
   border: 1px solid #bbb;
 }
 
-#varsContainer {
+#decsContainer {
   height: 27em;
   overflow: scroll;
   margin: 0;
