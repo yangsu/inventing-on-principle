@@ -124,16 +124,16 @@
         }
       });
 
-      console.log(map);
 
       // if (_.isEqual(prevVars, _.map())) {
       var vars = map['Variable'];
       this.get('vars').reset(vars);
-      this.trigger('change:vars', vars);
       // }
       var funs = map['Function'];
       this.get('funs').reset(funs);
-      this.trigger('change:funs', funs);
+
+      console.log( map['Function'], this.get('funs').toJSON());
+      this.trigger('change:decs', vars, funs);
     },
     onASTChange: function () {
       try {

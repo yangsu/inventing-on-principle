@@ -28,8 +28,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
       .on('change:text', this.renderUrl, this)
       .on('change:tokens', this.renderTokens, this)
       .on('change:ast', this.renderSyntax, this)
-      .on('change:vars', this.renderDeclarations, this)
-      .on('change:funs', this.renderDeclarations, this)
+      .on('change:decs', this.renderDeclarations, this)
       .on('change:generatedCode', this.renderGeneratedCode, this);
   },
   events: {
@@ -87,19 +86,21 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
     self.$vars.empty();
 
     var lines = [], linenumber;
-    self.model.ast.get('vars').each(function (varDec) {
+    self.model.ast.get('vars').each(function (varDec, i) {
       linenumber = varDec.get('loc').start.line - 1;
       var view = new inventingOnPrinciple.Views.VariableView({
-        model: varDec
+        model: varDec,
+        vid: i
       });
 
       lines[linenumber] = view;
     });
 
-    self.model.ast.get('funs').each(function (funDec) {
+    self.model.ast.get('funs').each(function (funDec, i) {
       linenumber = funDec.get('loc').start.line - 1;
       var view = new inventingOnPrinciple.Views.FunctionView({
-        model: funDec
+        model: funDec,
+        fid: i
       });
       lines[linenumber] = view;
     });

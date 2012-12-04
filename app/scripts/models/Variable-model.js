@@ -1,4 +1,5 @@
 inventingOnPrinciple.Models.VariableModel = Backbone.Model.extend({
+  idAttribute: 'vid',
   setVar: function (key, value) {
     var self = this;
     _.each(this.get('declarations'), function (dec) {
