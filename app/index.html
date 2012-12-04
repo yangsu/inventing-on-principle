@@ -18,7 +18,7 @@
             <h1>Parser <small>produces syntax tree</small></h1>
             <div class="left">
                 <div>
-                    <textarea id="code" autofocus="autofocus" cols="70" rows="20" spellcheck="false"></textarea>
+                    <textarea id="code" autofocus="autofocus" cols="70" spellcheck="false"></textarea>
                 </div>
 
                 <button id="run">Run</button>
@@ -31,7 +31,10 @@
                 </div>
             </div>
 
-            <div id="vars" class="CodeMirror right"></div>
+            <div id="varsContainer" class="right">
+                <div id="vars" class="CodeMirror" ></div>
+            </div>
+
 
             <div class="tabs right" style="display: none;">
 

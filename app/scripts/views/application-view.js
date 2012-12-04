@@ -92,6 +92,13 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
       self.$vars.append(view.render().$el);
       view.initTangle();
     });
+
+    while (n++ < inventingOnPrinciple.codeEditor.lineCount()) {
+      self.$vars.append(self.spacer);
+    }
+  },
+  scrollVars: function (scrollInfo) {
+    this.$('#varsContainer').scrollTop(scrollInfo.y);
   },
   render: function () {
     this.renderUrl();

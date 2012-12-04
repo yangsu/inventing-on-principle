@@ -35,6 +35,9 @@ $(document).ready(function(){
     inventingOnPrinciple.codeEditor = CodeMirror.fromTextArea(document.getElementById('code'), {
       lineNumbers: true,
       matchBrackets: true,
+      onScroll: function (editor) {
+        inventingOnPrinciple.view.scrollVars(editor.getScrollInfo());
+      },
       onCursorActivity: function (editor) {
         inventingOnPrinciple.view.trackCursor(editor);
       },

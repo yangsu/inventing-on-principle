@@ -211,11 +211,15 @@ textarea {
   border: 1px solid #bbb;
 }
 
-#vars {
+#varsContainer {
+  height: 27em;
+  overflow: scroll;
   margin: 0;
   border: 1px solid #DDD;
-  min-height: 400px;
+}
+#vars {
   padding: .4em;
+  min-height: 27em;
 }
 #vars .spacer {
   height: 1em;
