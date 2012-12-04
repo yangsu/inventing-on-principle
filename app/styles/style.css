@@ -210,3 +210,16 @@ textarea {
   display: block;
   border: 1px solid #bbb;
 }
+
+#vars {
+  margin: 0;
+  border: 1px solid #DDD;
+  min-height: 400px;
+  padding: .4em;
+}
+#vars .spacer {
+  height: 1em;
+}
+#vars span {
+  display: inline-block;
+}

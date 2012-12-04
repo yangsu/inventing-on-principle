@@ -1,4 +1,6 @@
 inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
+
+  spacer: inventingOnPrinciple.getTemplate('spacer')(),
   initialize: function () {
     // Input
     this.$code = $('#code');
@@ -78,7 +80,12 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
   renderVars: function () {
     var self = this;
     self.$vars.empty();
+    var n = 0, currentN = 0;
     self.model.ast.get('vars').each(function (varDec) {
+      currentN = varDec.get('loc').start.line - 1;
+      while (n++ < currentN) {
+        self.$vars.append(self.spacer);
+      }
       var view = new inventingOnPrinciple.Views.VariableView({
         model: varDec
       });

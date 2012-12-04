@@ -1,10 +1,12 @@
+<div class="varDecs">
 <% _.each(arguments[0], function (dec) { %>
-<div class="varDec">
-    <strong><%= dec.name %> = </strong>
+<span class="varDec">
+    <span class="cm-variable"><%= dec.name %> = </span>
     <% if (dec.init.type == 'Identifier') { %>
-    <span class="var"><%= dec.init.name %></span>
+    <span class="cm-variable"><%= dec.init.name %></span>
     <% } else if (dec.init.type == 'Literal') { %>
-    <span class="num"><%= inventingOnPrinciple.getTemplate('tangleSpan')({ label: dec.name, value: dec.init.value }) %></span>
+    <span class="cm-number"><%= inventingOnPrinciple.getTemplate('tangleSpan')({ label: dec.name, value: dec.init.value }) %></span>
     <% } %>
-</div>
+</span>
 <% }); %>
+</div>
