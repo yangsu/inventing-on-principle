@@ -25,5 +25,15 @@
     };
   };
 
+  /**
+   * Test to see if a position is within a codeMirror Range array
+   * @param  {int} pos   position
+   * @param  {array} range (range[0], range[1])
+   * @return {boolean}       true if pos is within range, false otherwise
+   */
+  util.withinRange = function (pos, range) {
+    return range && range.length === 2 && pos >= range[0] && pos <= range[1];
+  };
+
   window.util = util;
 })(jQuery, _, Backbone)

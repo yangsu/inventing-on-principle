@@ -22,7 +22,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
     this.$codeTab = $('#tab_code');
     this.$stateTab = $('#tab_state');
 
-    this.model
+    this.model.ast
       .on('change:text', this.renderUrl, this)
       .on('change:tokens', this.renderTokens, this)
       .on('change:ast', this.renderSyntax, this)
@@ -78,7 +78,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
   renderVars: function () {
     var self = this;
     self.$vars.empty();
-    self.model.get('vars').each(function (varDec) {
+    self.model.ast.get('vars').each(function (varDec) {
       var view = new inventingOnPrinciple.Views.VariableView({
         model: varDec
       });
