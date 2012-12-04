@@ -1,7 +1,8 @@
 (function (jQuery, _, Backbone, inventingOnPrinciple, esprima) {
-  var insertHelpers = function (node, parent, chunks) {
+  var insertHelpers = function (node, parent, chunks, depth) {
     if (!node.range) return;
 
+    node.depth = depth;
     node.parent = parent;
 
     node.source = function () {
@@ -18,8 +19,8 @@
 
   var traverse = function (ast, chunks, prefunc, postfunc) {
     var ctx = this;
-    (function walk (node, parent) {
-      postfunc && postfunc.call(ctx, node, parent, chunks);
+    (function walk (node, parent, depth) {
+      postfunc && postfunc.call(ctx, node, parent, chunks, depth);
 
       _.each(node, function (child, key) {
         if (key === 'parent' || key === 'range' || key === 'loc') return;
@@ -27,17 +28,17 @@
         if (_.isArray(child)) {
           _.each(child, function (grandchild) {
             if (grandchild && typeof grandchild.type === 'string') {
-              walk(grandchild, node);
+              walk(grandchild, node, depth + 1);
             }
           })
         } else if (child && typeof child.type === 'string') {
-          postfunc && postfunc.call(ctx, child, node, chunks);
-          walk(child, node);
+          postfunc && postfunc.call(ctx, child, node, chunks, depth);
+          walk(child, node, depth);
         }
       });
 
       prefunc && prefunc.call(ctx, node, parent, chunks);
-    })(ast, undefined);
+    })(ast, undefined, 0);
   };
 
   inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend({

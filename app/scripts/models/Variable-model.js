@@ -21,5 +21,11 @@ inventingOnPrinciple.Models.VariableModel = Backbone.Model.extend({
         loc: dec.loc
       };
     });
+  },
+  toTemplate: function () {
+    return {
+      depth: this.get('depth'),
+      decs: this.toDeclarations()
+    };
   }
 });

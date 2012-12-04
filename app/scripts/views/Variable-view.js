@@ -1,6 +1,8 @@
 inventingOnPrinciple.Views.VariableView = Backbone.View.extend({
 
   template: inventingOnPrinciple.getTemplate('variable'),
+  tagName: 'div',
+  className: 'varDecs',
   events: {
   },
   initTangle: function () {
@@ -19,7 +21,7 @@ inventingOnPrinciple.Views.VariableView = Backbone.View.extend({
     });
   },
   render: function () {
-    this.$el.html(this.template(this.model.toDeclarations()));
+    this.$el.html(this.template(this.model.toTemplate()));
     return this;
   }
 

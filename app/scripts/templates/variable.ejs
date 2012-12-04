@@ -1,5 +1,5 @@
-<div class="varDecs">
-<% _.each(arguments[0], function (dec) { %>
+<%= inventingOnPrinciple.getTemplate('tab')(arguments[0].depth) %>
+<% _.each(arguments[0].decs, function (dec) { %>
 <span class="varDec">
     <span class="cm-variable-2"><%= dec.name %> = </span>
     <% if (dec.init.type == 'Identifier') { %>
@@ -9,4 +9,3 @@
     <% } %>
 </span>
 <% }); %>
-</div>
