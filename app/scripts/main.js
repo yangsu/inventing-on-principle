@@ -32,7 +32,7 @@ $(document).ready(function(){
   try {
     window.checkEnv();
 
-    inventingOnPrinciple.codeEditor = CodeMirror.fromTextArea(document.getElementById("code"), {
+    inventingOnPrinciple.codeEditor = CodeMirror.fromTextArea(document.getElementById('code'), {
       lineNumbers: true,
       matchBrackets: true,
       onCursorActivity: function (editor) {
@@ -47,6 +47,11 @@ $(document).ready(function(){
       mode: 'javascript',
       lineNumbers: true,
       readOnly: true
+    });
+
+    inventingOnPrinciple.state = CodeMirror.fromTextArea(document.getElementById('state'), {
+      mode: 'javascript',
+      lineNumbers: true
     });
 
   } catch (e) {

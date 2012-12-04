@@ -19,7 +19,20 @@ inventingOnPrinciple.Views.VariableView = Backbone.View.extend({
     });
   },
   render: function () {
-    this.$el.html(this.template(this.model.toDeclarations()));
+    // this.$el.html(this.template(this.model.toDeclarations()));
+    inventingOnPrinciple.state.setValue('');
+    var loc
+      , str = _.map(this.model.toDeclarations(), function (dec) {
+        loc = loc || dec.loc.start;
+        var str = dec.name + ': ';
+        if (dec.init.type == 'Identifier') {
+          str += dec.init.name;
+        } else if (dec.init.type == 'Literal') {
+          str += dec.init.value;
+        }
+        return str;
+      }).join(', ');
+    inventingOnPrinciple.state.replaceRange(str, loc);
     return this;
   }
 
