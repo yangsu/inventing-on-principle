@@ -1,11 +1,11 @@
 <div class="funDecs">
 <span class="funDec">
     <span class="cm-keyword">function</span>
-    <span class="cm-variable"><%= id.name %></span>
+    <span class="cm-variable-2"><%= id.name %></span>
     <span class="cm-variable">
     (
         <%= _.map(_.pluck(params, 'name'), function (name) {
-            return '<span class="cm-variable">' + name + '</span>';
+            return '<span class="cm-def">' + name + '</span>';
         }).join(', ') %>
     )
     </span>
