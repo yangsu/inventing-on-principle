@@ -1,16 +1,7 @@
 inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
   markers: [],
-  parsingOptions: {
-    comment: true,
-    loc: true,
-    range: true,
-    raw: true,
-    tokens: true
-  },
   initialize: function () {
     this.ast = new inventingOnPrinciple.Models.ASTModel();
-  },
-  processUpdate: function () {
   },
   clearMarkers: function () {
     _.invoke(this.markers, 'clear');
@@ -59,8 +50,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
     }
   },
   parse: function (text, editor) {
-    var parsedResult, ast, generated, vars;
-    // if (text == this.ast.toSource()) return;
+    if (text == this.ast.toSource()) return;
 
     if (inventingOnPrinciple.updating) {
       return;
@@ -71,10 +61,11 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
         .setSource(text)
         .extractVars();
 
-      inventingOnPrinciple.view.runCode();
     } catch (e) {
-      // console.log('parse Error', e);
+      console.log(e);
     }
+
+    inventingOnPrinciple.view.runCode();
   },
   tokens: function () {
     return JSON.stringify(this.ast.get('tokens'), util.adjustRegexLiteral, 4);

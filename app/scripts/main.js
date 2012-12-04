@@ -58,9 +58,8 @@ $(document).ready(function(){
 
   inventingOnPrinciple.view.parse();
 
-  var oldLog = console.log;
   var $console = $('#console');
-  console.log = function (message) {
+  window.log = function (message) {
     // DO MESSAGE HERE.
     var text = $console.html();
     text += (message + ' ');
@@ -69,7 +68,5 @@ $(document).ready(function(){
     $console.scrollTop(
       $console[0].scrollHeight - $console.height()
     );
-
-    oldLog.apply(console, arguments);
   };
 });

@@ -57,7 +57,10 @@
       }
       var vars = new inventingOnPrinciple.Collections.VariableCollection;
 
-      this.set('vars', vars, { silent: true });
+      this.set({
+        vars: vars
+      }, { silent: true });
+
       var self = this;
       vars.on('change', function () {
         inventingOnPrinciple.updating = true;
@@ -86,7 +89,7 @@
       return this;
     },
     toSource: function () {
-      return this.get('ast').source();
+      return (this.get('ast') && this.get('ast').source()) || '';
     },
     traverse: function (prefunc, postfunc) {
       var ast = this.get('ast')
@@ -125,7 +128,7 @@
           generatedCode: generated
         });
       } catch (e) {
-        // console.log('gen Error', e);
+        console.log('gen Error', e);
       }
     }
 
