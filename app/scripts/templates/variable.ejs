@@ -1,11 +1,10 @@
-<% for (var i = 0, l = arguments[0].declarations.length; i < l; i++) { %>
-<% var dec = arguments[0].declarations[i]; %>
+<% _.each(arguments[0], function (dec) { %>
 <div class="varDec">
-    <strong><%= dec.id.name %> = </strong>
+    <strong><%= dec.name %> = </strong>
     <% if (dec.init.type == 'Identifier') { %>
     <span class="var"><%= dec.init.name %></span>
     <% } else if (dec.init.type == 'Literal') { %>
-    <span class="num"><%= inventingOnPrinciple.getTemplate('tangleSpan')({ label: dec.id.name, value: dec.init.value }) %></span>
+    <span class="num"><%= inventingOnPrinciple.getTemplate('tangleSpan')({ label: dec.name, value: dec.init.value }) %></span>
     <% } %>
 </div>
-<% } %>
+<% }); %>

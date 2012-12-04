@@ -112,6 +112,7 @@
           vars.push(varModel);
         }
       });
+
       if (_.isEqual(prevVars, this.get('vars').toJSON())) {
         this.get('vars').reset(vars);
         this.trigger('change:vars', vars);
