@@ -109,9 +109,116 @@
     posttraverse: function (f) {
       this.traverse(null, f);
     },
+    extractFunction: function (node, functionList) {
+      var parent = node.parent
+        , func = {
+          node: node
+        };
+      if (node.type === Syntax.FunctionDeclaration) {
+        _.extend(func, {
+          name: node.id.name,
+          range: node.range,
+          loc: node.loc,
+          blockStart: node.body.range[0]
+        });
+      } else if (node.type === Syntax.FunctionExpression) {
+        if (parent.type === Syntax.AssignmentExpression) {
+          if (typeof parent.left.range !== 'undefined') {
+            _.extend(func, {
+              name: code.slice(parent.left.range[0],
+                  parent.left.range[1] + 1),
+              range: node.range,
+              loc: node.loc,
+              blockStart: node.body.range[0]
+            });
+          }
+        } else if (parent.type === Syntax.VariableDeclarator) {
+          _.extend(func, {
+            name: parent.id.name,
+            range: node.range,
+            loc: node.loc,
+            blockStart: node.body.range[0]
+          });
+        } else if (parent.type === Syntax.CallExpression) {
+          _.extend(func, {
+            name: parent.id ? parent.id.name : '[Anonymous]',
+            range: node.range,
+            loc: node.loc,
+            blockStart: node.body.range[0]
+          });
+        } else if (typeof parent.length === 'number') {
+          _.extend(func, {
+            name: parent.id ? parent.id.name : '[Anonymous]',
+            range: node.range,
+            loc: node.loc,
+            blockStart: node.body.range[0]
+          });
+        } else if (typeof parent.key !== 'undefined') {
+          if (parent.key.type === 'Identifier') {
+            if (parent.value === node && parent.key.name) {
+              _.extend(func, {
+                name: parent.key.name,
+                range: node.range,
+                loc: node.loc,
+                blockStart: node.body.range[0]
+              });
+            }
+          }
+        }
+      }
+      if (func.name) {
+        functionList.push(func);
+      }
+    },
+    instrumentFunctions: function (functionList) {
+      // Insert the instrumentation code from the last entry.
+      // This is to ensure that the range for each entry remains valid)
+      // (it won't shift due to some new inserting string before the range).
+      var source = this.get('ast').source()
+        , traceFunc = 'window.tracer.traceFunc';
+
+      for (var i = 0, l = functionList.length; i < l; i += 1) {
+        var func = functionList[i]
+          , param = {
+            name: func.name,
+            range: func.range,
+            loc: func.loc
+          }
+          , signature = '';
+        if (typeof traceFunc === 'function') {
+          signature = traceFunc.call(null, param);
+        } else {
+          signature = traceFunc + '({ ';
+          signature += 'name: \'' + func.name + '\', ';
+          if (typeof func.loc !== 'undefined') {
+            signature += 'lineNumber: ' + func.loc.start.line + ', ';
+          }
+          signature += 'range: [' + func.range[0] + ', ' +
+            func.range[1] + '] ';
+          signature += '});';
+        }
+        pos = func.blockStart + 1;
+        source = source.slice(0, pos) + '\n' + signature + source.slice(pos);
+      }
+
+      window.tracer.active = true;
+
+      try {
+        eval(source);
+        var hist = window.tracer.funcHistogram();
+        console.log(hist);
+      } catch (e) {
+        console.log(e);
+      }
+
+      window.tracer.active = false;
+      return this;
+    },
     extractDeclarations: function () {
-      var prevVars = this.get('vars').toJSON()
-        , map = {};
+      var map = {}
+        , functionList = []
+        , signature, pos
+        , self = this;
 
       this.pretraverse(function (node) {
         var type = node.type.slice(0, -11);
@@ -123,17 +230,19 @@
             map[type] = [model];
           }
         }
+        self.extractFunction(node, functionList);
       });
 
-
-      // if (_.isEqual(prevVars, _.map())) {
+      if (!_.isEqual(functionList, this.get('functionList'))) {
+        this
+          .instrumentFunctions(functionList)
+          .set('functionList', functionList);
+      }
       var vars = map['Variable'];
       this.get('vars').reset(vars);
-      // }
       var funs = map['Function'];
       this.get('funs').reset(funs);
 
-      console.log( map['Function'], this.get('funs').toJSON());
       this.trigger('change:decs', vars, funs);
     },
     onASTChange: function () {
