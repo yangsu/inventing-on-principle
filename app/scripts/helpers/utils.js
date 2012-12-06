@@ -35,5 +35,21 @@
     return range && range.length === 2 && pos >= range[0] && pos <= range[1];
   };
 
+  /**
+   * Number to hex function
+   * @param  {int} num    input
+   * @param  {int} length optional length of output. Default to the full length of the input
+   * @return {string}        hex number string
+   */
+  util.toHex = function (num, length) {
+    var hex = Math.floor(num).toString(16);
+    length = (length || hex.length);
+    // Pad output
+    for (var i = 0, l = length - hex.length; i < l; i += 1) {
+      hex = '0' + hex;
+    }
+    return hex.slice(-length);
+  }
+
   window.util = util;
 })(jQuery, _, Backbone)
