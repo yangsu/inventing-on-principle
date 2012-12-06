@@ -69,14 +69,12 @@
       vars.on('change', function () {
         inventingOnPrinciple.updating = true;
         inventingOnPrinciple.codeEditor.setValue(self.toSource());
-        inventingOnPrinciple.view.runCode();
         inventingOnPrinciple.updating = false;
 
         // Instrument Function
-        self.extractFunctions();
+        self.instrumentFunctions();
       }).on('endChange', function () {
         self.trigger('reparse');
-        self.extractFunctions();
       })
     },
     setSource: function (text, options) {
@@ -178,11 +176,15 @@
       }
     },
     instrumentFunctions: function () {
-      // Insert the instrumentation code from the last entry.
-      // This is to ensure that the range for each entry remains valid)
-      // (it won't shift due to some new inserting string before the range).
-      var functionList = this.get('functionList')
-        , source = this.get('ast').source()
+      var functionList = []
+        , self = this;
+
+      this.pretraverse(function (node) {
+        self.extractFunction(node, functionList);
+      });
+
+      this.set('functionList', functionList);
+      var source = this.get('ast').source()
         , traceFunc = 'window.tracer.traceFunc'
         , signature, pos;
 
@@ -212,10 +214,11 @@
 
       window.tracer.active = true;
 
+
       try {
+        inventingOnPrinciple.view.clearConsole();
         eval(source);
         var hist = window.tracer.funcHistogram();
-        console.log(JSON.stringify(hist));
         this.trigger('tracedFunctions', hist, functionList);
       } catch (e) {
         console.log(e);
@@ -226,21 +229,8 @@
       window.tracer.active = false;
       return this;
     },
-    extractFunctions: function () {
-      var functionList = []
-        , self = this;
-
-      this.pretraverse(function (node) {
-        self.extractFunction(node, functionList);
-      });
-
-      this
-        .set('functionList', functionList)
-        .instrumentFunctions();
-    },
     extractDeclarations: function () {
-      var map = {}
-        , self = this;
+      var map = {};
 
       this.pretraverse(function (node) {
         var type = node.type.slice(0, -11);
@@ -261,7 +251,7 @@
 
       this.trigger('change:decs', vars, funs);
 
-      this.extractFunctions();
+      return this;
     },
     onASTChange: function () {
       try {

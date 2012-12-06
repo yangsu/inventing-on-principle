@@ -59,13 +59,13 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
     try {
       this.ast
         .setSource(text)
-        .extractDeclarations();
+        .extractDeclarations()
+        .instrumentFunctions();
 
     } catch (e) {
       console.log(e);
+      console.trace(e);
     }
-
-    inventingOnPrinciple.view.runCode();
   },
   tokens: function () {
     return JSON.stringify(this.ast.get('tokens'), util.adjustRegexLiteral, 4);

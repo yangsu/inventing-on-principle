@@ -39,8 +39,11 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
     'click .tab_link': 'switchTab',
     'click #run': 'runCode'
   },
-  runCode: function() {
+  clearConsole: function () {
     $('#console').html('');
+  },
+  runCode: function() {
+    this.clearConsole();
     try {
       eval(inventingOnPrinciple.model.text());
     } catch (e) {
