@@ -5,6 +5,9 @@ window.inventingOnPrinciple = {
   Views: {},
   Routers: {},
   Templates: {},
+  Options: {
+    max: 200
+  },
   init: function() {
     this.model = new inventingOnPrinciple.Models.ApplicationModel();
     this.view = new inventingOnPrinciple.Views.ApplicationView({
@@ -46,7 +49,6 @@ $(document).ready(function(){
       }
     });
 
-
     $.get('/scripts/source.js', function (source) {
       inventingOnPrinciple.codeEditor.setValue(source);
     });
@@ -74,4 +76,10 @@ $(document).ready(function(){
       $console[0].scrollHeight - $console.height()
     );
   };
+
+  window.genTangle('span[data-container=max]', inventingOnPrinciple.Options, function () {
+    inventingOnPrinciple.Options.max = this.max;
+    inventingOnPrinciple.view.parse();
+  });
+
 });

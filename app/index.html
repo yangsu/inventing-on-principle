@@ -21,18 +21,24 @@
                     <textarea id="code" autofocus="autofocus" cols="70" spellcheck="false"></textarea>
                 </div>
 
-                <button id="run">Run</button>
-                <p id="codemirror" align="right">
-                    <small>The above code editor is based on<a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small>
-                </p>
                 <div id="consoleContainer">
-                    <strong>Console</strong>
+                    <h3>Console</h3>
                     <pre id="console"></pre>
                 </div>
             </div>
 
-            <div id="decsContainer" class="right">
-                <div id="vars" class="CodeMirror CodeMirror-scroll cm-s-default" ></div>
+            <div class="right">
+                <div id="decsContainer">
+                    <div id="vars" class="CodeMirror CodeMirror-scroll cm-s-default" ></div>
+                </div>
+
+                <div id="options">
+                    <h3>Options</h3>
+                    <span data-container="max">
+                        max:
+                        <span data-var="max" class="TKAdjustableNumber" data-min="0" data-max="5000"></span>
+                    </span>
+                </div>
             </div>
 
 

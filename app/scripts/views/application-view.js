@@ -122,10 +122,11 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
   },
   renderFunctionTraces: function (histogram, funcs) {
     // Normalize histogram
-    var max = _.max(_.values(histogram));
+    var max = inventingOnPrinciple.Options.max;
     _.each(histogram, function (count, funcname) {
       histogram[funcname] = count/max;
     });
+
 
     var self = this
       , $lines = this.$('#vars').children();
