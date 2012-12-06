@@ -51,5 +51,17 @@
     return hex.slice(-length);
   }
 
+  /**
+   * Map a value [0,1] to [min, max]
+   * @param  {float} value a value between 0 and 1 inclusive
+   * @param  {float} min   lowerbound
+   * @param  {float} max   upperbound
+   * @return {float}       mapped value
+   */
+  util.mapValue = function (value, min, max) {
+    var range = max - min;
+    return value * range + min;
+  }
+
   window.util = util;
 })(jQuery, _, Backbone)
