@@ -59,17 +59,12 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
     try {
       this.ast
         .setSource(text)
-        .extractDeclarations();
-      try {
-        this.ast
-          .instrumentFunctions();
-      } catch (e) {
-        console.log(e.name + ": " + e.message);
-        console.log(e.toString());
-      }
+        .extractDeclarations()
+        .instrumentFunctions();
     } catch (e) {
-      console.log(e);
-      console.trace(e);
+      // console.log(e.name + ": " + e.message);
+      // console.log(e);
+      // console.trace(e);
       this.trigger('error', e);
     }
   },

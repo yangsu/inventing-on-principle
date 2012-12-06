@@ -159,7 +159,9 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
     }
   },
   renderError: function (e) {
-    var ln = e.lineNumber - 1;
+    // Either the lineNumber is contained in the error object
+    // Or guess that the error was due to the last change and use cursor's position
+    var ln = e.lineNumber ? e.lineNumber - 1 : inventingOnPrinciple.codeEditor.getCursor().line;
     this.clearError();
     inventingOnPrinciple.codeEditor.setLineClass(ln, 'errorLine', 'errorLineBackground');
     this.errorLineNumber = ln;
