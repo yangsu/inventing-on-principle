@@ -29,7 +29,9 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
       .on('change:tokens', this.renderTokens, this)
       .on('change:ast', this.renderSyntax, this)
       .on('change:decs', this.renderDeclarations, this)
-      .on('change:generatedCode', this.renderGeneratedCode, this);
+      .on('change:generatedCode', this.renderGeneratedCode, this)
+      .on('tracedFunctions', this.renderFunctionTraces, this)
+    ;
   },
   events: {
     'change input[type=checkbox]': 'parse',
@@ -113,6 +115,28 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
         self.$vars.append(self.spacer);
       }
     })
+  },
+  renderFunctionTraces: function (histogram, funcs) {
+    // Normalize histogram
+    var max = _.max(_.values(histogram));
+    _.each(histogram, function (count, funcname) {
+      histogram[funcname] = count/max;
+    });
+
+    var self = this
+      , $lines = this.$('#vars').children();
+
+    _.each(funcs.reverse(), function (func) {
+      var start = func.loc.start.line - 1
+        , end = func.loc.end.line - 1
+        , weight = histogram[func.name]
+        // , color = '#' + util.toHex(weight * 255, 2) + util.toHex(weight * 255, 2) + util.toHex(weight * 255, 2);
+        , color = 'rgba(255, 0, 0, ' + weight + ')';
+      $lines.slice(start, end).css({
+        'background-color': color
+      });
+    })
+    return this;
   },
   scrollVars: function (scrollInfo) {
     this.$('#decsContainer').scrollTop(scrollInfo.y);

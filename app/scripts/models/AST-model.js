@@ -206,7 +206,8 @@
       try {
         eval(source);
         var hist = window.tracer.funcHistogram();
-        console.log(hist);
+        console.log(hist, functionList);
+        this.trigger('tracedFunctions', hist, functionList);
       } catch (e) {
         console.log(e);
       }
@@ -233,17 +234,18 @@
         self.extractFunction(node, functionList);
       });
 
-      if (!_.isEqual(functionList, this.get('functionList'))) {
-        this
-          .instrumentFunctions(functionList)
-          .set('functionList', functionList);
-      }
       var vars = map['Variable'];
       this.get('vars').reset(vars);
       var funs = map['Function'];
       this.get('funs').reset(funs);
 
       this.trigger('change:decs', vars, funs);
+
+      if (!_.isEqual(functionList, this.get('functionList'))) {
+        this
+          .instrumentFunctions(functionList)
+          .set('functionList', functionList);
+      }
     },
     onASTChange: function () {
       try {
