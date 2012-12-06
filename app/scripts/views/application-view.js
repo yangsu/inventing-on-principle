@@ -138,7 +138,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
         , weight = normalized[func.name]
         , count = histogram[func.name]
         // , color = '#' + util.toHex(weight * 255, 2) + util.toHex(weight * 255, 2) + util.toHex(weight * 255, 2);
-        , color = 'rgba(255, 0, 0, ' + util.mapValue(weight, 0.05, 1) + ')'
+        , color = 'rgba(255, 0, 0, ' + util.mapValue(weight, 0.05, 0.9) + ')'
         , $lineinfo = inventingOnPrinciple.getTemplate('lineinfo')({ msg: count })
         , $linesInRange = $lines.slice(start, end);
       $linesInRange.css({
