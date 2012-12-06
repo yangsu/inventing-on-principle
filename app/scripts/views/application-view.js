@@ -122,9 +122,10 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
   },
   renderFunctionTraces: function (histogram, funcs) {
     // Normalize histogram
-    var max = inventingOnPrinciple.Options.max;
+    var max = inventingOnPrinciple.Options.max
+      , normalized = {};
     _.each(histogram, function (count, funcname) {
-      histogram[funcname] = count/max;
+      normalized[funcname] = count/max;
     });
 
 
@@ -134,12 +135,18 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
     _.each(funcs.reverse(), function (func) {
       var start = func.loc.start.line - 1
         , end = func.loc.end.line - 1
-        , weight = histogram[func.name]
+        , weight = normalized[func.name]
+        , count = histogram[func.name]
         // , color = '#' + util.toHex(weight * 255, 2) + util.toHex(weight * 255, 2) + util.toHex(weight * 255, 2);
-        , color = 'rgba(255, 0, 0, ' + weight + ')';
-      $lines.slice(start, end).css({
+        , color = 'rgba(255, 0, 0, ' + util.mapValue(weight, 0.05, 1) + ')'
+        , $lineinfo = inventingOnPrinciple.getTemplate('lineinfo')({ msg: count })
+        , $linesInRange = $lines.slice(start, end);
+      $linesInRange.css({
         'background-color': color
       });
+      $linesInRange
+        .find('.lineinfo').remove().end()
+        .append($lineinfo);
     })
     return this;
   },

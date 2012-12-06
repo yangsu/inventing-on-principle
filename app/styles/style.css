@@ -224,6 +224,16 @@ textarea {
 #vars .spacer {
   height: 1em;
 }
+#vars div {
+  /*position: relative;*/
+}
+#vars .lineinfo {
+  position: absolute;
+  right: 5px;
+  z-index: 11;
+  background-color: transparent;
+  border-color: 1px solid red;
+}
 #vars span {
   display: inline-block;
 }
