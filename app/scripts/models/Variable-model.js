@@ -7,7 +7,7 @@ inventingOnPrinciple.Models.VariableModel = Backbone.Model.extend({
       if (dec.id.name == key && dec.init.value != value) {
         dec.init.value = value;
         dec.init.update(value);
-        self.trigger('change:decs');
+        self.trigger('change');
       }
     });
   },

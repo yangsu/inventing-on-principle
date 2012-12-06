@@ -50,7 +50,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend({
     }
   },
   parse: function (text, editor) {
-    if (text == this.ast.toSource()) return;
+    // if (text == this.ast.toSource()) return;
 
     if (inventingOnPrinciple.updating) {
       return;

@@ -71,7 +71,13 @@
         inventingOnPrinciple.codeEditor.setValue(self.toSource());
         inventingOnPrinciple.view.runCode();
         inventingOnPrinciple.updating = false;
-      });
+
+        // Instrument Function
+        self.extractFunctions();
+      }).on('endChange', function () {
+        self.trigger('reparse');
+        self.extractFunctions();
+      })
     },
     setSource: function (text, options) {
       if (typeof text !== 'string') {
@@ -90,6 +96,7 @@
       }, options);
 
       this.posttraverse(insertHelpers);
+
       return this;
     },
     toSource: function () {
@@ -170,12 +177,14 @@
         functionList.push(func);
       }
     },
-    instrumentFunctions: function (functionList) {
+    instrumentFunctions: function () {
       // Insert the instrumentation code from the last entry.
       // This is to ensure that the range for each entry remains valid)
       // (it won't shift due to some new inserting string before the range).
-      var source = this.get('ast').source()
-        , traceFunc = 'window.tracer.traceFunc';
+      var functionList = this.get('functionList')
+        , source = this.get('ast').source()
+        , traceFunc = 'window.tracer.traceFunc'
+        , signature, pos;
 
       for (var i = 0, l = functionList.length; i < l; i += 1) {
         var func = functionList[i]
@@ -206,19 +215,31 @@
       try {
         eval(source);
         var hist = window.tracer.funcHistogram();
-        console.log(hist, functionList);
+        console.log(JSON.stringify(hist));
         this.trigger('tracedFunctions', hist, functionList);
       } catch (e) {
         console.log(e);
+        console.trace(e);
+        console.log(source);
       }
 
       window.tracer.active = false;
       return this;
     },
+    extractFunctions: function () {
+      var functionList = []
+        , self = this;
+
+      this.pretraverse(function (node) {
+        self.extractFunction(node, functionList);
+      });
+
+      this
+        .set('functionList', functionList)
+        .instrumentFunctions();
+    },
     extractDeclarations: function () {
       var map = {}
-        , functionList = []
-        , signature, pos
         , self = this;
 
       this.pretraverse(function (node) {
@@ -231,7 +252,6 @@
             map[type] = [model];
           }
         }
-        self.extractFunction(node, functionList);
       });
 
       var vars = map['Variable'];
@@ -241,11 +261,7 @@
 
       this.trigger('change:decs', vars, funs);
 
-      if (!_.isEqual(functionList, this.get('functionList'))) {
-        this
-          .instrumentFunctions(functionList)
-          .set('functionList', functionList);
-      }
+      this.extractFunctions();
     },
     onASTChange: function () {
       try {

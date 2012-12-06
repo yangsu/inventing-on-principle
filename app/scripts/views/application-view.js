@@ -31,6 +31,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
       .on('change:decs', this.renderDeclarations, this)
       .on('change:generatedCode', this.renderGeneratedCode, this)
       .on('tracedFunctions', this.renderFunctionTraces, this)
+      .on('reparse', this.parse, this)
     ;
   },
   events: {

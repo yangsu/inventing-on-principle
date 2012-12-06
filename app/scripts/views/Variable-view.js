@@ -4,6 +4,11 @@ inventingOnPrinciple.Views.VariableView = Backbone.View.extend({
   tagName: 'div',
   className: 'varDecs',
   events: {
+    'mouseup': 'onMouseUp'
+  },
+  onMouseUp: function (e) {
+    console.log(e);
+    this.model.trigger('endChange');
   },
   initTangle: function () {
     var self = this
