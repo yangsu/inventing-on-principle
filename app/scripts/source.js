@@ -1,6 +1,7 @@
 var a = 10;
 for (var i = 0; i < a; i += 1) {
   log(i);
+  f();
 }
 
 function f (args) {
@@ -18,6 +19,3 @@ function f (args) {
     f2(b);
   }
 }
-
-f();
-
