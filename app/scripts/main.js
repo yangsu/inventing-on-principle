@@ -45,6 +45,7 @@ $(document).ready(function(){
         inventingOnPrinciple.view.trackCursor(editor);
       },
       onChange: function (editor, changeInfo) {
+        inventingOnPrinciple.view.clearError();
         inventingOnPrinciple.view.parse(editor, changeInfo);
       }
     });

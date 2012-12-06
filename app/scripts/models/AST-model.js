@@ -214,17 +214,10 @@
 
       window.tracer.active = true;
 
-
-      try {
-        inventingOnPrinciple.view.clearConsole();
-        eval(source);
-        var hist = window.tracer.funcHistogram();
-        this.trigger('tracedFunctions', hist, functionList);
-      } catch (e) {
-        console.log(e);
-        console.trace(e);
-        console.log(source);
-      }
+      inventingOnPrinciple.view.clearConsole();
+      eval(source);
+      var hist = window.tracer.funcHistogram();
+      this.trigger('tracedFunctions', hist, functionList);
 
       window.tracer.active = false;
       return this;

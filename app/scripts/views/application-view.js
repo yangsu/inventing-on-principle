@@ -33,6 +33,8 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
       .on('tracedFunctions', this.renderFunctionTraces, this)
       .on('reparse', this.parse, this)
     ;
+    this.model
+      .on('error', this.renderError, this)
   },
   events: {
     'change input[type=checkbox]': 'parse',
@@ -148,6 +150,23 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend({
         .find('.lineinfo').remove().end()
         .append($lineinfo);
     })
+    return this;
+  },
+  clearError: function () {
+    if (this.errorLineNumber >= 0) {
+      inventingOnPrinciple.codeEditor.setLineClass(this.errorLineNumber, null, null);
+      this.$('#codeContainer .errorContainer').html('');
+    }
+  },
+  renderError: function (e) {
+    var ln = e.lineNumber - 1;
+    this.clearError();
+    inventingOnPrinciple.codeEditor.setLineClass(ln, 'errorLine', 'errorLineBackground');
+    this.errorLineNumber = ln;
+
+    this.$('#codeContainer .errorContainer')
+      .html(inventingOnPrinciple.getTemplate('lineinfo')({ msg: e.message }))
+      .css('top', (ln + 0.5) + 'em');
     return this;
   },
   scrollVars: function (scrollInfo) {

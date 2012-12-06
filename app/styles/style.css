@@ -227,7 +227,8 @@ textarea {
 #vars div {
   /*position: relative;*/
 }
-#vars .lineinfo {
+
+.lineinfo {
   position: absolute;
   right: 5px;
   z-index: 11;
@@ -236,4 +237,18 @@ textarea {
 }
 #vars span {
   display: inline-block;
+}
+
+.errorContainer {
+  position: absolute;
+  right: 0;
+  line-height: 1em;
+  width: 100%;
+}
+
+.CodeMirror .errorLine {
+  /*color: white;*/
+}
+.CodeMirror .errorLineBackground {
+  background-color: rgba(255, 0, 0, 0.3);
 }
