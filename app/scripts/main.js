@@ -46,6 +46,11 @@ $(document).ready(function(){
       }
     });
 
+
+    $.get('/scripts/source.js', function (source) {
+      inventingOnPrinciple.codeEditor.setValue(source);
+    });
+
     inventingOnPrinciple.outputcode = CodeMirror.fromTextArea(document.getElementById('outputcode'), {
       mode: 'javascript',
       lineNumbers: true,
