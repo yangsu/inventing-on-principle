@@ -16,3 +16,7 @@ npm-debug.log
 
 # Sublime
 *.sublime-workspace
+
+# Yeoman
+temp
+dist
