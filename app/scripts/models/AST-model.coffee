@@ -1,34 +1,3 @@
-insertHelpers = (node, parent, chunks, depth) ->
-  return unless node.range
-
-  node.depth = depth
-  node.parent = parent
-  node.source = ->
-    chunks[node.range[0]...node.range[1]].join('')
-
-  node.updateSource = (s) ->
-    chunks[node.range[0]] = s
-    chunks[i] = '' for i in [(node.range[0] + 1)...node.range[1]]
-    s
-
-traverse = (ast, chunks, prefunc, postfunc) ->
-  walk = (node, parent, depth = 0) =>
-    postfunc.call(@, node, parent, chunks, depth) if postfunc?
-    _.each node, (child, key) =>
-      return if key in ['parent', 'range', 'loc']
-
-      if _.isArray(child)
-        _.each child, (grandchild) ->
-          walk(grandchild, node, depth + 1) if grandchild and typeof grandchild.type is 'string'
-
-      else if child? and typeof child.type is 'string'
-        postfunc.call(@, child, node, chunks, depth) if postfunc?
-        walk(child, node, depth)
-
-    prefunc.call(@, node, parent, chunks) if prefunc?
-
-  walk(ast)
-
 inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
   defaults:
     parsingOptions:
@@ -78,23 +47,23 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
       tokens: tokens
     }, options)
 
-    @posttraverse insertHelpers
+    @posttraverse util.insertHelpers
     this
 
   toSource: ->
     @get('ast').source?()
 
-  traverse: (prefunc, postfunc) ->
-    ast = @get('ast')
+  traverse: (prefunc, postfunc, ast) ->
+    ast ?= @get('ast')
     chunks = @get('chunks')
     if ast? and chunks?
-      traverse.call(this, ast, chunks, prefunc, postfunc)
+      util.traverse.call(this, ast, chunks, prefunc, postfunc)
 
-  pretraverse: (f) ->
-    @traverse(f)
+  pretraverse: (f, ast) ->
+    @traverse(f, null, ast)
 
-  posttraverse: (f) ->
-    @traverse(null, f)
+  posttraverse: (f, ast) ->
+    @traverse(null, f, ast)
 
   extractFunction: (node, functionList) ->
     parent = node.parent
@@ -208,6 +177,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
     funs = declarationMap['Function']
     @get('funs').reset funs
     @trigger 'change:decs', vars, funs
+
 
     console.log statementMap
     console.log expressionMap
