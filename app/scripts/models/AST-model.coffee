@@ -56,9 +56,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
     vars
     .on 'change:var', =>
       inventingOnPrinciple.updating = true
-      last = inventingOnPrinciple.codeEditor.getValue()
-      current = @toSource()
-      inventingOnPrinciple.codeEditor.setValue(current)
+      inventingOnPrinciple.codeEditor.setValue(@toSource())
       inventingOnPrinciple.updating = false
       @instrumentFunctions()
     .on 'endChange', =>
