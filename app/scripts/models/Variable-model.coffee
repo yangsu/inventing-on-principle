@@ -4,7 +4,7 @@ inventingOnPrinciple.Models.VariableModel = Backbone.Model.extend
     _.each @get('declarations'), (dec) =>
       if dec.id.name is key and dec.init.value isnt value
         dec.init.value = value
-        dec.init.update(value)
+        dec.init.updateSource(value)
         @trigger('change:var')
 
   toDeclarations: ->

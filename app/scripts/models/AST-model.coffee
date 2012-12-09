@@ -6,7 +6,7 @@ insertHelpers = (node, parent, chunks, depth) ->
   node.source = ->
     chunks[node.range[0]...node.range[1]].join('')
 
-  node.update = (s) ->
+  node.updateSource = (s) ->
     chunks[node.range[0]] = s
     chunks[i] = '' for i in [(node.range[0] + 1)...node.range[1]]
     s
@@ -152,7 +152,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
 
       if func.body? and func.body.length
         node = func.body[0]
-        node.update(signature + '\n' + node.source());
+        node.updateSource(signature + '\n' + node.source());
 
     # Store updated source with function traces
     source = @get('ast').source()
