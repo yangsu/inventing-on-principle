@@ -107,35 +107,30 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
       loc: node.loc
       body: if node.body? then node.body.body
 
+    name = ''
+
     if node.type is Syntax.FunctionDeclaration
-      _.extend func,
-        name: node.id.name
+      name = node.id.name
 
     else if node.type is Syntax.FunctionExpression
-      if parent.type is Syntax.AssignmentExpression
-        if parent.left.range?
-          _.extend func,
-            name: code.slice(parent.left.range[0], parent.left.range[1] + 1)
+      if parent.type is Syntax.AssignmentExpression and parent.left.range?
+        name = code.slice(parent.left.range[0], parent.left.range[1] + 1)
 
       else if parent.type is Syntax.VariableDeclarator
-        _.extend func,
-          name: parent.id.name
+        name = parent.id.name
 
       else if parent.type is Syntax.CallExpression
-        _.extend func,
-          name: if parent.id then parent.id.name else '[Anonymous]'
+        name = if parent.id then parent.id.name else '[Anonymous]'
 
       else if typeof parent.length is 'number'
-        _.extend func,
-          name: if parent.id then parent.id.name else '[Anonymous]'
+        name = if parent.id then parent.id.name else '[Anonymous]'
 
-      else if typeof parent.key isnt 'undefined'
-        if parent.key.type is 'Identifier'
-          if parent.value is node and parent.key.name
-            _.extend func,
-              name: parent.key.name
+      else if parent.key?
+        if parent.key.type is Syntax.Identifier and parent.value is node and parent.key.name
+          name = parent.key.name
 
-    functionList.push func if func.name
+    if name? and name.length
+      functionList.push _.extend(func, name: name)
 
   instrumentFunctions: ->
     functionList = []
