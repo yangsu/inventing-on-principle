@@ -9,7 +9,7 @@
     {
       "path": ".",
       "file_exclude_patterns": ["*.sublime-workspace", ".gitattributes", ".npmignore"],
-      "folder_exclude_patterns": ["app"]
+      "folder_exclude_patterns": ["app", "temp", "dist"]
     }
   ],
   "settings": {
