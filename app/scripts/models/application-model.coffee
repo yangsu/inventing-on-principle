@@ -1,4 +1,4 @@
-inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend(
+inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
 
   markers: []
 
@@ -23,8 +23,8 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend(
         @markers.push(marker)
         id = node
 
-    unless _.isUndefined(id)
-      @ast.pretraverse (node) ->
+    if id?
+      @ast.pretraverse (node) =>
         if node? and node.type is Syntax.Identifier and node isnt id and node.name is id.name
           marker = editor.markText(util.convertLoc(node.loc.start), util.convertLoc(node.loc.end), 'highlight')
           @markers.push(marker)
@@ -52,4 +52,3 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend(
 
   text: ->
     @ast.toSource()
-)

@@ -9,6 +9,7 @@ insertHelpers = (node, parent, chunks, depth) ->
   node.update = (s) ->
     chunks[node.range[0]] = s
     chunks[i] = '' for i in [(node.range[0] + 1)...node.range[1]]
+    s
 
 traverse = (ast, chunks, prefunc, postfunc) ->
   walk = (node, parent, depth = 0) =>
@@ -28,7 +29,7 @@ traverse = (ast, chunks, prefunc, postfunc) ->
 
   walk(ast)
 
-inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend(
+inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
   defaults:
     parsingOptions:
       # Range is required
@@ -53,9 +54,11 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend(
     })
 
     vars
-    .on 'change', =>
+    .on 'change:var', =>
       inventingOnPrinciple.updating = true
-      inventingOnPrinciple.codeEditor.setValue(@toSource())
+      last = inventingOnPrinciple.codeEditor.getValue()
+      current = @toSource()
+      inventingOnPrinciple.codeEditor.setValue(current)
       inventingOnPrinciple.updating = false
       @instrumentFunctions()
     .on 'endChange', =>
@@ -81,7 +84,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend(
     this
 
   toSource: ->
-    (@get('ast') and @get('ast').source()) or ''
+    @get('ast').source?()
 
   traverse: (prefunc, postfunc) ->
     ast = @get('ast')
@@ -146,7 +149,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend(
               loc: node.loc
               blockStart: node.body.range[0]
 
-    functionList.push func  if func.name
+    functionList.push func if func.name
 
   instrumentFunctions: ->
     functionList = []
@@ -155,37 +158,28 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend(
 
     @set 'functionList', functionList
     source = @get('ast').source()
-    traceFunc = 'window.tracer.traceFunc'
 
-    i = 0
-    l = functionList.length
-
-    while i < l
-      func = functionList[i]
-      param =
+    for func in functionList
+      params =
         name: func.name
         range: func.range
         loc: func.loc
+        lineNumber: if func.loc? then func.loc.start.line else null
 
-      signature = ''
-
-      if typeof traceFunc is 'function'
-        signature = traceFunc.call(null, param)
-      else
-        signature = traceFunc + '({ '
-        signature += 'name: "' + func.name + '", '
-        signature += 'lineNumber: ' + func.loc.start.line + ', ' if typeof func.loc isnt 'undefined'
-        signature += 'range: [' + func.range[0] + ', ' + func.range[1] + '] '
-        signature += '});'
+      signature = window.tracer.genTraceFunc(params)
 
       pos = func.blockStart + 1
       source = source.slice(0, pos) + '\n' + signature + source.slice(pos)
-      i += 1
 
     window.tracer.active = true
     inventingOnPrinciple.view.clearConsole()
 
-    eval(source)
+    try
+      eval(source)
+    catch e
+      console.log(e.toString())
+      console.log(e)
+      console.log(source)
 
     hist = window.tracer.funcHistogram()
     @trigger 'tracedFunctions', hist, functionList
@@ -219,4 +213,3 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend(
       @set generatedCode: generated
     catch e
       console.log 'gen Error', e
-)

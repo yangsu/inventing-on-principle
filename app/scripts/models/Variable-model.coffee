@@ -1,12 +1,11 @@
-inventingOnPrinciple.Models.VariableModel = Backbone.Model.extend(
+inventingOnPrinciple.Models.VariableModel = Backbone.Model.extend
   idAttribute: 'vid'
   setVar: (key, value) ->
     _.each @get('declarations'), (dec) =>
       if dec.id.name is key and dec.init.value isnt value
         dec.init.value = value
         dec.init.update(value)
-        @trigger('change')
-
+        @trigger('change:var')
 
   toDeclarations: ->
     _.map @get('declarations'), (dec, i) =>
@@ -19,4 +18,3 @@ inventingOnPrinciple.Models.VariableModel = Backbone.Model.extend(
   toTemplate: ->
     depth: @get('depth')
     decs: @toDeclarations()
-)

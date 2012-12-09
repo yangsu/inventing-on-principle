@@ -3,8 +3,13 @@ GLOBAL = exports ? this
 tracer =
   active: false
   funcDict: {}
+  genTraceFunc: (params) ->
+    paramsStr = JSON.stringify(params)
+    signature = tracer.traceFuncName + "(#{paramsStr});"
+
+  traceFuncName: 'window.tracer.traceFunc'
   traceFunc: (params) ->
-    return  unless tracer.active
+    return unless tracer.active
     name = params.name
     if tracer.funcDict[name]
       tracer.funcDict[name] += 1

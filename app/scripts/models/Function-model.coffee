@@ -1,3 +1,2 @@
-inventingOnPrinciple.Models.FunctionModel = Backbone.Model.extend(
+inventingOnPrinciple.Models.FunctionModel = Backbone.Model.extend
   idAttribute: 'fid'
-)

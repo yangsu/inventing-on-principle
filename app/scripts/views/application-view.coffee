@@ -1,4 +1,4 @@
-inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend(
+inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
   spacer: inventingOnPrinciple.getTemplate('spacer')()
   initialize: ->
 
@@ -59,11 +59,8 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend(
     @model.trackCursor editor
 
   parse: (editor, changeInfo) ->
-    text = undefined
-    if _.isUndefined(inventingOnPrinciple.codeEditor)
-      text = @$code.val()
-    else
-      text = inventingOnPrinciple.codeEditor.getValue()
+    editor ?= inventingOnPrinciple.codeEditor
+    text = if editor? then editor.getValue() else @$code.val()
     @model.parse text, editor
 
   renderUrl: ->
@@ -135,15 +132,15 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend(
 
     # Either the lineNumber is contained in the error object
     # Or guess that the error was due to the last change and use cursor's position
-    ln = (if e.lineNumber then e.lineNumber - 1 else inventingOnPrinciple.codeEditor.getCursor().line)
+    ln = if e.lineNumber then e.lineNumber - 1 else inventingOnPrinciple.codeEditor.getCursor().line
     @clearError()
 
     inventingOnPrinciple.codeEditor.setLineClass ln, 'errorLine', 'errorLineBackground'
     @errorLineNumber = ln
 
     @$('#codeContainer .errorContainer')
-      .html inventingOnPrinciple.getTemplate('lineinfo')(msg: e.message)
-      .css 'top', (ln + 0.5) + 'em'
+      .html(inventingOnPrinciple.getTemplate('lineinfo')(msg: e.message))
+      .css('top', (ln + 0.5) + 'em')
     this
 
   scrollVars: (scrollInfo) ->
@@ -155,4 +152,3 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend(
     @renderSyntax()
     @renderGeneratedCode()
     @renderDeclarations()
-)

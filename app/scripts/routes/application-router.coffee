@@ -1,2 +1,1 @@
-inventingOnPrinciple.Routers.ApplicationRouter = Backbone.Router.extend(
-)
+inventingOnPrinciple.Routers.ApplicationRouter = Backbone.Router.extend
