@@ -178,22 +178,39 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
     this
 
   extractDeclarations: ->
-    map = {}
+    declarationMap = {}
+    statementMap = {}
+    expressionMap = {}
 
     @pretraverse (node) ->
-      type = node.type.slice(0, -11)
       if node.type.slice(-11) is 'Declaration'
+        type = node.type.slice(0, -11)
         model = new inventingOnPrinciple.Models[type + 'Model'](node)
-        if map[type]
-          map[type].push model
+        if declarationMap[type]
+          declarationMap[type].push model
         else
-          map[type] = [model]
+          declarationMap[type] = [model]
+      else if node.type.slice(-9) is 'Statement'
+        type = node.type.slice(0, -9)
+        if statementMap[type]
+          statementMap[type].push node
+        else
+          statementMap[type] = [node]
+      else if node.type.slice(-10) is 'Expression'
+        type = node.type.slice(0, -10)
+        if expressionMap[type]
+          expressionMap[type].push node
+        else
+          expressionMap[type] = [node]
 
-    vars = map['Variable']
+    vars = declarationMap['Variable']
     @get('vars').reset vars
-    funs = map['Function']
+    funs = declarationMap['Function']
     @get('funs').reset funs
     @trigger 'change:decs', vars, funs
+
+    console.log statementMap
+    console.log expressionMap
 
     this
 
