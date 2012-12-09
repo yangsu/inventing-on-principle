@@ -76,45 +76,45 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     inventingOnPrinciple.outputcode.setValue @model.generatedCode()  if @$codeTab.hasClass('active')
 
   renderDeclarations: ->
-    self = this
-    self.$vars.empty()
+    @$vars.empty()
     lines = []
     linenumber = undefined
-    self.model.ast.get('vars').each (varDec, i) ->
+    @model.ast.get('vars').each (varDec, i) ->
       linenumber = varDec.get('loc').start.line - 1
       view = new inventingOnPrinciple.Views.VariableView(model: varDec)
       lines[linenumber] = view
 
-    self.model.ast.get('funs').each (funDec, i) ->
+    @model.ast.get('funs').each (funDec, i) ->
       linenumber = funDec.get('loc').start.line - 1
       view = new inventingOnPrinciple.Views.FunctionView(model: funDec)
       lines[linenumber] = view
 
-    _.each lines, (line) ->
+    _.each lines, (line) =>
       if line
-        self.$vars.append line.render().$el
+        @$vars.append line.render().$el
         line.initTangle()  if line.initTangle
       else
-        self.$vars.append self.spacer
+        @$vars.append @spacer
 
 
   renderFunctionTraces: (histogram, funcs) ->
 
-    # Normalize histogram
     max = inventingOnPrinciple.Options.max
     normalized = {}
     _.each histogram, (count, funcname) ->
       normalized[funcname] = count / max
 
-    self = this
     $lines = @$('#vars').children()
+
+    # Clear previous function traces
+    $lines.css('background-color', 'transparent')
+
     _.each funcs.reverse(), (func) ->
       start = func.loc.start.line - 1
       end = func.loc.end.line - 1
       weight = normalized[func.name]
       count = histogram[func.name]
 
-      # , color = '#' + util.toHex(weight * 255, 2) + util.toHex(weight * 255, 2) + util.toHex(weight * 255, 2);
       color = 'rgba(255, 0, 0, ' + util.mapValue(weight, 0.05, 0.9) + ')'
       $lineinfo = inventingOnPrinciple.getTemplate('lineinfo')(msg: count)
       $linesInRange = $lines.slice(start, end)

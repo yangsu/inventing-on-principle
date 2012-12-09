@@ -101,63 +101,52 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
   extractFunction: (node, functionList) ->
     parent = node.parent
 
-    func = node: node
+    func =
+      node: node
+      range: node.range
+      loc: node.loc
+      body: if node.body? then node.body.body
 
     if node.type is Syntax.FunctionDeclaration
       _.extend func,
         name: node.id.name
-        range: node.range
-        loc: node.loc
-        blockStart: node.body.range[0]
 
     else if node.type is Syntax.FunctionExpression
       if parent.type is Syntax.AssignmentExpression
         if parent.left.range?
           _.extend func,
             name: code.slice(parent.left.range[0], parent.left.range[1] + 1)
-            range: node.range
-            loc: node.loc
-            blockStart: node.body.range[0]
 
       else if parent.type is Syntax.VariableDeclarator
         _.extend func,
           name: parent.id.name
-          range: node.range
-          loc: node.loc
-          blockStart: node.body.range[0]
 
       else if parent.type is Syntax.CallExpression
         _.extend func,
-          name: (if parent.id then parent.id.name else '[Anonymous]')
-          range: node.range
-          loc: node.loc
-          blockStart: node.body.range[0]
+          name: if parent.id then parent.id.name else '[Anonymous]'
 
       else if typeof parent.length is 'number'
         _.extend func,
-          name: (if parent.id then parent.id.name else '[Anonymous]')
-          range: node.range
-          loc: node.loc
-          blockStart: node.body.range[0]
+          name: if parent.id then parent.id.name else '[Anonymous]'
 
       else if typeof parent.key isnt 'undefined'
         if parent.key.type is 'Identifier'
           if parent.value is node and parent.key.name
             _.extend func,
               name: parent.key.name
-              range: node.range
-              loc: node.loc
-              blockStart: node.body.range[0]
 
     functionList.push func if func.name
 
   instrumentFunctions: ->
     functionList = []
+
     @pretraverse (node) =>
       @extractFunction(node, functionList)
 
+    chunks = @get('chunks')
+    chunksCopy = _.clone(chunks)
+
     @set 'functionList', functionList
-    source = @get('ast').source()
 
     for func in functionList
       params =
@@ -168,8 +157,16 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
 
       signature = window.tracer.genTraceFunc(params)
 
-      pos = func.blockStart + 1
-      source = source.slice(0, pos) + '\n' + signature + source.slice(pos)
+      if func.body? and func.body.length
+        node = func.body[0]
+        node.update(signature + '\n' + node.source());
+
+    # Store updated source with function traces
+    source = @get('ast').source()
+
+    # Reset chunks
+    for chunk, i in chunksCopy
+      chunks[i] = chunksCopy[i]
 
     window.tracer.active = true
     inventingOnPrinciple.view.clearConsole()
