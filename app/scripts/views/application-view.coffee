@@ -127,7 +127,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
   renderStatementTraces: (list, map) ->
     console.log(map)
     for i in list
-      console.log i.type
+      console.log i.type, i.data
 
 
   clearError: ->

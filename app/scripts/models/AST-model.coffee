@@ -116,27 +116,26 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
       forList.push forStmt
 
   instrumentFunctions: ->
-    functionList = []
-    forList = []
-    statementMap = {}
+    lists =
+      function: []
+      for: []
+      forIn: []
+      expression: []
 
     @pretraverse (node) =>
-      @extractFunction(node, functionList)
-      # @extractFor(node, forList)
-      type = node.type.slice(0, -9)
-      if node.type.slice(-9) is 'Statement' and type isnt 'Block'
-        if statementMap[type]
-          statementMap[type].push node
-        else
-          statementMap[type] = [node]
+      @extractFunction(node, lists.function)
+      if node.type is Syntax.ForStatement
+        lists.for.push(node)
+      else if node.type is Syntax.ForInStatement
+        lists.forIn.push(node)
+      else if node.type is Syntax.ExpressionStatement
+        lists.expression.push(node)
 
     chunks = @get('chunks')
     chunksCopy = _.clone(chunks)
 
     # Functions ----------------------------------------------------------------
-    @set 'functionList', functionList
-
-    for func in functionList
+    for func in lists.function
       params =
         name: func.name
         range: func.range
@@ -147,16 +146,42 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
 
       if func.body? and func.body.length
         node = func.body[0]
-        node.updateSource(signature + '\n' + node.source());
+        node.insertBefore(signature);
 
     # For Statment -------------------------------------------------------------
-    @set 'forList', forList
+    for forStatement in lists.for
+      signature = window.tracer.getTraceStatement
+        type: forStatement.type
+        data:
+          init: forStatement.init.source()
+          test: forStatement.test.source()
+          update: forStatement.update.source()
+      forStatement.insertBefore(signature);
 
-    for own type, statements of statementMap
-      for statement in statements
-        signature = window.tracer.getTraceStatement
-          type: statement.type
-        statement.updateSource(signature + '\n' + statement.source());
+    # ForIn Statment -------------------------------------------------------------
+    for forInStatement in lists.forIn
+      signature = window.tracer.getTraceStatement
+        type: forInStatement.type
+        data:
+          left: forInStatement.left.source()
+          right: forInStatement.right.source()
+      forInStatement.insertBefore(signature);
+
+    # Expression Statment -------------------------------------------------------------
+    for expStatement in lists.expression
+      exp = expStatement.expression
+      parent = expStatement.parent
+      data = {}
+      switch exp.type
+        when Syntax.CallExpression
+          data.callee = exp.callee.source()
+          data.arguments = (arg.source() for arg in exp.arguments)
+
+      signature = window.tracer.getTraceStatement
+        type: expStatement.type
+        data: data
+
+      expStatement.insertBefore(signature);
 
     # Store updated source with function traces
     source = @get('ast').source()
@@ -176,10 +201,10 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
       console.log(source)
 
     hist = window.tracer.funcHistogram()
-    @trigger 'tracedFunctions', hist, functionList
+    @trigger 'tracedFunctions', hist, lists.function
 
     list = window.tracer.getStatementList()
-    @trigger 'tracedStatements', list, statementMap
+    @trigger 'tracedStatements', list, lists
 
 
     window.tracer.active = false
