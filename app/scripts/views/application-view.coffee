@@ -108,6 +108,43 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
       else
         @$vars.append @spacer
 
+    markers = []
+    code =
+      for line, i in lines
+        if line?
+          list = []
+
+          for view in line
+            list.push view.renderText()
+            end =
+              line: i
+              ch: list.join(', ').length
+
+
+            if view.model.get('type') is Syntax.VariableDeclarator
+              value = String(view.model.toTemplateContext().value)
+              markers.push
+                #@TODO take into account multiple lines
+                start:
+                  line: i
+                  ch: end.ch - value.length
+                end: end
+
+          list.join(', ')
+        else
+          ''
+
+    stateEditor = inventingOnPrinciple.state
+    stateEditor.setValue code.join('\n')
+
+    for marker in markers
+      console.log marker.start
+      console.log stateEditor.getRange(marker.start, marker.end)
+      stateEditor.markText(
+        marker.start,
+        marker.end,
+        'highlight'
+      )
 
   renderFunctionTraces: (histogram, funcs) ->
 

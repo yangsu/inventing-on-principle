@@ -24,3 +24,7 @@ inventingOnPrinciple.Views.VariableView = Backbone.View.extend
   render: ->
     @$el.html @template @model.toTemplateContext()
     this
+
+  renderText: ->
+    ctx = @model.toTemplateContext()
+    "#{ctx.name} = #{ctx.value}"

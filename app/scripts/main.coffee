@@ -53,6 +53,11 @@ $ ->
       lineNumbers: true
       readOnly: true
     )
+
+    inventingOnPrinciple.state = CodeMirror.fromTextArea(document.getElementById('state'),
+      mode: 'javascript'
+      lineNumbers: true
+    )
   catch e
     console.log 'CodeMirror failed to initialize'
 
