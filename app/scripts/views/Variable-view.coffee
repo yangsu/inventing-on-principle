@@ -27,4 +27,7 @@ inventingOnPrinciple.Views.VariableView = Backbone.View.extend
 
   renderText: ->
     ctx = @model.toTemplateContext()
-    "#{ctx.name} = #{ctx.value}"
+    if ctx.type is Syntax.Literal and isNaN(+ctx.value)
+      "#{ctx.name} = \"#{ctx.value}\""
+    else
+      "#{ctx.name} = #{ctx.value}"

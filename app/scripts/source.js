@@ -30,3 +30,6 @@ for (key in obj) {
   log(key);
   log(obj[key]);
 }
+
+
+var test = 'taosetuhaoesuntahos';

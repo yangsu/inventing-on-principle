@@ -54,11 +54,12 @@ $ ->
       readOnly: true
     )
 
-    inventingOnPrinciple.state = CodeMirror.fromTextArea(document.getElementById('state'),
-      mode: 'javascript'
-      lineNumbers: true
-    )
+    inventingOnPrinciple.stateView = new inventingOnPrinciple.Views.StateView
+      el: '#stateContainer'
+
+
   catch e
+    console.log e
     console.log 'CodeMirror failed to initialize'
 
   inventingOnPrinciple.view.parse()
