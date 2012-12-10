@@ -9,11 +9,24 @@ inventingOnPrinciple.Models.VariableModel = Backbone.Model.extend
 
   toDeclarations: ->
     _.map @get('declarations'), (dec, i) =>
-      id: @cid + '-' + i
-      name: dec.id.name
-      init: dec.init
-      loc: dec.loc
+      decData =
+        id: @cid + '-' + i
+        name: dec.id.name
+        loc: dec.loc
+      if dec.init?
+        decData.type = dec.init.type
+        decData.init =
+          switch dec.init.type
+            when Syntax.Identifier then dec.init.name
+            when Syntax.Literal
+              decData.enableTangle = true
+              dec.init.value
+            else dec.init.source()
+      else
+        decData.type = 'undefined'
+        decData.init = 'undefined'
 
+      decData
 
   toTemplate: ->
     depth: @get('depth')

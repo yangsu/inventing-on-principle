@@ -2,10 +2,12 @@
 <% _.each(arguments[0].decs, function (dec) { %>
 <span class="varDec">
     <span class="cm-variable-2"><%= dec.name %> : </span>
-    <% if (dec.init.type == 'Identifier') { %>
-    <span class="cm-variable-2"><%= dec.init.name %></span>
-    <% } else if (dec.init.type == 'Literal') { %>
-    <span class="cm-number"><%= inventingOnPrinciple.getTemplate('tangleSpan')({ id: dec.id, label: dec.name, value: dec.init.value }) %></span>
+    <% if (dec.type == 'Identifier') { %>
+    <span class="cm-variable-2"><%= dec.init %></span>
+    <% } else if (dec.type == 'undefined') { %>
+    <span class="cm-atom"><%= dec.init %></span>
+    <% } else if (dec.type == 'Literal') { %>
+    <span class="cm-number"><%= inventingOnPrinciple.getTemplate('tangleSpan')({ id: dec.id, label: dec.name, value: dec.value }) %></span>
     <% } %>
 </span>
 <% }); %>
