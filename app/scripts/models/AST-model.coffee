@@ -99,15 +99,41 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
     if name? and name.length
       functionList.push _.extend(func, name: name)
 
+  extractFor: (node, forList) ->
+    parent = node.parent
+
+    forStmt =
+      node: node
+      loc: node.loc
+      body: if node.body? then node.body.body
+
+
+    if node.type is Syntax.ForStatement
+      forStmt.init = node.init
+      forStmt.test = node.test
+      forStmt.update = node.update
+
+      forList.push forStmt
+
   instrumentFunctions: ->
     functionList = []
+    forList = []
+    statementMap = {}
 
     @pretraverse (node) =>
       @extractFunction(node, functionList)
+      # @extractFor(node, forList)
+      type = node.type.slice(0, -9)
+      if node.type.slice(-9) is 'Statement' and type isnt 'Block'
+        if statementMap[type]
+          statementMap[type].push node
+        else
+          statementMap[type] = [node]
 
     chunks = @get('chunks')
     chunksCopy = _.clone(chunks)
 
+    # Functions ----------------------------------------------------------------
     @set 'functionList', functionList
 
     for func in functionList
@@ -122,6 +148,15 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
       if func.body? and func.body.length
         node = func.body[0]
         node.updateSource(signature + '\n' + node.source());
+
+    # For Statment -------------------------------------------------------------
+    @set 'forList', forList
+
+    for own type, statements of statementMap
+      for statement in statements
+        signature = window.tracer.getTraceStatement
+          type: statement.type
+        statement.updateSource(signature + '\n' + statement.source());
 
     # Store updated source with function traces
     source = @get('ast').source()
@@ -142,14 +177,17 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
 
     hist = window.tracer.funcHistogram()
     @trigger 'tracedFunctions', hist, functionList
+
+    list = window.tracer.getStatementList()
+    @trigger 'tracedStatements', list, statementMap
+
+
     window.tracer.active = false
 
     this
 
   extractDeclarations: ->
     declarationMap = {}
-    statementMap = {}
-    expressionMap = {}
 
     @pretraverse (node) ->
       if node.type.slice(-11) is 'Declaration'
@@ -159,28 +197,12 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
           declarationMap[type].push model
         else
           declarationMap[type] = [model]
-      else if node.type.slice(-9) is 'Statement'
-        type = node.type.slice(0, -9)
-        if statementMap[type]
-          statementMap[type].push node
-        else
-          statementMap[type] = [node]
-      else if node.type.slice(-10) is 'Expression'
-        type = node.type.slice(0, -10)
-        if expressionMap[type]
-          expressionMap[type].push node
-        else
-          expressionMap[type] = [node]
 
     vars = declarationMap['Variable']
     @get('vars').reset vars
     funs = declarationMap['Function']
     @get('funs').reset funs
     @trigger 'change:decs', vars, funs
-
-
-    console.log statementMap
-    console.log expressionMap
 
     this
 

@@ -31,6 +31,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
       .on('change:decs', @renderDeclarations, this)
       .on('change:generatedCode', @renderGeneratedCode, this)
       .on('tracedFunctions', @renderFunctionTraces, this)
+      .on('tracedStatements', @renderStatementTraces, this)
       .on('reparse', @parse, this)
 
     @model.on('error', @renderError, this)
@@ -122,6 +123,12 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
       $linesInRange.find('.lineinfo').remove().end().append $lineinfo
 
     this
+
+  renderStatementTraces: (list, map) ->
+    console.log(map)
+    for i in list
+      console.log i.type
+
 
   clearError: ->
     if @errorLineNumber >= 0
