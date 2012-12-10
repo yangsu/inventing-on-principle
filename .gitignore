@@ -20,3 +20,6 @@ npm-debug.log
 # Yeoman
 temp
 dist
+
+# SASS
+.sass-cache

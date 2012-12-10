@@ -1,0 +1,74 @@
+@import 'base'
+@import 'tabs'
+
+body
+  background-color: #ffffff
+  min-width: $width
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+
+.container
+  margin: 0 auto
+  width: $width
+
+.highlight
+  background-color: rgba(255, 255, 122, 0.4) !important
+
+.identifier
+  background-color: rgba(255, 255, 122, 0.4) !important
+  border: 1px solid #ffcc99
+  margin: -1px
+
+.left, .right
+  width: 49.8%
+  position: relative
+
+.left
+  float: left
+
+.right
+  float: right
+
+.CodeMirror
+  padding: 0
+  border: 1px solid #ccc
+
+.CodeMirror-scroll
+  height: $editorHeight
+
+#console
+  height: 100px
+  margin: 0
+  display: block
+  border: 1px solid #bbb
+
+#decsContainer
+  overflow: scroll
+  margin: 0
+  border: 1px solid #DDD
+
+#vars
+  padding: .4em
+  min-height: 27em
+  .spacer
+    height: 1em
+  span
+    display: inline-block
+
+.lineinfo
+  position: absolute
+  right: 5px
+  z-index: 11
+  background-color: transparent
+  border-color: 1px solid red
+
+.errorContainer
+  position: absolute
+  right: 0
+  line-height: 1em
+  width: 100%
+
+.CodeMirror
+  .errorLine
+    // color: white;
+  .errorLineBackground
+    background-color: rgba(255, 0, 0, 0.3)

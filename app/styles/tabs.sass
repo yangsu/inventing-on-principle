@@ -1,0 +1,47 @@
+@import 'base'
+
+.tab
+  min-height: $editorHeight
+
+.tabs
+  position: relative
+  display: block
+
+  ul, li
+    list-style-type: none
+    margin: 0
+  h3
+    float: left
+    position: relative
+    margin: 0 6px 0 0
+    border: 1px solid #bbb
+    background-color: #eee
+    border-bottom: none
+    cursor: pointer
+    z-index: 0
+    border-top-left-radius: 6px
+    border-top-right-radius: 6px
+  .active h3
+    background-color: #fff
+    border-bottom-color: #fff
+    z-index: 2
+  h3 a
+    padding: 0 10px
+    line-height: 29px
+    font-size: 13px
+    font-weight: normal
+  a
+    color: black
+    text-decoration: none
+    &:visited
+      color: black
+  .tab
+    position: absolute
+    display: none
+    left: 0
+    top: 29px
+    right: 0
+    border: 1px solid #bbb
+    z-index: 1
+  .active .tab
+    display: block
