@@ -1,33 +1,26 @@
 inventingOnPrinciple.Models.VariableModel = Backbone.Model.extend
   idAttribute: 'vid'
-  setVar: (key, value) ->
-    _.each @get('declarations'), (dec) =>
-      if dec.id.name is key and dec.init.value isnt value
-        dec.init.value = value
-        dec.init.updateSource(value)
-        @trigger('change:var')
+  setVar: (value) ->
+    init = @get('init')
+    if init? and init.value isnt value
+      init.value = value
+      init.updateSource(value)
+      @trigger('change:var')
 
-  toDeclarations: ->
-    _.map @get('declarations'), (dec, i) =>
-      decData =
-        id: @cid + '-' + i
-        name: dec.id.name
-        loc: dec.loc
-      if dec.init?
-        decData.type = dec.init.type
-        decData.init =
-          switch dec.init.type
-            when Syntax.Identifier then dec.init.name
-            when Syntax.Literal
-              decData.enableTangle = true
-              dec.init.value
-            else dec.init.source()
-      else
-        decData.type = 'undefined'
-        decData.init = 'undefined'
+  toTemplateContext: ->
+    init = @get('init')
 
-      decData
-
-  toTemplate: ->
+    id: @cid
     depth: @get('depth')
-    decs: @toDeclarations()
+    name: @get('id').name
+    loc: @get('loc')
+    type: (init and init.type) ? 'undefined'
+    node: @toJSON()
+    value:
+      if init?
+        switch init.type
+          when Syntax.Identifier then init.name
+          when Syntax.Literal then init.value
+          else init.source()
+      else
+        'undefined'

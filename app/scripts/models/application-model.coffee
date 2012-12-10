@@ -36,12 +36,13 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
 
     try
       @ast.setSource(text)
-        .extractDeclarations?()
+        .buildScope?()
         .instrumentFunctions?()
+
     catch e
-      # console.log(e.name + ': ' + e.message);
+      console.log(e.name + ': ' + e.message);
       # console.log(e);
-      # console.trace(e);
+      console.trace(e);
       @trigger('error', e)
 
   tokens: ->

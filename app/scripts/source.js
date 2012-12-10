@@ -1,4 +1,4 @@
-var a = 1;
+var a = 1, b;
 for (var i = 0; i < a; i += 1) {
   log(i);
   f();

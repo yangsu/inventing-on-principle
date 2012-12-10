@@ -1,13 +1,12 @@
-<%= inventingOnPrinciple.getTemplate('tab')(arguments[0].depth) %>
-<% _.each(arguments[0].decs, function (dec) { %>
-<span class="varDec">
-    <span class="cm-variable-2"><%= dec.name %> : </span>
-    <% if (dec.type == 'Identifier') { %>
-    <span class="cm-variable-2"><%= dec.init %></span>
-    <% } else if (dec.type == 'undefined') { %>
-    <span class="cm-atom"><%= dec.init %></span>
-    <% } else if (dec.type == 'Literal') { %>
-    <span class="cm-number"><%= inventingOnPrinciple.getTemplate('tangleSpan')({ id: dec.id, label: dec.name, value: dec.value }) %></span>
-    <% } %>
-</span>
-<% }); %>
+<% var ctx = arguments[0]; %>
+<%= inventingOnPrinciple.getTemplate('tab')(ctx.depth) %>
+<span class="cm-variable-2"><%= ctx.name %> : </span>
+<% if (ctx.type == 'Identifier') { %>
+<span class="cm-variable-2"><%= ctx.value %></span>
+<% } else if (ctx.type == 'undefined') { %>
+<span class="cm-atom"><%= ctx.value %></span>
+<% } else if (ctx.type == 'Literal') { %>
+<span class="cm-number"><%= inventingOnPrinciple.getTemplate('tangleSpan')({ id: ctx.id, label: ctx.name, value: ctx.value }) %></span>
+<% } else { %>
+<span class="cm-variable-2"><%= ctx.value %></span>
+<% } %>

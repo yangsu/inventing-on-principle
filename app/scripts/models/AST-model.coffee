@@ -206,26 +206,25 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
     list = window.tracer.getStatementList()
     @trigger 'tracedStatements', list, lists
 
-
     window.tracer.active = false
 
     this
 
-  extractDeclarations: ->
-    declarationMap = {}
+  buildScope: ->
+    ast = @get 'ast'
+    scope = {}
+    vars = []
+    funs = []
 
     @pretraverse (node) ->
-      if node.type.slice(-11) is 'Declaration'
-        type = node.type.slice(0, -11)
-        model = new inventingOnPrinciple.Models[type + 'Model'](node)
-        if declarationMap[type]
-          declarationMap[type].push model
-        else
-          declarationMap[type] = [model]
+      if node.type is Syntax.VariableDeclarator
+        model = new inventingOnPrinciple.Models.VariableModel(node)
+        vars.push model
+      else if node.type is Syntax.FunctionDeclaration
+        model = new inventingOnPrinciple.Models.FunctionModel(node)
+        funs.push(node)
 
-    vars = declarationMap['Variable']
     @get('vars').reset vars
-    funs = declarationMap['Function']
     @get('funs').reset funs
     @trigger 'change:decs', vars, funs
 

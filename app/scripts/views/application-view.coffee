@@ -83,17 +83,28 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     @model.ast.get('vars').each (varDec, i) ->
       linenumber = varDec.get('loc').start.line - 1
       view = new inventingOnPrinciple.Views.VariableView(model: varDec)
-      lines[linenumber] = view
+      if lines[linenumber]?
+        lines[linenumber].push view
+      else
+        lines[linenumber] = [view]
 
     @model.ast.get('funs').each (funDec, i) ->
       linenumber = funDec.get('loc').start.line - 1
       view = new inventingOnPrinciple.Views.FunctionView(model: funDec)
-      lines[linenumber] = view
+      if lines[linenumber]?
+        lines[linenumber].push view
+      else
+        lines[linenumber] = [view]
 
     _.each lines, (line) =>
       if line
-        @$vars.append line.render().$el
-        line.initTangle()  if line.initTangle
+        $line = $('<div class="varDecs"></div>')
+        for i in line
+          $line.append i.render().$el
+        @$vars.append $line
+        for i in line
+          i.initTangle() if i.initTangle
+
       else
         @$vars.append @spacer
 
@@ -125,9 +136,9 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     this
 
   renderStatementTraces: (list, map) ->
-    console.log(map)
-    for i in list
-      console.log i.type, i.data
+    # console.log(map)
+    # for i in list
+    #   console.log i.type, i.data
 
 
   clearError: ->
