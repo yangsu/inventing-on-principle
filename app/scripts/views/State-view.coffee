@@ -1,5 +1,6 @@
 inventingOnPrinciple.Views.StateView = Backbone.View.extend
   initialize: ->
+    @lines = []
     $stateEditor = @$el.find('#state').get(0)
     @editor = CodeMirror.fromTextArea($stateEditor,
       mode: 'javascript'
@@ -22,10 +23,15 @@ inventingOnPrinciple.Views.StateView = Backbone.View.extend
 
   onChange: ->
 
-  render: (lines) ->
+  setLines: (lines) ->
+    if not _.isEqual(@lines, lines)
+      @lines = lines
+      @render()
+
+  render: ->
     markers = []
     code =
-      for line, i in lines
+      for line, i in @lines
         if line?
           list = []
 

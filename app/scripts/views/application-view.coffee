@@ -108,7 +108,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
       else
         @$vars.append @spacer
 
-    inventingOnPrinciple.stateView.render(lines)
+    inventingOnPrinciple.stateView.setLines(lines)
 
   renderFunctionTraces: (histogram, funcs) ->
 
