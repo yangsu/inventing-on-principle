@@ -18,7 +18,7 @@ util.adjustRegexLiteral = (key, value) ->
 ###
 util.convertLoc = (loc) ->
   line: loc.line - 1
-  ch: loc.column
+  column: loc.ch || loc.column
 
 
 ###*
