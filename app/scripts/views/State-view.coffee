@@ -28,6 +28,9 @@ inventingOnPrinciple.Views.StateView = Backbone.View.extend
       @lines = lines
       @render()
 
+  scrollTo: (scrollInfo) ->
+    @editor.scrollTo(scrollInfo.x, scrollInfo.y)
+
   render: ->
     markers = []
     code =

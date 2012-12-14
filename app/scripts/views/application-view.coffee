@@ -165,7 +165,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
   scrollVars: (scrollInfo) ->
     @$('#decsContainer').scrollTop scrollInfo.y
 
-    inventingOnPrinciple.state.scrollTo(scrollInfo.x, scrollInfo.y)
+    inventingOnPrinciple.stateView.scrollTo(scrollInfo)
 
   render: ->
     @renderUrl()
