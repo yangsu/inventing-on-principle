@@ -20,6 +20,15 @@ util.convertLoc = (loc) ->
   line: loc.line - 1
   column: loc.ch || loc.column
 
+###*
+ * Construct a CodeMirror Location object
+ * @param  {int} line line number
+ * @param  {int} ch   column number
+ * @return {location}      location object
+###
+util.toLoc = (line, ch) ->
+  line: line
+  ch: ch
 
 ###*
  * Test to see if a position is within a codeMirror Range array
