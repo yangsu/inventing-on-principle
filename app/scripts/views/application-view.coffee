@@ -1,5 +1,6 @@
 inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
   spacer: inventingOnPrinciple.getTemplate('spacer')()
+
   initialize: ->
 
     # Input
@@ -56,8 +57,29 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     $(e.currentTarget).parents('li').addClass 'active'
     @render()
 
+  markers: []
+  clearMarkers: ->
+    _.invoke(@markers, 'clear')
+    @markers = []
+
+
   trackCursor: (editor) ->
-    @model.trackCursor editor
+
+    cursor = editor.getCursor()
+    cursorIndex = editor.indexFromPos(cursor)
+
+    @clearMarkers()
+
+    markerMap = @model.trackCursor cursor, cursorIndex
+
+    for own markerClass, markerArray of markerMap
+      for loc in markerArray
+        marker = editor.markText(
+          util.convertLoc(loc.start),
+          util.convertLoc(loc.end),
+          markerClass
+        )
+        @markers.push(marker)
 
   parse: (editor, changeInfo) ->
     editor ?= inventingOnPrinciple.codeEditor

@@ -1,33 +1,28 @@
 inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
 
-  markers: []
-
   initialize: ->
     @ast = new inventingOnPrinciple.Models.ASTModel()
 
-  clearMarkers: ->
-    _.invoke(@markers, 'clear')
-    @markers = []
-
-  trackCursor: (editor) ->
-    pos = editor.indexFromPos(editor.getCursor())
-    @clearMarkers()
-
+  trackCursor: (cursorLoc, cursorIndex) ->
     return if @ast is null
+
+    markers =
+      indentifier: []
+      highlight: []
 
     id = null
 
     @ast.pretraverse (node) =>
-      if node? and node.type is Syntax.Identifier and util.withinRange(pos, node.range)
-        marker = editor.markText(util.convertLoc(node.loc.start), util.convertLoc(node.loc.end), 'identifier')
-        @markers.push(marker)
+      if node? and node.type is Syntax.Identifier and util.withinRange(cursorIndex, node.range)
+        markers.indentifier.push node.loc
         id = node
 
     if id?
       @ast.pretraverse (node) =>
         if node? and node.type is Syntax.Identifier and node isnt id and node.name is id.name
-          marker = editor.markText(util.convertLoc(node.loc.start), util.convertLoc(node.loc.end), 'highlight')
-          @markers.push(marker)
+          markers.highlight.push node.loc
+
+    markers
 
   parse: (text, editor) ->
     # if (text == this.ast.toSource()) return;
