@@ -3,6 +3,7 @@ GLOBAL = exports ? this
 tracer =
   active: false
   funcDict: {}
+  varDict: {}
   statementList: []
 
   genTraceFunc: (params) ->
@@ -10,8 +11,18 @@ tracer =
     signature = "window.tracer.traceFunc(#{paramsStr});"
 
   getTraceStatement: (params) ->
-    paramsStr = JSON.stringify(params)
+    scope = params.scope
+    # console.log params
+    paramsStr = JSON.stringify(_.omit(params, 'scope'))
     signature = "window.tracer.traceStatement(#{paramsStr});"
+    if scope? and scope.vars.length
+      for v in scope.vars
+        signature += "window.tracer.traceVar('#{v}', #{v});"
+    signature
+
+  traceVar: (name, value) ->
+    tracer.varDict[name] = [] unless tracer.varDict[name]?
+    tracer.varDict[name].push(value);
 
   traceStatement: (params) ->
     tracer.statementList.push(params);
@@ -33,5 +44,10 @@ tracer =
     list = _.clone(tracer.statementList)
     tracer.statementList = []
     list
+
+  getVars : ->
+    vars = _.clone(tracer.varDict)
+    tracer.varDict = {}
+    vars
 
 GLOBAL.tracer = tracer;

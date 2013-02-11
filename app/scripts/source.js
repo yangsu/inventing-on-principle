@@ -11,7 +11,7 @@ function f(args) {
     function f3(args) {
       var d = 1;
     }
-    for (var i = 0; i < c; i += 1) {
+    for (var k = 0; k < c; k += 1) {
       f3(c);
     }
   }

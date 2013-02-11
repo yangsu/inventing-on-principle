@@ -32,6 +32,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
     try
       @ast.setSource(text)
         .buildScope?()
+        .buildScope2?()
         .instrumentFunctions?()
 
     catch e

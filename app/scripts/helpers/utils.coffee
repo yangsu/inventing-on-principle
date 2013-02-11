@@ -123,5 +123,19 @@ util.traverse = (ast, chunks, prefunc, postfunc) ->
 
   walk(ast)
 
+util.scopeLookup = (node, scopes) ->
+  itr = node
+  while itr?
+    scope = _.find scopes, (value, key) ->
+      return value.node == itr
+
+    break if scope?
+    itr = itr.parent
+
+  scope or scopes['global']
+
+util.allSame = (list) ->
+  return _.all list, (item) ->
+    item is list[0]
 
 GLOBAL.util = util

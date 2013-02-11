@@ -131,6 +131,8 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
       else if node.type is Syntax.ExpressionStatement
         lists.expression.push(node)
 
+    console.log _.invoke(lists.expression, 'source');
+
     chunks = @get('chunks')
     chunksCopy = _.clone(chunks)
 
@@ -152,20 +154,24 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
     for forStatement in lists.for
       signature = window.tracer.getTraceStatement
         type: forStatement.type
+        # scope: util.scopeLookup(forStatement, @scopes)
         data:
           init: forStatement.init.source()
           test: forStatement.test.source()
           update: forStatement.update.source()
-      forStatement.insertBefore(signature);
+
+      forStatement.body.body[0].insertBefore(signature);
 
     # ForIn Statment -------------------------------------------------------------
     for forInStatement in lists.forIn
       signature = window.tracer.getTraceStatement
         type: forInStatement.type
+        # scope: util.scopeLookup(forInStatement, @scopes)
         data:
           left: forInStatement.left.source()
           right: forInStatement.right.source()
-      forInStatement.insertBefore(signature);
+
+      forInStatement.body.body[0].insertBefore(signature);
 
     # Expression Statment -------------------------------------------------------------
     for expStatement in lists.expression
@@ -180,6 +186,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
       signature = window.tracer.getTraceStatement
         type: expStatement.type
         data: data
+        scope: util.scopeLookup(expStatement, @scopes)
 
       expStatement.insertBefore(signature);
 
@@ -206,6 +213,9 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
     list = window.tracer.getStatementList()
     @trigger 'tracedStatements', list, lists
 
+    vars = window.tracer.getVars()
+    @trigger 'tracedVars', vars, lists
+
     window.tracer.active = false
 
     this
@@ -227,6 +237,33 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
     @get('vars').reset vars
     @get('funs').reset funs
     @trigger 'change:decs', vars, funs
+
+    this
+
+  buildScope2: ->
+    ast = @get 'ast'
+    @scopes =
+      global:
+        node: ast
+        vars: []
+        funcs: []
+
+    @posttraverse (node) ->
+      scope = util.scopeLookup(node, @scopes)
+
+      switch (node.type)
+        when Syntax.VariableDeclarator
+          scope.vars.push node.id.name
+        when Syntax.FunctionDeclaration
+          scope.funcs.push node.id.name
+          @scopes[node.id.name] =
+            node: node
+            parent: scope
+            vars: []
+            funcs: []
+        else
+
+    console.log @scopes
 
     this
 

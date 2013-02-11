@@ -33,6 +33,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
       .on('change:generatedCode', @renderGeneratedCode, this)
       .on('tracedFunctions', @renderFunctionTraces, this)
       .on('tracedStatements', @renderStatementTraces, this)
+      .on('tracedVars', @renderVarsTraces, this)
       .on('reparse', @parse, this)
 
     @model.on('error', @renderError, this)
@@ -163,6 +164,19 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     # for i in list
     #   console.log i.type, i.data
 
+  renderVarsTraces: (list, map) ->
+    $vars = @$('#varsContainer pre')
+
+    content = _.map list, (values, name) ->
+      if util.allSame(values)
+        name + ':\t' + values[0]
+      else
+        vals = _.map values, (value) ->
+          JSON.stringify(value)
+        name + ':\t' + vals.join(' | ')
+
+    console.log $vars, content
+    $vars.html content.join('\n')
 
   clearError: ->
     if @errorLineNumber >= 0
