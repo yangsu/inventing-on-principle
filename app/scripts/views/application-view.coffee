@@ -169,13 +169,12 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
 
     content = _.map list, (values, name) ->
       if util.allSame(values)
-        name + ':\t' + values[0]
+        name + ':\t' + JSON.stringify(values[0])
       else
         vals = _.map values, (value) ->
           JSON.stringify(value)
         name + ':\t' + vals.join(' | ')
 
-    console.log $vars, content
     $vars.html content.join('\n')
 
   clearError: ->

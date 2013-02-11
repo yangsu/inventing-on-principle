@@ -25,7 +25,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
     markers
 
   parse: (text, editor) ->
-    # if (text == this.ast.toSource()) return;
+    # if (text == this.ast.toSource()) return
 
     return if inventingOnPrinciple.updating
 
@@ -36,9 +36,9 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
         .instrumentFunctions?()
 
     catch e
-      console.log(e.name + ': ' + e.message);
-      # console.log(e);
-      console.trace(e);
+      console.log(e.name + ': ' + e.message)
+      # console.log(e)
+      console.trace(e)
       @trigger('error', e)
 
   tokens: ->

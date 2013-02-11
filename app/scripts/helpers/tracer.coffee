@@ -22,10 +22,10 @@ tracer =
 
   traceVar: (name, value) ->
     tracer.varDict[name] = [] unless tracer.varDict[name]?
-    tracer.varDict[name].push(value);
+    tracer.varDict[name].push value
 
   traceStatement: (params) ->
-    tracer.statementList.push(params);
+    tracer.statementList.push params
 
   traceFunc: (params) ->
     return unless tracer.active

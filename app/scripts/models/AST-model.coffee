@@ -148,7 +148,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
 
       if func.body? and func.body.length
         node = func.body[0]
-        node.insertBefore(signature);
+        node.insertBefore signature
 
     # For Statment -------------------------------------------------------------
     for forStatement in lists.for
@@ -160,7 +160,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
           test: forStatement.test.source()
           update: forStatement.update.source()
 
-      forStatement.body.body[0].insertBefore(signature);
+      forStatement.body.body[0].insertBefore signature
 
     # ForIn Statment -------------------------------------------------------------
     for forInStatement in lists.forIn
@@ -171,7 +171,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
           left: forInStatement.left.source()
           right: forInStatement.right.source()
 
-      forInStatement.body.body[0].insertBefore(signature);
+      forInStatement.body.body[0].insertBefore signature
 
     # Expression Statment -------------------------------------------------------------
     for expStatement in lists.expression
