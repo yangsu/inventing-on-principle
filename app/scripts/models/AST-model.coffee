@@ -121,17 +121,16 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
       for: []
       forIn: []
       expression: []
+      return: []
 
     @pretraverse (node) =>
       @extractFunction(node, lists.function)
-      if node.type is Syntax.ForStatement
-        lists.for.push(node)
-      else if node.type is Syntax.ForInStatement
-        lists.forIn.push(node)
-      else if node.type is Syntax.ExpressionStatement
-        lists.expression.push(node)
+      switch node.type
+        when Syntax.ForStatement then lists.for.push(node)
+        when Syntax.ForInStatement then lists.forIn.push(node)
+        when Syntax.ExpressionStatement then lists.expression.push(node)
+        when Syntax.ReturnStatement then lists.return.push(node)
 
-    console.log _.invoke(lists.expression, 'source');
 
     chunks = @get('chunks')
     chunksCopy = _.clone(chunks)
@@ -182,16 +181,30 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
         when Syntax.CallExpression
           data.callee = exp.callee.source()
           data.arguments = (arg.source() for arg in exp.arguments)
+        when Syntax.AssignmentExpression
+          data.left = exp.left.source()
+          data.right = exp.right.source()
 
       signature = window.tracer.getTraceStatement
         type: expStatement.type
         data: data
         scope: util.scopeLookup(expStatement, @scopes)
 
-      expStatement.insertBefore(signature);
+      expStatement.insertBefore signature
+
+    for returnStatement in lists.return
+      signature = window.tracer.getTraceStatement
+        type: returnStatement.type
+        scope: util.scopeLookup(returnStatement, @scopes)
+        data:
+          argument: returnStatement.argument.source()
+
+      returnStatement.insertBefore signature
 
     # Store updated source with function traces
     source = @get('ast').source()
+
+    console.log @get('ast')
 
     # Reset chunks
     for chunk, i in chunksCopy

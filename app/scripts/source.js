@@ -1,35 +1,25 @@
-var a = 1, b;
-for (var i = 0; i < a; i += 1) {
-  log(i);
-  f();
-}
+function binarySearch (key, array) {
 
-function f(args) {
-  var b = 2;
-  function f2(args) {
-    var c = 2;
-    function f3(args) {
-      var d = 1;
+  var low = 0;
+  var high = array.length - 1;
+
+  while (low <= high) {
+
+    var mid = Math.floor((low + high) / 2);
+    var value = array[mid];
+
+    if (value < key) {
+      low = mid + 1;
+    } else if (value > key) {
+      high = mid - 1;
+    } else {
+      return mid;
     }
-    for (var k = 0; k < c; k += 1) {
-      f3(c);
-    }
+
   }
-  for (var j = 0; j < b; j += 1) {
-    f2(b);
-  }
+  return -1;
 }
 
-var obj = {
-  a: 1,
-  b: 2
-};
-
-
-for (key in obj) {
-  log(key);
-  log(obj[key]);
-}
-
-
-var test = 'taosetuhaoesuntahos';
+var key = 4;
+var array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+binarySearch(key, array);
