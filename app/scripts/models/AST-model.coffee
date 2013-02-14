@@ -68,13 +68,6 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
   extractFunction: (node, functionList) ->
     parent = node.parent
 
-    func =
-      type: Syntax.FunctionExpression
-      node: node
-      range: node.range
-      loc: node.loc
-      body: if node.body? then node.body.body
-
     name = ''
 
     if node.type is Syntax.FunctionDeclaration
@@ -98,7 +91,9 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
           name = parent.key.name
 
     if name? and name.length
-      functionList.push _.extend(func, name: name)
+      if node.body?
+        node.body = node.body.body
+      functionList.push _.extend(node, name: name)
 
   extractFor: (node, forList) ->
     parent = node.parent
@@ -125,10 +120,15 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
         Syntax.ForStatement,
         Syntax.ForInStatement,
         Syntax.ExpressionStatement,
-        Syntax.VariableDeclarator,
+        Syntax.VariableDeclaration,
         Syntax.ReturnStatement
       ]
-        trackList.push(node)
+        filtered =
+          # Don't trace variable declarations in the init field of forExps
+          node.type is Syntax.VariableDeclaration and node.parent.type is Syntax.ForStatement
+
+        unless filtered
+          trackList.push(node)
 
     chunks = @get('chunks')
     chunksCopy = _.clone(chunks)
@@ -194,6 +194,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
     ast = @get 'ast'
     @scopes =
       global:
+        name: 'global'
         node: ast
         vars: []
         funcs: []
@@ -207,6 +208,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
         when Syntax.FunctionDeclaration
           scope.funcs.push node.id.name
           @scopes[node.id.name] =
+            name: node.id.name
             node: node
             parent: scope
             vars: ['arguments']

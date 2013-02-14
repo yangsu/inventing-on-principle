@@ -134,6 +134,12 @@ util.scopeLookup = (node, scopes) ->
 
   scope or scopes['global']
 
+util.scopeName = (name, scope) ->
+  while scope? and scope.name isnt 'global'
+    name = scope.name + '.' + name
+    scope = scope.parent
+  name
+
 util.allSame = (list) ->
   return _.all list, (item) ->
     item is list[0]

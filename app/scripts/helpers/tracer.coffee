@@ -17,7 +17,7 @@ tracer =
       insertLocation = 'Before'
 
       switch exp.type
-        when Syntax.FunctionExpression
+        when Syntax.FunctionExpression, Syntax.FunctionDeclaration
           params =
             name: exp.name
             range: exp.range
@@ -25,7 +25,8 @@ tracer =
             lineNumber: if exp.loc? then exp.loc.start.line else null
 
           signature += window.tracer.genTraceFunc params
-          signature += window.tracer.genTraceVar 'arguments'
+          signature += window.tracer.genTraceVar 'arguments', scope
+
           if exp.body? and exp.body.length
             exp = exp.body[0]
 
@@ -38,9 +39,10 @@ tracer =
 
           exp = exp.body.body[0]
 
-        when Syntax.VariableDeclarator
-          signature += window.tracer.genTraceVar exp.id.name
-          insertLocation = 'After'
+        when Syntax.VariableDeclaration
+          for vardec in exp.declarations
+            signature += window.tracer.genTraceVar vardec.id.name, scope
+            insertLocation = 'After'
 
         when Syntax.ForInStatement
           signature += window.tracer.genTraceStatement
@@ -61,7 +63,7 @@ tracer =
             when Syntax.AssignmentExpression
               data.left = expression.left.source()
               data.right = expression.right.source()
-              signature += window.tracer.genTraceVar data.left
+              signature += window.tracer.genTraceVar data.left, scope
               insertLocation = 'After'
 
           signature += window.tracer.genTraceStatement
@@ -71,7 +73,7 @@ tracer =
         when Syntax.ReturnStatement
           signature += window.tracer.genTraceStatement
             scope: scope
-          signature += window.tracer.genTraceReturnVal exp.argument.source()
+          signature += window.tracer.genTraceVar 'returnVal', scope, exp.argument.source()
 
       exp['insert' + insertLocation] signature
 
@@ -79,12 +81,9 @@ tracer =
     paramsStr = JSON.stringify(params)
     "window.tracer.traceFunc(#{paramsStr});"
 
-  genTraceReturnVal: (varname) ->
-    "window.tracer.traceVar('returnVal', #{varname});"
-
-  genTraceVar: (varname) ->
-    scopedVarname = varname
-    "window.tracer.traceVar('#{scopedVarname}', #{varname});"
+  genTraceVar: (varname, scope, value = varname) ->
+    scopedVarname = util.scopeName varname, scope
+    "window.tracer.traceVar('#{scopedVarname}', #{value});"
 
   genTraceStatement: (params) ->
     scope = params.scope
