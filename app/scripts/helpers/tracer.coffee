@@ -18,6 +18,10 @@ tracer =
     if scope? and scope.vars.length
       for v in scope.vars
         signature += "window.tracer.traceVar('#{v}', #{v});"
+
+    if params.data.argument?
+      signature += "window.tracer.traceVar('returnVal', #{params.data.argument});"
+
     signature
 
   traceVar: (name, value) ->

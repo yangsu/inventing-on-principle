@@ -272,7 +272,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
           @scopes[node.id.name] =
             node: node
             parent: scope
-            vars: []
+            vars: ['arguments']
             funcs: []
         else
 
