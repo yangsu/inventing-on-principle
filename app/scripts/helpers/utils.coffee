@@ -135,10 +135,8 @@ util.scopeLookup = (node, scopes) ->
   scope or scopes['global']
 
 util.scopeName = (name, scope) ->
-  while scope? and scope.name isnt 'global'
-    name = scope.name + '.' + name
-    scope = scope.parent
-  name
+  namespace = if scope.name is 'global' then '' else scope.name + '.'
+  namespace + name
 
 util.allSame = (list) ->
   return _.all list, (item) ->

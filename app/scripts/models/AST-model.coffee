@@ -201,9 +201,10 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
         when Syntax.VariableDeclarator
           scope.vars.push node.id.name
         when Syntax.FunctionDeclaration
-          scope.funcs.push node.id.name
-          @scopes[node.id.name] =
-            name: node.id.name
+          scopedName = util.scopeName node.id.name, scope
+          scope.funcs.push scopedName
+          @scopes[scopedName] =
+            name: scopedName
             node: node
             parent: scope
             vars: ['arguments']
