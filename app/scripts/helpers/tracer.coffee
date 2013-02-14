@@ -101,8 +101,10 @@ tracer =
   # ############################################################################
 
   traceVar: (name, value) ->
-    tracer.varDict[name] = [] unless tracer.varDict[name]?
-    tracer.varDict[name].push value
+    unless util.objGet(tracer.varDict, name)?
+      util.objSet(tracer.varDict, name, [])
+
+    util.objGet(tracer.varDict, name).push value
 
   traceStatement: (params) ->
     tracer.statementList.push params
