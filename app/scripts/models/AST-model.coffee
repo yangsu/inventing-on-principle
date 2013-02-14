@@ -125,6 +125,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
         Syntax.ForStatement,
         Syntax.ForInStatement,
         Syntax.ExpressionStatement,
+        Syntax.VariableDeclarator,
         Syntax.ReturnStatement
       ]
         trackList.push(node)
@@ -136,6 +137,8 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
 
     # Store updated source with function traces
     source = @get('ast').source()
+
+    console.log source
 
     console.log @get('ast')
 

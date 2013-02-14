@@ -12,7 +12,9 @@ tracer =
 
   genTraces: (trackList, scopes) ->
     for exp in trackList
-      scope = util.scopeLookup(exp, scopes)
+      scope = util.scopeLookup exp, scopes
+      signature = ''
+      insertLocation = 'Before'
 
       switch exp.type
         when Syntax.FunctionExpression
@@ -22,28 +24,31 @@ tracer =
             loc: exp.loc
             lineNumber: if exp.loc? then exp.loc.start.line else null
 
-          signature = window.tracer.genTraceFunc(params)
-
+          signature += window.tracer.genTraceFunc params
+          signature += window.tracer.genTraceVar 'arguments'
           if exp.body? and exp.body.length
-            node = exp.body[0]
-            node.insertBefore signature
+            exp = exp.body[0]
 
         when Syntax.ForStatement
-          signature = window.tracer.getTraceStatement
+          signature += window.tracer.genTraceStatement
             data:
               init: exp.init.source()
               test: exp.test.source()
               update: exp.update.source()
 
-          exp.body.body[0].insertBefore signature
+          exp = exp.body.body[0]
+
+        when Syntax.VariableDeclarator
+          signature += window.tracer.genTraceVar exp.id.name
+          insertLocation = 'After'
 
         when Syntax.ForInStatement
-          signature = window.tracer.getTraceStatement
+          signature += window.tracer.genTraceStatement
             data:
               left: exp.left.source()
               right: exp.right.source()
 
-          exp.body.body[0].insertBefore signature
+          exp = exp.body.body[0]
 
         when Syntax.ExpressionStatement
           expression = exp.expression
@@ -56,39 +61,35 @@ tracer =
             when Syntax.AssignmentExpression
               data.left = expression.left.source()
               data.right = expression.right.source()
+              signature += window.tracer.genTraceVar data.left
+              insertLocation = 'After'
 
-          signature = window.tracer.getTraceStatement
+          signature += window.tracer.genTraceStatement
             data: data
             scope: scope
 
-          exp.insertBefore signature
-
         when Syntax.ReturnStatement
-          signature = window.tracer.getTraceStatement
+          signature += window.tracer.genTraceStatement
             scope: scope
-            data:
-              argument: exp.argument.source()
+          signature += window.tracer.genTraceReturnVal exp.argument.source()
 
-          exp.insertBefore signature
+      exp['insert' + insertLocation] signature
 
   genTraceFunc: (params) ->
     paramsStr = JSON.stringify(params)
-    signature = "window.tracer.traceFunc(#{paramsStr});"
+    "window.tracer.traceFunc(#{paramsStr});"
 
-  getTraceStatement: (params) ->
+  genTraceReturnVal: (varname) ->
+    "window.tracer.traceVar('returnVal', #{varname});"
+
+  genTraceVar: (varname) ->
+    scopedVarname = varname
+    "window.tracer.traceVar('#{scopedVarname}', #{varname});"
+
+  genTraceStatement: (params) ->
     scope = params.scope
-    # console.log params
     paramsStr = JSON.stringify(_.omit(params, 'scope'))
-    signature = "window.tracer.traceStatement(#{paramsStr});"
-    if scope? and scope.vars.length
-      for v in scope.vars
-        signature += "window.tracer.traceVar('#{v}', #{v});"
-
-    if params.data.argument?
-      signature += "window.tracer.traceVar('returnVal', #{params.data.argument});"
-
-    signature
-
+    "window.tracer.traceStatement(#{paramsStr});"
 
   # ############################################################################
   # Tracers
