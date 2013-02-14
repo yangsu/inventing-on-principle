@@ -123,12 +123,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
         Syntax.VariableDeclaration,
         Syntax.ReturnStatement
       ]
-        filtered =
-          # Don't trace variable declarations in the init field of forExps
-          node.type is Syntax.VariableDeclaration and node.parent.type is Syntax.ForStatement
-
-        unless filtered
-          trackList.push(node)
+        trackList.push(node)
 
     chunks = @get('chunks')
     chunksCopy = _.clone(chunks)

@@ -44,6 +44,12 @@ tracer =
             signature += window.tracer.genTraceVar vardec.id.name, scope
             insertLocation = 'After'
 
+          # Trace variables declared in ForExp.init at the beginning of the ForExp body
+          if exp.parent? and exp.parent.type is Syntax.ForStatement
+            exp = exp.parent.body.body[0]
+            insertLocation = 'Before'
+
+
         when Syntax.ForInStatement
           signature += window.tracer.genTraceStatement
             data:
