@@ -12,6 +12,8 @@ tracer =
 
   genTraces: (trackList, scopes) ->
     for exp in trackList
+      scope = util.scopeLookup(exp, scopes)
+
       switch exp.type
         when Syntax.FunctionExpression
           params =
@@ -28,7 +30,6 @@ tracer =
 
         when Syntax.ForStatement
           signature = window.tracer.getTraceStatement
-            # scope: util.scopeLookup(exp, scopes)
             data:
               init: exp.init.source()
               test: exp.test.source()
@@ -38,8 +39,6 @@ tracer =
 
         when Syntax.ForInStatement
           signature = window.tracer.getTraceStatement
-            type: exp.type
-            # scope: util.scopeLookup(exp, scopes)
             data:
               left: exp.left.source()
               right: exp.right.source()
@@ -47,28 +46,26 @@ tracer =
           exp.body.body[0].insertBefore signature
 
         when Syntax.ExpressionStatement
-          exp = exp.expression
-          parent = exp.parent
+          expression = exp.expression
+          parent = expression.parent
           data = {}
-          switch exp.type
+          switch expression.type
             when Syntax.CallExpression
-              data.callee = exp.callee.source()
-              data.arguments = (arg.source() for arg in exp.arguments)
+              data.callee = expression.callee.source()
+              data.arguments = (arg.source() for arg in expression.arguments)
             when Syntax.AssignmentExpression
-              data.left = exp.left.source()
-              data.right = exp.right.source()
+              data.left = expression.left.source()
+              data.right = expression.right.source()
 
           signature = window.tracer.getTraceStatement
-            type: exp.type
             data: data
-            scope: util.scopeLookup(exp, scopes)
+            scope: scope
 
           exp.insertBefore signature
 
         when Syntax.ReturnStatement
           signature = window.tracer.getTraceStatement
-            type: exp.type
-            scope: util.scopeLookup(exp, scopes)
+            scope: scope
             data:
               argument: exp.argument.source()
 
