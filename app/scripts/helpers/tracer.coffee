@@ -73,7 +73,7 @@ tracer =
         when Syntax.ReturnStatement
           signature += window.tracer.genTraceStatement
             scope: scope
-          signature += window.tracer.genTraceVar 'returnVal', scope, exp.argument.source()
+          signature += window.tracer.genTraceVar 'return', scope, exp.argument.source()
 
       exp['insert' + insertLocation] signature
 
