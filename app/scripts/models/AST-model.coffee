@@ -233,7 +233,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
 
     this
 
-  buildScope: ->
+  extractDeclarations: ->
     ast = @get 'ast'
     scope = {}
     vars = []
@@ -253,7 +253,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
 
     this
 
-  buildScope2: ->
+  buildScope: ->
     ast = @get 'ast'
     @scopes =
       global:

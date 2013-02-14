@@ -31,8 +31,8 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
 
     try
       @ast.setSource(text)
+        .extractDeclarations?()
         .buildScope?()
-        .buildScope2?()
         .instrumentFunctions?()
 
     catch e
