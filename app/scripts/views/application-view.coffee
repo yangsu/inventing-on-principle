@@ -167,19 +167,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
   renderVarsTraces: (list) ->
     $vars = @$('#varsContainer pre')
 
-    # content = JSON.stringify list, null, 4
-
-    content = _.map list, (values, name) ->
-      if util.allSame values
-        name + ':\t' + JSON.stringify values[0]
-      else if _.isArray values
-        vals = _.map values, (value) ->
-          JSON.stringify value
-        name + ':\t' + vals.join ' | '
-      else
-        name + ':\t' + JSON.stringify(values)
-
-    $vars.html content.join '\n'
+    $vars.html util.formatVarJSON(list)
 
   clearError: ->
     if @errorLineNumber >= 0
