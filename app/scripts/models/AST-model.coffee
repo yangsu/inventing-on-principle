@@ -149,7 +149,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
         node = func.body[0]
         node.insertBefore signature
 
-    # For Statment -------------------------------------------------------------
+    # For Statement ------------------------------------------------------------
     for forStatement in lists.for
       signature = window.tracer.getTraceStatement
         type: forStatement.type
@@ -161,7 +161,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
 
       forStatement.body.body[0].insertBefore signature
 
-    # ForIn Statment -------------------------------------------------------------
+    # ForIn Statement ----------------------------------------------------------
     for forInStatement in lists.forIn
       signature = window.tracer.getTraceStatement
         type: forInStatement.type
@@ -172,7 +172,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
 
       forInStatement.body.body[0].insertBefore signature
 
-    # Expression Statment -------------------------------------------------------------
+    # Expression Statement -----------------------------------------------------
     for expStatement in lists.expression
       exp = expStatement.expression
       parent = expStatement.parent
@@ -192,6 +192,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
 
       expStatement.insertBefore signature
 
+    # return Statement ---------------------------------------------------------
     for returnStatement in lists.return
       signature = window.tracer.getTraceStatement
         type: returnStatement.type
