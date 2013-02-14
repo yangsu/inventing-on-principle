@@ -144,4 +144,18 @@ util.allSame = (list) ->
   return _.all list, (item) ->
     item is list[0]
 
+util.objGet = (obj, path) ->
+  segments = path.split '.'
+  while segments.length and obj?
+    obj = obj[segments.shift()]
+  obj
+
+util.objSet = (obj, path, value) ->
+  segments = path.split '.'
+  while segments.length > 1
+    segment = segments.shift()
+    obj[segment] = obj[segment] or {}
+    obj = obj[segment]
+  obj[segments[0]] = value
+
 GLOBAL.util = util
