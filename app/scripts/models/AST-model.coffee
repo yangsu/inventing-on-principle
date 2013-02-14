@@ -69,6 +69,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
     parent = node.parent
 
     func =
+      type: Syntax.FunctionExpression
       node: node
       range: node.range
       loc: node.loc
@@ -116,91 +117,22 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
       forList.push forStmt
 
   instrumentFunctions: ->
-    lists =
-      function: []
-      for: []
-      forIn: []
-      expression: []
-      return: []
+    trackList = []
 
     @pretraverse (node) =>
-      @extractFunction(node, lists.function)
-      switch node.type
-        when Syntax.ForStatement then lists.for.push(node)
-        when Syntax.ForInStatement then lists.forIn.push(node)
-        when Syntax.ExpressionStatement then lists.expression.push(node)
-        when Syntax.ReturnStatement then lists.return.push(node)
-
+      @extractFunction(node, trackList)
+      if node.type in [
+        Syntax.ForStatement,
+        Syntax.ForInStatement,
+        Syntax.ExpressionStatement,
+        Syntax.ReturnStatement
+      ]
+        trackList.push(node)
 
     chunks = @get('chunks')
     chunksCopy = _.clone(chunks)
 
-    # Functions ----------------------------------------------------------------
-    for func in lists.function
-      params =
-        name: func.name
-        range: func.range
-        loc: func.loc
-        lineNumber: if func.loc? then func.loc.start.line else null
-
-      signature = window.tracer.genTraceFunc(params)
-
-      if func.body? and func.body.length
-        node = func.body[0]
-        node.insertBefore signature
-
-    # For Statement ------------------------------------------------------------
-    for forStatement in lists.for
-      signature = window.tracer.getTraceStatement
-        type: forStatement.type
-        # scope: util.scopeLookup(forStatement, @scopes)
-        data:
-          init: forStatement.init.source()
-          test: forStatement.test.source()
-          update: forStatement.update.source()
-
-      forStatement.body.body[0].insertBefore signature
-
-    # ForIn Statement ----------------------------------------------------------
-    for forInStatement in lists.forIn
-      signature = window.tracer.getTraceStatement
-        type: forInStatement.type
-        # scope: util.scopeLookup(forInStatement, @scopes)
-        data:
-          left: forInStatement.left.source()
-          right: forInStatement.right.source()
-
-      forInStatement.body.body[0].insertBefore signature
-
-    # Expression Statement -----------------------------------------------------
-    for expStatement in lists.expression
-      exp = expStatement.expression
-      parent = expStatement.parent
-      data = {}
-      switch exp.type
-        when Syntax.CallExpression
-          data.callee = exp.callee.source()
-          data.arguments = (arg.source() for arg in exp.arguments)
-        when Syntax.AssignmentExpression
-          data.left = exp.left.source()
-          data.right = exp.right.source()
-
-      signature = window.tracer.getTraceStatement
-        type: expStatement.type
-        data: data
-        scope: util.scopeLookup(expStatement, @scopes)
-
-      expStatement.insertBefore signature
-
-    # return Statement ---------------------------------------------------------
-    for returnStatement in lists.return
-      signature = window.tracer.getTraceStatement
-        type: returnStatement.type
-        scope: util.scopeLookup(returnStatement, @scopes)
-        data:
-          argument: returnStatement.argument.source()
-
-      returnStatement.insertBefore signature
+    window.tracer.genTraces(trackList, @scopes)
 
     # Store updated source with function traces
     source = @get('ast').source()
@@ -222,13 +154,14 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
       console.log(source)
 
     hist = window.tracer.funcHistogram()
-    @trigger 'tracedFunctions', hist, lists.function
+    funs = _.filter trackList, (exp) -> exp.type is Syntax.FunctionExpression
+    @trigger 'tracedFunctions', hist, funs
 
     list = window.tracer.getStatementList()
-    @trigger 'tracedStatements', list, lists
+    @trigger 'tracedStatements', list
 
     vars = window.tracer.getVars()
-    @trigger 'tracedVars', vars, lists
+    @trigger 'tracedVars', vars
 
     window.tracer.active = false
 

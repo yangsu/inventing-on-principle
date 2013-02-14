@@ -37,7 +37,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
 
     catch e
       console.log(e.name + ': ' + e.message)
-      # console.log(e)
+      console.log(@ast.get('ast').source())
       console.trace(e)
       @trigger('error', e)
 

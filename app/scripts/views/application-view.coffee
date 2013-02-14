@@ -159,12 +159,12 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
 
     this
 
-  renderStatementTraces: (list, map) ->
+  renderStatementTraces: (list) ->
     # console.log(map)
     # for i in list
     #   console.log i.type, i.data
 
-  renderVarsTraces: (list, map) ->
+  renderVarsTraces: (list) ->
     $vars = @$('#varsContainer pre')
 
     content = _.map list, (values, name) ->
