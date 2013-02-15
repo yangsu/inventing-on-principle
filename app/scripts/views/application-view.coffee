@@ -165,8 +165,12 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     #   console.log i.type, i.data
 
   renderVarsTraces: (list) ->
-    $vars = @$('#varsContainer pre')
-    $vars.html util.formatVarJSON(list)
+    CodeMirror.runMode(
+      util.formatVarJSON(list),
+        name: "javascript",
+        json: true
+      , document.getElementById('varsPre')
+    );
 
   clearError: ->
     if @errorLineNumber >= 0
