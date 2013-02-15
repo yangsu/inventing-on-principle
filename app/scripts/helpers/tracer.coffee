@@ -75,6 +75,10 @@ tracer =
               signature += window.tracer.genTraceVar data.left, scope
               insertLocation = 'After'
 
+              switch expression.left.type
+                when Syntax.MemberExpression
+                  signature += window.tracer.genTraceVar expression.left.object.name, scope
+
           signature += window.tracer.genTraceStatement
             data: data
             scope: scope
