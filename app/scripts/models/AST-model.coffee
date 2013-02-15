@@ -131,10 +131,6 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
     # Store updated source with function traces
     source = @get('ast').source()
 
-    console.log source
-
-    console.log @get('ast')
-
     # Reset chunks
     for chunk, i in chunksCopy
       chunks[i] = chunksCopy[i]
@@ -208,8 +204,6 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
             vars: ['arguments']
             funcs: []
         else
-
-    console.log @scopes
 
     this
 

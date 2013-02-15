@@ -166,7 +166,6 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
 
   renderVarsTraces: (list) ->
     $vars = @$('#varsContainer pre')
-
     $vars.html util.formatVarJSON(list)
 
   clearError: ->
