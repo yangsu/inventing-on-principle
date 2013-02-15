@@ -24,6 +24,40 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
 
     markers
 
+  widgets: [],
+  updateHints: (editor) ->
+    editor.operation =>
+      for widget in @widgets
+        editor.removeLineWidget widget
+
+      @widgets = []
+
+      JSHINT editor.getValue()
+
+      for err in JSHINT.errors
+        continue unless err?
+
+        msg = document.createElement 'div'
+        icon = msg.appendChild document.createElement 'span'
+        icon.innerHTML = '!!'
+        icon.className = 'lint-error-icon'
+        msg.appendChild document.createTextNode err.reason
+        msg.className = 'lint-error'
+
+        @widgets.push editor.addLineWidget(err.line - 1, msg,
+          coverGutter: false
+          noHScroll: true
+        )
+
+    info = editor.getScrollInfo()
+    after = editor.charCoords(
+      line: editor.getCursor().line + 1
+      ch: 0
+    , 'local').top
+
+    if info.top + info.clientHeight < after
+      editor.scrollTo null, after - info.clientHeight + 3
+
   parse: (text, editor) ->
     # if (text == this.ast.toSource()) return
 
@@ -34,6 +68,8 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
         .extractDeclarations?()
         .buildScope?()
         .instrumentFunctions?()
+
+      @updateHints(editor)
 
     catch e
       console.log(e.name + ': ' + e.message)
