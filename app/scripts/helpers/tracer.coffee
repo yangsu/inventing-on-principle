@@ -72,10 +72,11 @@ tracer =
             when Syntax.AssignmentExpression
               data.left = expression.left.source()
               data.right = expression.right.source()
-              signature += window.tracer.genTraceVar data.left, scope
               insertLocation = 'After'
 
               switch expression.left.type
+                when Syntax.Identifier
+                  signature += window.tracer.genTraceVar expression.left.name, scope
                 when Syntax.MemberExpression
                   signature += window.tracer.genTraceVar expression.left.object.name, scope
 
