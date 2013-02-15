@@ -35,16 +35,18 @@ $ ->
     inventingOnPrinciple.codeEditor = CodeMirror.fromTextArea(document.getElementById('code'),
       lineNumbers: true
       matchBrackets: true
-      onScroll: (editor) ->
-        inventingOnPrinciple.view.scrollVars editor.getScrollInfo()
-
-      onCursorActivity: (editor) ->
-        inventingOnPrinciple.view.trackCursor editor
-
-      onChange: (editor, changeInfo) ->
-        inventingOnPrinciple.view.clearError()
-        inventingOnPrinciple.view.parse editor, changeInfo
     )
+    inventingOnPrinciple.codeEditor.on('scroll', (editor) ->
+      inventingOnPrinciple.view.scrollVars editor.getScrollInfo()
+    )
+    inventingOnPrinciple.codeEditor.on('cursorActivity', (editor) ->
+      inventingOnPrinciple.view.trackCursor editor
+    )
+    inventingOnPrinciple.codeEditor.on('change', (editor, changeInfo) ->
+      inventingOnPrinciple.view.clearError()
+      inventingOnPrinciple.view.parse editor, changeInfo
+    )
+
     $.get '/scripts/source.js', (source) ->
       inventingOnPrinciple.codeEditor.setValue source
 

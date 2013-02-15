@@ -170,7 +170,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
 
   clearError: ->
     if @errorLineNumber >= 0
-      inventingOnPrinciple.codeEditor.setLineClass(@errorLineNumber, null, null)
+      inventingOnPrinciple.codeEditor.removeLineClass(@errorLineNumber,'background', 'errorLineBackground')
       @$('#codeContainer .errorContainer').html ''
 
   renderError: (e) ->
@@ -180,7 +180,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     ln = if e.lineNumber then e.lineNumber - 1 else inventingOnPrinciple.codeEditor.getCursor().line
     @clearError()
 
-    inventingOnPrinciple.codeEditor.setLineClass ln, 'errorLine', 'errorLineBackground'
+    inventingOnPrinciple.codeEditor.addLineClass ln, 'background', 'errorLineBackground'
     @errorLineNumber = ln
 
     @$('#codeContainer .errorContainer')
