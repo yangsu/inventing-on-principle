@@ -29,6 +29,9 @@ tracer =
 
           if exp.body? and exp.body.length
             exp = exp.body[0]
+          # FunctionDeclaration
+          else if exp.body.body? and exp.body.body.length
+            exp = exp.body.body[0]
 
         when Syntax.ForStatement
           signature += window.tracer.genTraceStatement
