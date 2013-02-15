@@ -157,7 +157,7 @@ util.objSet = (obj, path, value) ->
   obj[segments[0]] = value
 
 util.formatVarJSON = (obj, depth = 0) ->
-  indent = ('  ' for i in _.range(0, depth)).join ''
+  indent = ('  ' for i in [0..depth]).join ''
   content = _.map obj, (values, name) ->
     line = indent + '  '
     if _.isArray values
