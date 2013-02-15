@@ -91,8 +91,6 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
           name = parent.key.name
 
     if name? and name.length
-      if node.body?
-        node.body = node.body.body
       functionList.push _.extend(node, name: name)
 
   extractFor: (node, forList) ->
