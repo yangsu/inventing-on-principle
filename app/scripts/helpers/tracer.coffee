@@ -111,7 +111,7 @@ tracer =
     unless util.objGet(tracer.varDict, name)?
       util.objSet(tracer.varDict, name, [])
 
-    util.objGet(tracer.varDict, name).push value
+    util.objGet(tracer.varDict, name).push _.clone value
 
   traceStatement: (params) ->
     tracer.statementList.push params
