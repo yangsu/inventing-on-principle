@@ -146,7 +146,7 @@ inventingOnPrinciple.Models.ASTModel = Backbone.Model.extend
       console.log(source)
 
     hist = window.tracer.funcHistogram()
-    funs = _.filter trackList, (exp) -> exp.type is Syntax.FunctionExpression
+    funs = _.filter trackList, (exp) -> exp.type in [Syntax.FunctionExpression, Syntax.FunctionDeclaration]
     @trigger 'tracedFunctions', hist, funs
 
     list = window.tracer.getStatementList()
