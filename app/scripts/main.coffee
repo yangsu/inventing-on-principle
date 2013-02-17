@@ -17,7 +17,7 @@ GLOBAL.inventingOnPrinciple =
       model: @model
 
   getTemplate: (templateName) ->
-    path = 'scripts/templates/' + templateName + '.ejs'
+    path = 'scripts/templates/' + templateName + '.html'
     (context) ->
       unless inventingOnPrinciple.Templates[path]
         $.ajax(
