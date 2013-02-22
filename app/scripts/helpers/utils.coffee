@@ -138,6 +138,9 @@ util.scopeName = (name, scope) ->
   namespace = if scope.name is 'global' then '' else scope.name + '.'
   namespace + name
 
+util.unscopeName = (name) ->
+  name.split('.').slice(-1)[0]
+
 util.allSame = (list) ->
   return _.all list, (item) ->
     item is list[0]

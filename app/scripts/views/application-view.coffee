@@ -184,7 +184,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
       vals = JSON.stringify util.objGet(vars, k)
       ln = v.end.line - 1
       ctx =
-        name: k
+        name: util.unscopeName k
         values: vals
       varTraceElement = $(inventingOnPrinciple.getTemplate('varHint')(ctx)).get(0)
 
