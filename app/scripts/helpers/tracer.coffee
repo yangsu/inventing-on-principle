@@ -48,7 +48,7 @@ tracer =
             insertLocation = 'After'
 
           # Trace variables declared in ForExp.init at the beginning of the ForExp body
-          if exp.parent? and exp.parent.type is Syntax.ForStatement
+          if exp.parent? and exp.parent.type in [Syntax.ForStatement, Syntax.ForInStatement]
             exp = exp.parent.body.body[0]
             insertLocation = 'Before'
 
@@ -58,6 +58,9 @@ tracer =
             data:
               left: exp.left.source()
               right: exp.right.source()
+
+          if exp.left.type is Syntax.Identifier
+            signature += window.tracer.genTraceVar exp.left.name, scope
 
           exp = exp.body.body[0]
 
