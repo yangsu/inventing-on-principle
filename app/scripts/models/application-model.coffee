@@ -24,25 +24,13 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
 
     markers
 
-  widgets: [],
   updateHints: (editor) ->
     editor.operation =>
-      for widget in @widgets
-        editor.removeLineWidget widget
-
-      @widgets = []
-
       JSHINT editor.getValue()
 
       for err in JSHINT.errors
         continue unless err?
-
-        msg = $(inventingOnPrinciple.getTemplate('hint')(err)).get(0)
-
-        @widgets.push editor.addLineWidget(err.line - 1, msg,
-          coverGutter: false
-          noHScroll: true
-        )
+        @trigger 'error', err
 
     info = editor.getScrollInfo()
     after = editor.charCoords(
@@ -58,18 +46,18 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
 
     return if inventingOnPrinciple.updating
 
+    @updateHints(editor)
+
     try
-      @ast.setSource(text)
+      @ast.setSource(text);
+      @ast
         .extractDeclarations?()
         .buildScope?()
         .instrumentFunctions?()
-
-      @updateHints(editor)
-
     catch e
-      console.log(e.name + ': ' + e.message)
-      console.log(@ast.get('ast').source())
-      console.trace(e)
+      # console.log(e.name + ': ' + e.message)
+      # console.log(@ast.get('ast').source())
+      # console.trace(e)
       @trigger('error', e)
 
   tokens: ->

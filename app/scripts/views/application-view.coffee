@@ -63,6 +63,17 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     _.invoke(@markers, 'clear')
     @markers = []
 
+  widgets: [],
+  clearWidgets: ->
+    for widget in @widgets
+      inventingOnPrinciple.codeEditor.removeLineWidget widget
+    @widgets = []
+
+  addWidget: (line, msg) ->
+    @widgets.push inventingOnPrinciple.codeEditor.addLineWidget(line, msg,
+      coverGutter: false
+      noHScroll: true
+    )
 
   trackCursor: (editor) ->
 
@@ -85,6 +96,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
   parse: (editor, changeInfo) ->
     editor ?= inventingOnPrinciple.codeEditor
     text = if editor? then editor.getValue() else @$code.val()
+    @clearWidgets()
     @model.parse text, editor
 
   renderUrl: ->
@@ -172,25 +184,16 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
       , document.getElementById('varsPre')
     );
 
-  clearError: ->
-    if @errorLineNumber >= 0
-      inventingOnPrinciple.codeEditor.removeLineClass(@errorLineNumber,'background', 'errorLineBackground')
-      @$('#codeContainer .errorContainer').html ''
-
   renderError: (e) ->
 
     # Either the lineNumber is contained in the error object
     # Or guess that the error was due to the last change and use cursor's position
     ln = if e.lineNumber then e.lineNumber - 1 else inventingOnPrinciple.codeEditor.getCursor().line
-    @clearError()
 
-    inventingOnPrinciple.codeEditor.addLineClass ln, 'background', 'errorLineBackground'
-    @errorLineNumber = ln
+    e.reason ?= e.message
+    msg = $(inventingOnPrinciple.getTemplate('hint')(e)).get(0)
 
-    @$('#codeContainer .errorContainer')
-      .html(inventingOnPrinciple.getTemplate('lineinfo')(msg: e.message))
-      .css('top', (ln + 0.5) + 'em')
-    this
+    @addWidget(ln, msg)
 
   scrollVars: (scrollInfo) ->
     @$('#decsContainer').scrollTop scrollInfo.y

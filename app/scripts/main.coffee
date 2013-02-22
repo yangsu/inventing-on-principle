@@ -43,7 +43,6 @@ $ ->
       inventingOnPrinciple.view.trackCursor editor
     )
     inventingOnPrinciple.codeEditor.on('change', (editor, changeInfo) ->
-      inventingOnPrinciple.view.clearError()
       inventingOnPrinciple.view.parse editor, changeInfo
     )
 
