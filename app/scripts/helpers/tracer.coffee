@@ -4,6 +4,7 @@ tracer =
   active: false
   funcDict: {}
   varDict: {}
+  varLocDict: {}
   statementList: []
 
   # ############################################################################
@@ -25,13 +26,14 @@ tracer =
             lineNumber: if exp.loc? then exp.loc.start.line else null
 
           signature += window.tracer.genTraceFunc params
-          signature += window.tracer.genTraceVar 'arguments', scope
 
           if exp.body? and exp.body.length
             exp = exp.body[0]
           # FunctionDeclaration
           else if exp.body.body? and exp.body.body.length
             exp = exp.body.body[0]
+
+          signature += window.tracer.genTraceVar exp.loc, 'arguments', scope
 
         when Syntax.ForStatement
           signature += window.tracer.genTraceStatement
@@ -44,7 +46,7 @@ tracer =
 
         when Syntax.VariableDeclaration
           for vardec in exp.declarations
-            signature += window.tracer.genTraceVar vardec.id.name, scope
+            signature += window.tracer.genTraceVar exp.loc, vardec.id.name, scope
             insertLocation = 'After'
 
           # Trace variables declared in ForExp.init at the beginning of the ForExp body
@@ -54,15 +56,17 @@ tracer =
 
 
         when Syntax.ForInStatement
+          left = exp.left
+          right = exp.right
           signature += window.tracer.genTraceStatement
             data:
-              left: exp.left.source()
-              right: exp.right.source()
-
-          if exp.left.type is Syntax.Identifier
-            signature += window.tracer.genTraceVar exp.left.name, scope
+              left: left.source()
+              right: right.source()
 
           exp = exp.body.body[0]
+
+          if left.type is Syntax.Identifier
+            signature += window.tracer.genTraceVar exp.loc, left.name, scope
 
         when Syntax.ExpressionStatement
           expression = exp.expression
@@ -79,9 +83,9 @@ tracer =
 
               switch expression.left.type
                 when Syntax.Identifier
-                  signature += window.tracer.genTraceVar expression.left.name, scope
+                  signature += window.tracer.genTraceVar exp.loc, expression.left.name, scope
                 when Syntax.MemberExpression
-                  signature += window.tracer.genTraceVar expression.left.object.name, scope
+                  signature += window.tracer.genTraceVar exp.loc, expression.left.object.name, scope
 
           signature += window.tracer.genTraceStatement
             data: data
@@ -90,7 +94,7 @@ tracer =
         when Syntax.ReturnStatement
           signature += window.tracer.genTraceStatement
             scope: scope
-          signature += window.tracer.genTraceVar 'return', scope, exp.argument.source()
+          signature += window.tracer.genTraceVar exp.loc, 'return', scope, exp.argument.source()
 
       exp['insert' + insertLocation] signature
 
@@ -98,9 +102,9 @@ tracer =
     paramsStr = JSON.stringify(params)
     "window.tracer.traceFunc(#{paramsStr});"
 
-  genTraceVar: (varname, scope, value = varname) ->
+  genTraceVar: (loc, varname, scope, value = varname) ->
     scopedVarname = util.scopeName varname, scope
-    "window.tracer.traceVar('#{scopedVarname}', #{value});"
+    "window.tracer.traceVar(#{JSON.stringify(loc)}, '#{scopedVarname}', #{value});"
 
   genTraceStatement: (params) ->
     scope = params.scope
@@ -111,11 +115,14 @@ tracer =
   # Tracers
   # ############################################################################
 
-  traceVar: (name, value) ->
+  traceVar: (loc, name, value) ->
+
     unless util.objGet(tracer.varDict, name)?
       util.objSet(tracer.varDict, name, [])
 
     util.objGet(tracer.varDict, name).push _.clone value
+
+    tracer.varLocDict[name] = loc
 
   traceStatement: (params) ->
     tracer.statementList.push params
@@ -144,8 +151,12 @@ tracer =
     list
 
   getVars : ->
-    vars = _.clone(tracer.varDict)
-    tracer.varDict = {}
-    vars
+    vars = _.clone(@varDict)
+    @varDict = {}
+    varLocs = _.clone(@varLocDict)
+    @varLocDict = {}
+
+    vars: vars,
+    varLocs: varLocs
 
 GLOBAL.tracer = tracer;
