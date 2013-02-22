@@ -1,5 +1,6 @@
 @import 'base'
 @import 'tabs'
+@import "compass/css3/box-shadow"
 
 body
   background-color: #ffffff
@@ -83,11 +84,10 @@ body
     overflow: auto
 
 .var-hint
-  font-family: arial
-  font-size: 70%
-  background: #aCf
-  color: #a00
-  padding: 2px 5px 3px
+  @include single-box-shadow(rgba(0, 0, 0, 0.5), 0, 2px, 6px, -3px, true)
+  padding: 5px 0
+  margin: 5px 0
+  border-bottom: 1px solid #EEE
 
 .lint-error
   font-family: arial
