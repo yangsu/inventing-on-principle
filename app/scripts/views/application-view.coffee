@@ -41,17 +41,9 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
   events:
     'change input[type=checkbox]': 'parse'
     'click .tab_link': 'switchTab'
-    'click #run': 'runCode'
 
   clearConsole: ->
     $('#console').html ''
-
-  runCode: ->
-    @clearConsole()
-    try
-      eval(inventingOnPrinciple.model.text())
-    catch e
-      console.log 'run time error', e
 
   switchTab: (e) ->
     @$('li').removeClass 'active'
