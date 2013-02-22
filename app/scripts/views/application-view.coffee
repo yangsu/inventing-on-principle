@@ -39,8 +39,15 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     @model.on('error', @renderError, this)
 
   events:
-    'change input[type=checkbox]': 'parse'
+    'change #showvars': 'toggleVars'
+    # 'change input[type=checkbox]': 'parse'
     'click .tab_link': 'switchTab'
+
+  toggleVars: (e) ->
+    checked = !!$(e.target).attr('checked')
+    op = if checked then 'slideDown' else 'slideUp'
+
+    @$('.var-hint')[op]('fast')
 
   clearConsole: ->
     $('#console').html ''
