@@ -181,14 +181,19 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     varLocs = list.varLocs
 
     for own k, v of varLocs
-      vals = util.objGet(vars, k)
+      vals = util.formatVal util.objGet(vars, k), util.unscopeName k
       ln = v.end.line - 1
-      ctx =
-        name: util.unscopeName k
-        values: vals
-      varTraceElement = $(inventingOnPrinciple.getTemplate('varHint')(ctx)).get(0)
+
+      varTraceElement = $(inventingOnPrinciple.getTemplate('varHint')(vals: vals)).get(0)
 
       @addWidget(ln, varTraceElement)
+
+      CodeMirror.runMode(
+        vals,
+          name: "javascript"
+          # json: true
+        , varTraceElement
+      );
 
     CodeMirror.runMode(
       util.formatVarJSON(vars),
