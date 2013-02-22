@@ -181,7 +181,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     varLocs = list.varLocs
 
     for own k, v of varLocs
-      vals = JSON.stringify util.objGet(vars, k)
+      vals = util.objGet(vars, k)
       ln = v.end.line - 1
       ctx =
         name: util.unscopeName k

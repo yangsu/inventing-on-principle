@@ -159,9 +159,8 @@ util.objSet = (obj, path, value) ->
     obj = obj[segment]
   obj[segments[0]] = value
 
-util.formatVarJSON = (obj, depth = 0) ->
-  indent = ('  ' for i in [0..depth]).join ''
-  content = _.map obj, (values, name) ->
+util.formatValWithIndent = (indent, depth) ->
+  (values, name) ->
     line = indent + '  '
     if _.isArray values
       if util.allSame values
@@ -173,6 +172,12 @@ util.formatVarJSON = (obj, depth = 0) ->
     else
       line += name + ':\t' + util.formatVarJSON(values, depth + 1)
     line
+
+util.formatVal = util.formatValWithIndent('', 0)
+
+util.formatVarJSON = (obj, depth = 0) ->
+  indent = ('  ' for i in [0..depth]).join ''
+  content = _.map obj, util.formatValWithIndent(indent, depth)
 
   '{\n' + content.join(',\n') + "\n#{indent}}"
 
