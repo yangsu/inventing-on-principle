@@ -37,12 +37,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
       for err in JSHINT.errors
         continue unless err?
 
-        msg = document.createElement 'div'
-        icon = msg.appendChild document.createElement 'span'
-        icon.innerHTML = '!!'
-        icon.className = 'lint-error-icon'
-        msg.appendChild document.createTextNode err.reason
-        msg.className = 'lint-error'
+        msg = $(inventingOnPrinciple.getTemplate('hint')(err)).get(0)
 
         @widgets.push editor.addLineWidget(err.line - 1, msg,
           coverGutter: false
