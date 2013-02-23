@@ -48,11 +48,17 @@ window.onload = function() {
   var waiting;
 
   try {
+    CodeMirror.commands.autocomplete = function(cm) {
+      CodeMirror.showHint(cm, CodeMirror.processingHint);
+    };
+
     editor = CodeMirror(document.getElementById('code'), {
       lineNumbers: true,
       mode: 'javascript',
-      value: content
+      value: content,
+      extraKeys: {'Ctrl-Space': 'autocomplete'}
     });
+
     editor.on('change', function(editor, changeInfo) {
       clearTimeout(waiting);
       waiting = setTimeout(runProcessing, throttle);
