@@ -23,6 +23,43 @@
     var cur = editor.getCursor(),
         token = getToken(editor, cur),
         tprop = token;
+    // If it's not a 'word-style' token, ignore the token.
+    if (!/^[\w$_]*$/.test(token.string)) {
+      token = tprop = {
+        start: cur.ch,
+        end: cur.ch,
+        string: '',
+        state: token.state,
+        type: token.string == '.' ? 'property' : null
+      };
+    }
+    // If it is a property, find out what it is a property of.
+    while (tprop.type == 'property') {
+      tprop = getToken(editor, Pos(cur.line, tprop.start));
+      if (tprop.string != '.') return;
+      tprop = getToken(editor, Pos(cur.line, tprop.start));
+      if (tprop.string == ')') {
+        var level = 1;
+        do {
+          tprop = getToken(editor, Pos(cur.line, tprop.start));
+          switch (tprop.string) {
+            case ')':
+              level++;
+              break;
+            case '(':
+              level--;
+              break;
+            default:
+              break;
+          }
+        } while (level > 0);
+        tprop = getToken(editor, Pos(cur.line, tprop.start));
+        if (tprop.type.indexOf('variable') === 0) tprop.type = 'function';
+        else return; // no clue
+      }
+      if (!context) var context = [];
+      context.push(tprop);
+    }
     return {
       list: getCompletions(token, context, keywords, options),
       from: Pos(cur.line, token.start),
