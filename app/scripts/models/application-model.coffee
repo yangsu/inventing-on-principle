@@ -32,15 +32,6 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
         continue unless err?
         @trigger 'error', err
 
-    info = editor.getScrollInfo()
-    after = editor.charCoords(
-      line: editor.getCursor().line + 1
-      ch: 0
-    , 'local').top
-
-    if info.top + info.clientHeight < after
-      editor.scrollTo null, after - info.clientHeight + 3
-
   parse: (text, editor) ->
     # if (text == this.ast.toSource()) return
 

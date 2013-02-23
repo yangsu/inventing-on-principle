@@ -201,6 +201,15 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
       , document.getElementById('varsPre')
     );
 
+    info = inventingOnPrinciple.codeEditor.getScrollInfo()
+    after = inventingOnPrinciple.codeEditor.charCoords(
+      line: inventingOnPrinciple.codeEditor.getCursor().line + 1
+      ch: 0
+    , 'local').top
+
+    if info.top + info.clientHeight < after
+      inventingOnPrinciple.codeEditor.scrollTo null, after - info.clientHeight + 3
+
   renderError: (e) ->
 
     # Either the lineNumber is contained in the error object
