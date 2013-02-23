@@ -1,7 +1,30 @@
+var editor;
 var p = null;
 var throttle = 100;
 
 var canvas = document.getElementById('canvas');
+
+var widgets = [];
+
+var clearWidgets = function() {
+  for (var i = 0; i < widgets.length; ++i)
+    editor.removeLineWidget(widgets[i]);
+  widgets = [];
+};
+
+var updateHints = function(e) {
+  e && editor && editor.operation(function() {
+    clearWidgets();
+    var msg = document.createElement('div');
+    var icon = msg.appendChild(document.createElement('span'));
+    icon.innerHTML = '!';
+    icon.className = 'lint-error-icon';
+    msg.appendChild(document.createTextNode(e.message));
+    msg.className = 'lint-error';
+
+    widgets.push(editor.addLineWidget(editor.getCursor().line, msg, {coverGutter: false, noHScroll: true}));
+  });
+};
 
 var runProcessing = function() {
   if (p) {
@@ -9,8 +32,12 @@ var runProcessing = function() {
     delete p;
   }
   var setup = 'void setup(){ size(500, 500); }\n';
-  p = new Processing(canvas, setup + window.editor.getValue());
-
+  try {
+    p = new Processing(canvas, setup + window.editor.getValue());
+  } catch (e) {
+    console.log(e);
+    updateHints(e);
+  }
 };
 
 window.onload = function() {
@@ -20,17 +47,17 @@ window.onload = function() {
   var waiting;
 
   try {
-    window.editor = CodeMirror(document.getElementById('code'), {
+    editor = CodeMirror(document.getElementById('code'), {
       lineNumbers: true,
       mode: 'javascript',
       value: content
     });
-    window.editor.on('change', function(editor, changeInfo) {
+    editor.on('change', function(editor, changeInfo) {
       clearTimeout(waiting);
       waiting = setTimeout(runProcessing, throttle);
+      clearWidgets();
     });
   } catch (e) {
-    console.log(e);
     console.log('CodeMirror failed to initialize');
   }
 
