@@ -1,0 +1,8 @@
+#code {
+  width: 500px;
+  float: left;
+}
+
+#canvas {
+  display: inline-block;
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <title>Processing.JS Web IDE</title>
+        <meta name="description" content=""/>
+        <meta name="viewport" content="width=device-width"/>
+        <link rel="stylesheet" href="scripts/vendor/codemirror/lib/codemirror.css"/>
+        <link rel="stylesheet" href="styles/style.css"/>
+    </head>
+    <body>
+        <h1>Processing.JS Web IDE</h1>
+
+        <p><a href="http://processingjs.org/reference/">Processing.js Documentation</a></p>
+
+        <script type="text/processing" id="script">
+void draw () {
+  background(200);
+  ellipse(100, 100, 100, 100);
+}
+        </script>
+
+        <div id="code"></div>
+
+        <canvas id="canvas" width="500" height="500"></canvas>
+
+        <script src="scripts/vendor/processing.min.js"></script>
+        <script src="scripts/vendor/codemirror/lib/codemirror.js"></script>
+        <script src="scripts/vendor/codemirror/mode/javascript/javascript.js"></script>
+        <script src="scripts/main.js"></script>
+    </body>
+</html>
