@@ -43,6 +43,7 @@ var runProcessing = function() {
 window.onload = function() {
   var sc = document.getElementById('script');
   var content = sc.textContent || sc.innerText || sc.innerHTML;
+  content = content.replace(/^\s+|\s+$/g, '');
 
   var waiting;
 
