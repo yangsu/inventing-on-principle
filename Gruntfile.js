@@ -19,7 +19,7 @@ module.exports = function( grunt ) {
     coffee: {
       compile: {
         files: {
-          'temp/scripts/*.js': 'app/scripts/**/*.coffee'
+          'temp/scripts/*.js': ['app/scripts/**/*.coffee', , '!app/scripts/vendor/*']
         },
         options: {
           basePath: 'app/scripts'
@@ -54,7 +54,7 @@ module.exports = function( grunt ) {
     // default watch configuration
     watch: {
       coffee: {
-        files: 'app/scripts/**/*.coffee',
+        files: ['app/scripts/**/*.coffee', '!app/scripts/vendor/*'],
         tasks: 'coffee reload'
       },
       compass: {
@@ -80,7 +80,8 @@ module.exports = function( grunt ) {
       files: [
         'Gruntfile.js',
         'app/scripts/**/*.js',
-        'spec/**/*.js'
+        'spec/**/*.js',
+        '!app/scripts/vendor/*'
       ]
     },
 
