@@ -46,7 +46,7 @@ $ ->
       inventingOnPrinciple.view.parse editor, changeInfo
     )
 
-    $.get '/scripts/source.js', (source) ->
+    $.get '/scripts/source1.js', (source) ->
       inventingOnPrinciple.codeEditor.setValue source
 
     inventingOnPrinciple.outputcode = CodeMirror.fromTextArea(document.getElementById('outputcode'),

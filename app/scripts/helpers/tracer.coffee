@@ -14,6 +14,7 @@ tracer =
   genTraces: (trackList, scopes) ->
     for exp in trackList
       scope = util.scopeLookup exp, scopes
+      loc = exp.loc
       signature = ''
       insertLocation = 'Before'
 
@@ -22,11 +23,10 @@ tracer =
           params =
             name: exp.name
             range: exp.range
-            loc: exp.loc
-            lineNumber: if exp.loc? then exp.loc.start.line else null
+            loc: loc
 
           signature += window.tracer.genTraceFunc params
-          signature += window.tracer.genTraceVar exp.loc, 'arguments', scope
+          signature += window.tracer.genTraceVar loc, 'arguments', scope
 
           # FunctionExpression
           if exp.body? and exp.body.length
@@ -47,7 +47,7 @@ tracer =
 
         when Syntax.VariableDeclaration
           for vardec in exp.declarations
-            signature += window.tracer.genTraceVar exp.loc, vardec.id.name, scope
+            signature += window.tracer.genTraceVar loc, vardec.id.name, scope
             insertLocation = 'After'
 
           # Trace variables declared in ForExp.init at the beginning of the ForExp body
@@ -64,10 +64,10 @@ tracer =
               left: left.source()
               right: right.source()
 
-          exp = exp.body.body[0]
-
           if left.type is Syntax.Identifier
-            signature += window.tracer.genTraceVar exp.loc, left.name, scope
+            signature += window.tracer.genTraceVar loc, left.name, scope
+
+          exp = exp.body.body[0]
 
         when Syntax.ExpressionStatement
           expression = exp.expression
@@ -84,9 +84,9 @@ tracer =
 
               switch expression.left.type
                 when Syntax.Identifier
-                  signature += window.tracer.genTraceVar exp.loc, expression.left.name, scope
+                  signature += window.tracer.genTraceVar loc, expression.left.name, scope
                 when Syntax.MemberExpression
-                  signature += window.tracer.genTraceVar exp.loc, expression.left.object.name, scope
+                  signature += window.tracer.genTraceVar loc, expression.left.object.name, scope
 
           signature += window.tracer.genTraceStatement
             data: data
@@ -95,7 +95,7 @@ tracer =
         when Syntax.ReturnStatement
           signature += window.tracer.genTraceStatement
             scope: scope
-          signature += window.tracer.genTraceVar exp.loc, 'return', scope, exp.argument.source()
+          signature += window.tracer.genTraceVar loc, 'return', scope, exp.argument.source()
 
       exp['insert' + insertLocation] signature
 
