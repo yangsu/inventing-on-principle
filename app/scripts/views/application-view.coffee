@@ -44,7 +44,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     'click .tab_link': 'switchTab'
 
   toggleVars: (e) ->
-    checked = !!$(e.target).attr('checked')
+    checked = $(e.target).prop('checked')
     op = if checked then 'slideDown' else 'slideUp'
 
     @$('.var-hint')[op]('fast')
