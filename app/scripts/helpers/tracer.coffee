@@ -26,14 +26,15 @@ tracer =
             lineNumber: if exp.loc? then exp.loc.start.line else null
 
           signature += window.tracer.genTraceFunc params
+          signature += window.tracer.genTraceVar exp.loc, 'arguments', scope
 
+          # FunctionExpression
           if exp.body? and exp.body.length
             exp = exp.body[0]
           # FunctionDeclaration
           else if exp.body.body? and exp.body.body.length
             exp = exp.body.body[0]
 
-          signature += window.tracer.genTraceVar exp.loc, 'arguments', scope
 
         when Syntax.ForStatement
           signature += window.tracer.genTraceStatement
