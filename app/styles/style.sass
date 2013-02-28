@@ -1,6 +1,7 @@
 @import 'base'
 @import 'tabs'
 @import "compass/css3/box-shadow"
+@import "compass/css3/border-radius"
 
 body
   background-color: #ffffff
@@ -88,21 +89,18 @@ body
 .var-hint
   @include single-box-shadow(rgba(0, 0, 0, 0.5), 0, 2px, 6px, -3px, true)
   padding: 5px 0
-  margin: 2px 0
+  margin: 0
   border-bottom: 1px solid #EEE
   background-color: #f8f8f8
 
-.lint-error
-  font-family: arial
-  font-size: 70%
-  background: #ffa
-  color: #a00
-  padding: 2px 5px 3px
+.highlight-line
+  background-color: rgba(255, 50, 50, 0.5)
 
-.lint-error-icon
-  color: white
-  background-color: red
-  font-weight: bold
-  border-radius: 50%
-  padding: 0 3px
-  margin-right: 7px
+.lint-error
+  margin-bottom: 0
+  @include border-radius(0)
+  p
+    margin: 2px 6px
+  .ui-icon-alert
+    float: left
+    margin-right: 0.3em
