@@ -81,7 +81,7 @@ util.insertHelpers = (node, parent, chunks, depth) ->
   node.depth = depth
   node.parent = parent
   node.source = ->
-    chunks[node.range[0]...node.range[1]].join('')
+    chunks[node.range[0]..node.range[1]].join('')
 
   node.updateSource = (s) ->
     chunks[node.range[0]] = s

@@ -196,19 +196,27 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
   renderStatementTraces: (list) ->
     locs = _.pluck(list, 'loc')
 
+    start = 0
+    end = locs.length
+
     @$slider.slider
       range: 'min',
-      min: 1,
-      max: locs.length,
-      value: 1,
+      min: start,
+      max: end,
+      value: start,
       slide: (event, ui) =>
         @$step.html ui.value
-        loc = locs[ui.value - 1]
+        trace = list[ui.value - start]
+        loc = trace.loc
+        # if not loc?
+        #   debugger
         @highlightLines loc.start.line - 1, loc.end.line - 1
 
+        @clearWidgets()
+        @renderVarsTraces trace
 
-    @$step.html 1
-    @$total.html locs.length
+    @$step.html start
+    @$total.html end
 
     # for i in list
     #   console.log i.type, i.data

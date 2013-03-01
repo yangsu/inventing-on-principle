@@ -25,6 +25,7 @@ tracer =
             range: exp.range
             loc: loc
 
+          # signature += window.tracer.genTraceStatement params
           signature += window.tracer.genTraceFunc params
           signature += window.tracer.genTraceVar loc, 'arguments', scope
 
@@ -47,6 +48,9 @@ tracer =
           exp = exp.body.body[0]
 
         when Syntax.VariableDeclaration
+          signature += window.tracer.genTraceStatement
+            loc: loc
+
           for vardec in exp.declarations
             signature += window.tracer.genTraceVar loc, vardec.id.name, scope
             insertLocation = 'After'
@@ -55,7 +59,6 @@ tracer =
           if exp.parent? and exp.parent.type in [Syntax.ForStatement, Syntax.ForInStatement]
             exp = exp.parent.body.body[0]
             insertLocation = 'Before'
-
 
         when Syntax.ForInStatement
           left = exp.left
@@ -132,7 +135,9 @@ tracer =
     tracer.varLocDict[nameWithLoc] = name;
 
   traceStatement: (params) ->
-    tracer.statementList.push params
+    tracer.statementList.push _.extend params,
+      vars : _.cloneDeep @varDict
+      varLocs : _.cloneDeep @varLocDict
 
   traceFunc: (params) ->
     return unless tracer.active
@@ -156,9 +161,6 @@ tracer =
     list = _.clone(tracer.statementList)
     tracer.statementList = []
     list
-
-  getStatementLocList : ->
-    _.pluck(tracer.statementList, 'loc')
 
   getVars : ->
     vars = _.clone(@varDict)
