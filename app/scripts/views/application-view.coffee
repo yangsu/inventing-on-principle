@@ -41,7 +41,6 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
   events:
     'change #showvars': 'toggleVars'
     # 'change input[type=checkbox]': 'parse'
-    'click .tab_link': 'switchTab'
 
   toggleVars: (e) ->
     checked = $(e.target).prop('checked')
@@ -51,11 +50,6 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
 
   clearConsole: ->
     $('#console').html ''
-
-  switchTab: (e) ->
-    @$('li').removeClass 'active'
-    $(e.currentTarget).parents('li').addClass 'active'
-    @render()
 
   markers: []
   clearMarkers: ->
@@ -99,16 +93,16 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     @model.parse text, editor
 
   renderUrl: ->
-    @$url.val location.protocol + '//' + location.host + location.pathname + '?code=' + encodeURIComponent(@model.text())  if @$urlTab.hasClass('active')
+    @$url.val "#{location.protocol}//#{location.host}#{location.pathname}?code=#{encodeURIComponent(@model.text())}"
 
   renderTokens: ->
-    @$tokens.html @model.tokens()  if @$tokensTab.hasClass('active')
+    @$tokens.html @model.tokens()
 
   renderSyntax: ->
-    @$syntax.html @model.ast()  if @$syntaxTab.hasClass('active')
+    @$syntax.html @model.text()
 
   renderGeneratedCode: ->
-    inventingOnPrinciple.outputcode.setValue @model.generatedCode()  if @$codeTab.hasClass('active')
+    inventingOnPrinciple.outputcode.setValue @model.generatedCode()
 
   renderDeclarations: ->
     @$vars.empty()
