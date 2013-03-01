@@ -32,6 +32,8 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
 
     @highlightedLines = []
 
+    @showHints = true
+
     @model.ast
       .on('change:text', @renderUrl, this)
       .on('change:tokens', @renderTokens, this)
@@ -51,9 +53,18 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
 
   toggleVars: (e) ->
     checked = $(e.target).prop('checked')
-    op = if checked then 'slideDown' else 'slideUp'
 
-    @$('.var-hint')[op]('fast')
+    $varhint = @$('.var-hint')
+    if checked
+      $varhint.slideDown('fast', ->
+        $(this).removeClass('hidden')
+      )
+    else
+      $varhint.slideUp('fast', ->
+        $(this).addClass('hidden')
+      )
+
+    @showHints = checked
 
   clearConsole: ->
     $('#console').html ''
@@ -212,7 +223,10 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
       vals = util.formatVal(util.objGet(vars, k), util.unscopeName name)
       ln = +(util.unscopeName k)
 
-      varTraceElement = $(inventingOnPrinciple.getTemplate('varHint')(vals: vals)).get(0)
+      varTraceElement = $(inventingOnPrinciple.getTemplate('varHint')(
+        vals: vals
+        show: @showHints
+      )).get(0)
 
       @addWidget(ln, varTraceElement)
 
