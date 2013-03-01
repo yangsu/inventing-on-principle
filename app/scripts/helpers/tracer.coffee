@@ -38,6 +38,7 @@ tracer =
 
         when Syntax.ForStatement
           signature += window.tracer.genTraceStatement
+            loc: loc
             data:
               init: exp.init.source()
               test: exp.test.source()
@@ -60,6 +61,7 @@ tracer =
           left = exp.left
           right = exp.right
           signature += window.tracer.genTraceStatement
+            loc: loc
             data:
               left: left.source()
               right: right.source()
@@ -89,11 +91,13 @@ tracer =
                   signature += window.tracer.genTraceVar loc, expression.left.object.name, scope
 
           signature += window.tracer.genTraceStatement
+            loc: loc
             data: data
             scope: scope
 
         when Syntax.ReturnStatement
           signature += window.tracer.genTraceStatement
+            loc: loc
             scope: scope
           signature += window.tracer.genTraceVar loc, 'return', scope, exp.argument.source()
 
@@ -152,6 +156,9 @@ tracer =
     list = _.clone(tracer.statementList)
     tracer.statementList = []
     list
+
+  getStatementLocList : ->
+    _.pluck(tracer.statementList, 'loc')
 
   getVars : ->
     vars = _.clone(@varDict)

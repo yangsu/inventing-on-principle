@@ -25,6 +25,13 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     @$codeTab = $('#tab_code')
     @$stateTab = $('#tab_state')
 
+    # Slider
+    @$slider = $ '#slider'
+    @$step = $ '#step'
+    @$total = $ '#total'
+
+    @highlightedLines = []
+
     @model.ast
       .on('change:text', @renderUrl, this)
       .on('change:tokens', @renderTokens, this)
@@ -164,8 +171,36 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
 
     this
 
+  highlightLines: (begin, end) ->
+    where = 'background'
+    cssClass = 'highlight-line'
+    range = _.range(begin, end + 1)
+
+    for ln in @highlightedLines
+      inventingOnPrinciple.codeEditor.removeLineClass ln, where, cssClass
+
+    for ln in range
+      inventingOnPrinciple.codeEditor.addLineClass ln, where, cssClass
+
+    @highlightedLines = range
+
   renderStatementTraces: (list) ->
-    # console.log(map)
+    locs = _.pluck(list, 'loc')
+
+    @$slider.slider
+      range: 'min',
+      min: 1,
+      max: locs.length,
+      value: 1,
+      slide: (event, ui) =>
+        @$step.html ui.value
+        loc = locs[ui.value - 1]
+        @highlightLines loc.start.line - 1, loc.end.line - 1
+
+
+    @$step.html 1
+    @$total.html locs.length
+
     # for i in list
     #   console.log i.type, i.data
 
