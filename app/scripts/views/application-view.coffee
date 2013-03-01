@@ -32,7 +32,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
 
     @highlightedLines = []
 
-    @showHints = true
+    @showHints = false
 
     @model.ast
       .on('change:text', @renderUrl, this)
@@ -56,9 +56,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
 
     $varhint = @$('.var-hint')
     if checked
-      $varhint.slideDown('fast', ->
-        $(this).removeClass('hidden')
-      )
+      $varhint.removeClass('hidden').slideDown('fast')
     else
       $varhint.slideUp('fast', ->
         $(this).addClass('hidden')
