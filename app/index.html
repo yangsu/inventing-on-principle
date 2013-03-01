@@ -28,64 +28,68 @@
     </head>
     <body>
         <div id="main" class="container">
-            <div class="left">
-                <div id="codeContainer">
-                    <span class="errorContainer"></span>
-                    <textarea id="code" autofocus="autofocus" cols="70" spellcheck="false"></textarea>
-                </div>
+            <div class="row">
+                <div class="span6">
+                    <div id="codeContainer">
+                        <span class="errorContainer"></span>
+                        <textarea id="code" autofocus="autofocus" cols="70" spellcheck="false"></textarea>
+                    </div>
 
-                <div id="consoleContainer">
-                    <h3>Console</h3>
-                    <pre id="console"></pre>
-                </div>
-            </div>
+                    <div>
+                        <p>
+                            <label for="step">Step: </label>
+                            <span id="step">0</span>/<span id="total">0</span>
+                        </p>
+                        <div id="slider"></div>
+                    </div>
 
-            <div class="right">
-                <div id="decsContainer">
-                    <div id="vars" class="CodeMirror CodeMirror-scroll cm-s-default" ></div>
+                    <div id="consoleContainer">
+                        <h3>Console</h3>
+                        <pre id="console"></pre>
+                    </div>
                 </div>
-
-                <div id="stateContainer">
-                    <textarea id="state" cols="70" spellcheck="false"></textarea>
-                </div>
-                <div id="varsContainer">
-                    <pre id="varsPre" class="cm-s-default"></pre>
-                </div>
-                <div id="options">
-                    <h3>Options</h3>
-                    <span data-container="max">
-                        max:
-                        <span data-var="max" class="TKAdjustableNumber" data-min="0" data-max="5000"></span>
-                    </span>
-                    <label>Show Vars Inline: <input type="checkbox" id="showvars" checked /></label>
-                </div>
-            </div>
-
-            <div class="tabs right" style="display: none;">
-                <ul>
-                    <li id="tab_syntax">
-                        <h3><a id="show_syntax" class="tab_link">Syntax</a></h3>
-                        <div class="tab">
+                <div class="span6">
+                    <div id="tabs" class="tabs-bottom">
+                        <ul>
+                            <li><a href="#decsContainer">Declarations</a></li>
+                            <li><a href="#stateContainer">State</a></li>
+                            <li><a href="#varsContainer">Variables</a></li>
+                            <li><a href="#tab_syntax">Syntax</a></li>
+                            <li><a href="#tab_tokens">Tokens</a></li>
+                            <li><a href="#tab_code">Escodegen</a></li>
+                            <li><a href="#tab_url">URL</a></li>
+                        </ul>
+                        <div class="tabs-spacer"></div>
+                        <div id="decsContainer">
+                            <div id="vars" class="CodeMirror CodeMirror-scroll cm-s-default" ></div>
+                        </div>
+                        <div id="stateContainer">
+                            <textarea id="state" cols="70" spellcheck="false"></textarea>
+                        </div>
+                        <div id="varsContainer">
+                            <pre id="varsPre" class="cm-s-default"></pre>
+                        </div>
+                        <div id="tab_syntax">
                             <pre id="syntax" class="pretext"></pre>
                         </div>
-                    </li>
-                    <li id="tab_tokens">
-                        <h3><a id="show_tokens" class="tab_link">Tokens</a></h3>
-                        <div class="tab">
+                        <div id="tab_tokens">
                             <pre id="tokens" class="pretext"></pre>
                         </div>
-                    </li>
-                    <li id="tab_code">
-                        <h3><a id="show_code" class="tab_link">Escodegen</a></h3>
-                        <div class="tab">
+                        <div id="tab_code">
                             <textarea id="outputcode" rows="40" readonly></textarea>
                         </div>
-                    </li>
-                    <li id="tab_url">
-                        <h3><a id="show_url" class="tab_link">URL</a></h3>
-                        <div class="tab"><input id="url" type="text" readonly onclick="this.select()"></div>
-                    </li>
-                </ul>
+                        <div id="tab_url"><input id="url" type="text" readonly onclick="this.select()"></div>
+                    </div>
+
+                    <div id="options">
+                        <h3>Options</h3>
+                        <span data-container="max">
+                            max:
+                            <span data-var="max" class="TKAdjustableNumber" data-min="0" data-max="5000"></span>
+                        </span>
+                        <label>Show Vars Inline: <input type="checkbox" id="showvars" checked /></label>
+                    </div>
+                </div>
             </div>
         </div>
 

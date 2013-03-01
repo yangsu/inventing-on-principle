@@ -1,5 +1,4 @@
 @import 'base'
-@import 'tabs'
 @import "compass/css3/box-shadow"
 @import "compass/css3/border-radius"
 
@@ -7,25 +6,6 @@ body
   background-color: #ffffff
   min-width: $width
   font: 13px "Helvetica Neue", Helvetica, Arial, sans-serif
-
-.container
-  margin: 0 auto
-  width: $width
-
-.left, .right
-  width: 49.8%
-  position: relative
-
-.left
-  float: left
-
-.right
-  float: right
-
-.CodeMirror
-  padding: 0
-  border: 1px solid #ccc
-  height: $editorHeight
 
 #console
   height: 100px
@@ -37,6 +17,7 @@ body
   height: $editorHeight
   // overflow: scroll
   margin: 0
+  padding: 0
 
 #vars
   min-height: 27em
@@ -60,6 +41,9 @@ body
   width: 100%
 
 .CodeMirror
+  padding: 0
+  border: 1px solid #ccc
+  height: $editorHeight
   .errorLine
     // color: white;
   .errorLineBackground
@@ -104,3 +88,21 @@ body
   .ui-icon-alert
     float: left
     margin-right: 0.3em
+
+#tabs .tabs-spacer
+  float: left
+  height: 200px
+
+.tabs-bottom .ui-tabs-nav
+  padding: 0
+  li
+    top: auto
+    bottom: 0
+    margin: 0 .2em 1px 0
+    border-bottom: auto
+    border-top: 0
+    a
+      padding: 0 5px
+    &.ui-tabs-active
+      margin-top: -1px
+      padding-top: 1px
