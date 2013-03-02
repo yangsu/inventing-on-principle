@@ -31,6 +31,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
     .on 'endChange', =>
       @trigger 'reparse'
 
+    @on 'change:ast', @onASTChange, this
 
   setSource: (text, options) ->
     return unless typeof text is 'string'
@@ -50,11 +51,6 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
       _.extend options, silent: true
 
     @posttraverse util.insertHelpers
-
-    @trigger 'change:ast'
-    @trigger 'change:chunks'
-    @trigger 'change:tokens'
-
     this
 
   traverse: (prefunc, postfunc, ast) ->
