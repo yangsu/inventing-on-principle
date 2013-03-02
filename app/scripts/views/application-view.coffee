@@ -197,7 +197,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     locs = _.pluck(list, 'loc')
 
     start = 0
-    end = locs.length
+    end = locs.length - 1
 
     @$slider.slider
       range: 'min',
