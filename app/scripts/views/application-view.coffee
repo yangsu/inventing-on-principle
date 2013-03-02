@@ -34,7 +34,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
 
     @showHints = false
 
-    @model.ast
+    @model
       .on('change:text', @renderUrl, this)
       .on('change:tokens', @renderTokens, this)
       .on('change:ast', @renderSyntax, this)
@@ -49,7 +49,6 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
 
   events:
     'change #showvars': 'toggleVars'
-    # 'change input[type=checkbox]': 'parse'
 
   toggleVars: (e) ->
     checked = $(e.target).prop('checked')
@@ -115,7 +114,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     @$tokens.html @model.tokens()
 
   renderSyntax: ->
-    @$syntax.html @model.text()
+    @$syntax.html @model.astString()
 
   renderGeneratedCode: ->
     inventingOnPrinciple.outputcode.setValue @model.generatedCode()
@@ -124,7 +123,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     @$vars.empty()
     lines = []
     linenumber = undefined
-    @model.ast.get('vars').each (varDec, i) ->
+    @model.get('vars').each (varDec, i) ->
       linenumber = varDec.get('loc').start.line - 1
       view = new inventingOnPrinciple.Views.VariableView(model: varDec)
       if lines[linenumber]?
@@ -132,7 +131,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
       else
         lines[linenumber] = [view]
 
-    @model.ast.get('funs').each (funDec, i) ->
+    @model.get('funs').each (funDec, i) ->
       linenumber = funDec.get('loc').start.line - 1
       view = new inventingOnPrinciple.Views.FunctionView(model: funDec)
       if lines[linenumber]?

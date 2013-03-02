@@ -8,8 +8,13 @@ util = {}
  * as object "{}" and the regular expression would be lost.
 ###
 util.adjustRegexLiteral = (key, value) ->
-  value.toString() if key is 'value' and value instanceof RegExp
+  if key is 'value' and value instanceof RegExp
+    value.toString()
+  else
+    value
 
+util.printJSON = (json) ->
+  JSON.stringify json, util.adjustRegexLiteral, 4
 
 ###*
  * Convert codeMirror location object to 0 based index for lines
