@@ -1,0 +1,8 @@
+<ul class="unstyled">
+    <% _.each(tokens, function (token) { %>
+      <li>
+        <span class="cm-keyword"><%= token.type %></span>
+        <span class="cm-number"><%= token.value %></span>
+      </li>
+    <% }); %>
+</ul>

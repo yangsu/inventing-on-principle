@@ -239,7 +239,7 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
       @trigger 'error', e
 
   tokens: ->
-    util.printJSON @get 'tokens'
+    @get 'tokens'
 
   generatedCode: ->
     @get 'generatedCode'
