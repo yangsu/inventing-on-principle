@@ -98,7 +98,8 @@ util.insertHelpers = (node, parent, chunks, depth) ->
     s
 
   node.insertAfter = (s) ->
-    chunks[node.range[1]] = chunks[node.range[1]] + '\n' + s
+    endIndex = node.range[1] - 1
+    chunks[endIndex] = chunks[endIndex] + '\n' + s
     s
 
   node
