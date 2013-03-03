@@ -1,8 +1,9 @@
 <ul class="unstyled">
+    <% var map = { Numeric: 'cm-number', Identifier: 'cm-def', Keyword: 'cm-keyword'}; %>
     <% _.each(tokens, function (token) { %>
       <li>
         <span class="cm-keyword"><%= token.type %></span>
-        <span class="cm-number"><%= token.value %></span>
+        <span class="<%= map[token.type] || '' %>"><%= token.value %></span>
       </li>
     <% }); %>
 </ul>
