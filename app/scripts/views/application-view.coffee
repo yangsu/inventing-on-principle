@@ -227,7 +227,8 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     varLocs = list.varLocs
 
     for own k, name of varLocs
-      vals = util.formatVal(util.objGet(vars, k), util.unscopeName name)
+      values = util.objGet(vars, k)
+      vals = util.formatVal(values, util.unscopeName name)
       ln = +(util.unscopeName k)
 
       varTraceElement = $(inventingOnPrinciple.getTemplate('varHint')(
@@ -235,7 +236,15 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
         show: @showHints
       )).get(0)
 
-      @addWidget(ln, varTraceElement)
+      isArray = _.all(values, (val) -> _.isArray val)
+      if isArray
+        el = $(inventingOnPrinciple.getTemplate('arrayVis')(
+          values: values
+          show: @showHints
+        )).get(0)
+        @addWidget(ln, el)
+      else
+        @addWidget(ln, varTraceElement)
 
       CodeMirror.runMode(
         vals,
@@ -247,7 +256,8 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     CodeMirror.runMode(
       util.formatVarJSON(vars),
         name: "javascript",
-        json: true
+        json: true,
+        lineNumbers: true
       , document.getElementById('varsPre')
     );
 
