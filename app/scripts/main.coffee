@@ -22,7 +22,6 @@ GLOBAL.inventingOnPrinciple =
 $ ->
   inventingOnPrinciple.init()
   try
-    window.checkEnv()
     inventingOnPrinciple.codeEditor = CodeMirror.fromTextArea(document.getElementById('code'),
       lineNumbers: true
       matchBrackets: true
