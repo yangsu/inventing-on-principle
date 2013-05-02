@@ -98,18 +98,16 @@
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
 
-        <!-- build:js scripts/scripts.js -->
-        <script src="scripts/vendor/jquery.min.js"></script>
-        <script src="scripts/vendor/bootstrap.min.js"></script>
+        <!-- build:js scripts/vendor.js -->
+        <script src="components/jquery/jquery.min.js"></script>
+        <script src="components/lodash/dist/lodash.min.js"></script>
+        <script src="components/backbone/backbone-min.js"></script>
         <script src="scripts/vendor/jquery-ui-1.10.0.custom.min.js"></script>
-        <script src="scripts/vendor/lodash.min.js"></script>
         <script src="scripts/vendor/platform.js"></script>
         <script src="scripts/vendor/checkenv.js"></script>
         <script src="scripts/vendor/esprima.js"></script>
         <script src="scripts/vendor/escodegen.js"></script>
         <script src="scripts/vendor/json2.js"></script>
-        <script src="scripts/vendor/backbone.js"></script>
-        <!-- <script src="scripts/vendor/backbone-min.js"></script> -->
         <script src="scripts/vendor/codemirror/lib/codemirror.js"></script>
         <script src="scripts/vendor/codemirror/mode/javascript/javascript.js"></script>
         <script src="scripts/vendor/codemirror/addon/runmode/runmode.js"></script>
@@ -120,12 +118,32 @@
         <script src="scripts/vendor/tangle/TangleKit/sprintf.js"></script>
         <script src="scripts/vendor/tangle/TangleKit/BVTouchable.js"></script>
         <script src="scripts/vendor/tangle/TangleKit/TangleKit.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js scripts/plugins.js -->
+        <script src="components/sass-bootstrap/js/bootstrap-affix.js"></script>
+        <script src="components/sass-bootstrap/js/bootstrap-alert.js"></script>
+        <script src="components/sass-bootstrap/js/bootstrap-dropdown.js"></script>
+        <script src="components/sass-bootstrap/js/bootstrap-tooltip.js"></script>
+        <script src="components/sass-bootstrap/js/bootstrap-modal.js"></script>
+        <script src="components/sass-bootstrap/js/bootstrap-transition.js"></script>
+        <script src="components/sass-bootstrap/js/bootstrap-button.js"></script>
+        <script src="components/sass-bootstrap/js/bootstrap-popover.js"></script>
+        <script src="components/sass-bootstrap/js/bootstrap-typeahead.js"></script>
+        <script src="components/sass-bootstrap/js/bootstrap-carousel.js"></script>
+        <script src="components/sass-bootstrap/js/bootstrap-scrollspy.js"></script>
+        <script src="components/sass-bootstrap/js/bootstrap-collapse.js"></script>
+        <script src="components/sass-bootstrap/js/bootstrap-tab.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js scripts/main.js -->
         <script src="scripts/helpers/tangleWrapper.js"></script>
         <script src="scripts/helpers/utils.js"></script>
         <script src="scripts/helpers/syntax.js"></script>
         <script src="scripts/helpers/tracer.js"></script>
         <script src="scripts/helpers/keys.js"></script>
         <script src="scripts/main.js"></script>
+        <script src="scripts/templates.js"></script>
         <script src="scripts/models/Variable-model.js"></script>
         <script src="scripts/collections/Variable-collection.js"></script>
         <script src="scripts/views/Variable-view.js"></script>

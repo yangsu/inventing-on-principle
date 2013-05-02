@@ -20,6 +20,8 @@ npm-debug.log
 # Yeoman
 temp
 dist
-
-# SASS
+*.css
+.tmp
 .sass-cache
+app/components
+app/scripts/templates.js
