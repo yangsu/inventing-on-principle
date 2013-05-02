@@ -10,7 +10,8 @@
     "codemirror": "latest",
     "jquery-ui": "~1.10.2",
     "esprima": "~1.0.2",
-    "escodegen": "~0.0.22"
+    "escodegen": "~0.0.22",
+    "font-awesome": "~3.0.2"
   },
   "devDependencies": {}
 }
