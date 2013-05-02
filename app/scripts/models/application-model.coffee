@@ -122,7 +122,10 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
     window.tracer.active = true
     inventingOnPrinciple.view.clearConsole()
 
-    eval source
+    if source.length
+      eval.call
+        _: _
+      , source
 
     hist = window.tracer.funcHistogram()
     funs = _.filter trackList, (exp) -> exp.type in [Syntax.FunctionExpression, Syntax.FunctionDeclaration]

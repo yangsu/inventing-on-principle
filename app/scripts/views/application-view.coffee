@@ -236,30 +236,36 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
         show: @showHints
       )).get(0)
 
-      isArray = _.all(values, (val) -> _.isArray val)
-      if isArray
+      allArrays = _.all(values, (val) -> _.isArray val)
+      if allArrays
         el = $(inventingOnPrinciple.getTemplate('arrayVis')(
           values: values
           show: @showHints
         )).get(0)
-        @addWidget(ln, el)
+
+        plot = _.map values[values.length-1], (v, i) -> [i, v]
+        if k is 'insertionSort.list.all'
+          console.log (_.map plot, (p) -> "(#{p[0]},#{p[1]})").join(' ')
+          window.updateD3(plot)
+
+        # @addWidget ln, el if not _.isNaN ln
       else
-        @addWidget(ln, varTraceElement)
+        # @addWidget ln, varTraceElement if not _.isNaN ln
 
-      CodeMirror.runMode(
-        vals,
-          name: "javascript"
-          # json: true
-        , varTraceElement
-      );
+      # CodeMirror.runMode(
+      #   vals,
+      #     name: "javascript"
+      #     # json: true
+      #   , varTraceElement
+      # );
 
-    CodeMirror.runMode(
-      util.formatVarJSON(vars),
-        name: "javascript",
-        json: true,
-        lineNumbers: true
-      , document.getElementById('varsPre')
-    );
+    # CodeMirror.runMode(
+    #   util.formatVarJSON(vars),
+    #     name: "javascript",
+    #     json: true,
+    #     lineNumbers: true
+    #   , document.getElementById('varsPre')
+    # );
 
     info = inventingOnPrinciple.codeEditor.getScrollInfo()
     after = inventingOnPrinciple.codeEditor.charCoords(

@@ -1,9 +1,9 @@
 function insertionSort(list) {
   var key, i;
-  for(var j = 1; j < list.length; j++) {
+  for (var j = 1; j < list.length; j++) {
     key = list[j];
     i = j - 1;
-    while((i >= 0) && (list[i] > key)) {
+    while ((i >= 0) && (list[i] > key)) {
       list[i + 1] = list[i];
       i = i - 1;
     }
@@ -12,5 +12,5 @@ function insertionSort(list) {
   return list;
 }
 
-var input = [8, 3, 9, 15, 29, 7, 10];
+var input = _.shuffle(_.range(0, 15));
 insertionSort(input);

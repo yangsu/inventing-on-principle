@@ -126,13 +126,20 @@ tracer =
   traceVar: (loc, name, value) ->
     ln = loc.start.line - 1
     nameWithLoc = "#{name}.#{ln}"
+    nameAllTraces = "#{name}.all"
 
     unless util.objGet(tracer.varDict, nameWithLoc)?
       util.objSet(tracer.varDict, nameWithLoc, [])
 
     util.objGet(tracer.varDict, nameWithLoc).push _.clone value
 
+    unless util.objGet(tracer.varDict, nameAllTraces)?
+      util.objSet(tracer.varDict, nameAllTraces, [])
+
+    util.objGet(tracer.varDict, nameAllTraces).push _.clone value
+
     tracer.varLocDict[nameWithLoc] = name;
+    tracer.varLocDict[nameAllTraces] = name;
 
   traceStatement: (params) ->
     tracer.statementList.push _.extend params,
