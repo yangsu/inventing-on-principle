@@ -35,5 +35,5 @@ function msort(array, begin, end) {
   merge_inplace(array, begin, middle, end);
 }
 
-var input = _.shuffle(_.range(0, 30));
+var input = _.shuffle(_.range(0, 50));
 msort(input, 0, input.length);

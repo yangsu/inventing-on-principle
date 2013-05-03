@@ -71,8 +71,7 @@ $ ->
     inventingOnPrinciple.view.parse()
 
   #Width and height
-  w = 500
-  h = 500
+  w = h = 450
 
   svg = d3.select('#tab_d3')
     .append('svg')
