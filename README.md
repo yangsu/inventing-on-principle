@@ -20,3 +20,9 @@
 * [Codebook](http://danielhooper.tumblr.com/post/19313911658/codebook)
 * [learnjs.info](https://github.com/zdwalter/learnjs)
 * [AlgoView](https://github.com/nicroto/AlgoView)
+
+## Instructions
+
+* Clone this repo
+* Within the repo, run `npm install && bower install`
+* run `grunt server` to run the app
