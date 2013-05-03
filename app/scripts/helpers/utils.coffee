@@ -194,4 +194,13 @@ util.formatVarJSON = (obj, depth = 0) ->
 
   '{\n' + content.join(',\n') + "\n#{indent}}"
 
+util.getParameterByName = (name) ->
+  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')
+  regexS = "[\\?&]#{name}=([^&#]*)"
+  regex = new RegExp(regexS)
+  results = regex.exec(window.location.search)
+  if results?
+    decodeURIComponent results[1].replace(/\+/g, ' ')
+
+
 GLOBAL.util = util

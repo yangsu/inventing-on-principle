@@ -36,7 +36,9 @@ $ ->
       inventingOnPrinciple.view.parse editor, changeInfo
     )
 
-    $.get '/scripts/source4.js', (source) ->
+    filename = util.getParameterByName('f') ? 'source4'
+
+    $.get "/scripts/#{filename}.txt", (source) ->
       inventingOnPrinciple.codeEditor.setValue source
     , 'text'
 
