@@ -10,8 +10,7 @@ util = {}
 util.adjustRegexLiteral = (key, value) ->
   if key is 'value' and _.isRegExp value
     value.toString()
-  else if _.isArray value
-    console.log key
+  else if _.isArray(value) and _.all(value, (v) -> not _.isObject v)
     '[' + value.join(', ') + ']'
   else
     value
