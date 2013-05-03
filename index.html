@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Inventing On Principle</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="stylesheet" href="styles/style.css">
+    </head>
+    <body>
+        <div id="main" class="container">
+            <div class="row">
+                <div class="span6">
+                    <div id="codeContainer">
+                        <textarea id="code" autofocus="autofocus" cols="70" spellcheck="false"></textarea>
+                    </div>
+
+                    <div id="slidercontainer"></div>
+
+                    <div id="consoleContainer">
+                        <h3>Console</h3>
+                        <pre id="console"></pre>
+                    </div>
+                </div>
+                <div class="span6">
+                    <div id="tabs" class="tabbable tabs-below">
+                      <div class="tab-content">
+                        <div class="tab-pane active" id="decsContainer">
+                            <div id="vars" class="CodeMirror cm-s-default"></div>
+                        </div>
+                        <!-- <div class="tab-pane" id="stateContainer">
+                            <textarea id="state" cols="70" spellcheck="false"></textarea>
+                        </div> -->
+                        <div class="tab-pane" id="varsContainer">
+                            <pre id="varsPre" class="CodeMirror cm-s-default"></pre>
+                        </div>
+                        <div class="tab-pane" id="tab_syntax">
+                            <pre id="syntax" class="pretext"></pre>
+                        </div>
+                        <div class="tab-pane" id="tab_tokens">
+                            <div id="tokens" class="CodeMirror cm-s-default"></div>
+                        </div>
+                        <!-- <div class="tab-pane" id="tab_code">
+                            <textarea id="outputcode" rows="40" readonly></textarea>
+                        </div> -->
+                        <!-- <div class="tab-pane" id="tab_url"><input id="url" type="text" readonly onclick="this.select()"></div> -->
+                        <div class="tab-pane" id="tab_d3"></div>
+                      </div>
+                      <ul class="nav nav-tabs">
+                        <li class="active"><a href="#decsContainer" data-toggle="tab">Declarations</a></li>
+                        <!-- <li><a href="#stateContainer" data-toggle="tab">State</a></li> -->
+                        <li><a href="#varsContainer" data-toggle="tab">Variables</a></li>
+                        <li><a href="#tab_syntax" data-toggle="tab">Syntax</a></li>
+                        <li><a href="#tab_tokens" data-toggle="tab">Tokens</a></li>
+                        <!-- <li><a href="#tab_code" data-toggle="tab">Escodegen</a></li> -->
+                        <!-- <li><a href="#tab_url" data-toggle="tab">URL</a></li> -->
+                        <li><a href="#tab_d3" data-toggle="tab">D3</a></li>
+                      </ul>
+                    </div>
+
+                    <div id="options">
+                        <h3>Options</h3>
+                        <span data-container="max">
+                            max:
+                            <span data-var="max" class="TKAdjustableNumber" data-min="0" data-max="5000"></span>
+                        </span>
+                        <label>Show Vars Inline: <input type="checkbox" id="showvars"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <script src="scripts/vendor.js"></script>
+
+        <script src="scripts/plugins.js"></script>
+
+        <script src="scripts/main.js"></script>
+    </body>
+</html>
