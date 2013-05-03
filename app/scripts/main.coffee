@@ -82,7 +82,7 @@ $ ->
     xs = _.pluck(data, '0');
     ys = _.pluck(data, '1');
 
-    radius = w / data.length / 4
+    radius = w / data.length / 2
     margin = radius * 4
 
     xscale = d3.scale.linear().domain([_.min(xs), _.max(xs)]).range([margin, w - margin])
