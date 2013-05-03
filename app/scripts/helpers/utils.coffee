@@ -147,10 +147,6 @@ util.scopeName = (name, scope) ->
 util.unscopeName = (name) ->
   name.split('.').slice(-1)[0]
 
-util.allSame = (list) ->
-  return _.all list, (item) ->
-    item is list[0]
-
 util.objGet = (obj, path) ->
   segments = path.split '.'
   while segments.length and obj?
@@ -165,15 +161,17 @@ util.objSet = (obj, path, value) ->
     obj = obj[segment]
   obj[segments[0]] = value
 
-util.formatValWithIndent = (indent, depth) ->
+allSame = (list) ->
+  return _.all list, (item) -> item is list[0]
+
+formatValWithIndent = (indent, depth) ->
   (values, name) ->
     line = indent + '  '
     if _.isArray values
-      if util.allSame values
+      if allSame values
         line += name + ':\t' + JSON.stringify values[0]
       else
-        vals = _.map values, (value) ->
-          JSON.stringify value
+        vals = _.map values, (value) -> JSON.stringify value
         line += name + ':\t' + vals.join ' | '
     else if _.isObject values
       line += name + ':\t' + util.formatVarJSON(values, depth + 1)
@@ -181,11 +179,11 @@ util.formatValWithIndent = (indent, depth) ->
       line += name + ':\t' + values
     line
 
-util.formatVal = util.formatValWithIndent('', 0)
+util.formatVal = formatValWithIndent('', 0)
 
 util.formatVarJSON = (obj, depth = 0) ->
   indent = ('  ' for i in [0..depth]).join ''
-  content = _.map obj, util.formatValWithIndent(indent, depth)
+  content = _.map obj, formatValWithIndent(indent, depth)
 
   '{\n' + content.join(',\n') + "\n#{indent}}"
 
