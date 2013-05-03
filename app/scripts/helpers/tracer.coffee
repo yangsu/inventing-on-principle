@@ -102,7 +102,8 @@ tracer =
           signature += window.tracer.genTraceStatement
             loc: loc
             scope: scope
-          signature += window.tracer.genTraceVar loc, 'return', scope, exp.argument.source()
+          returnVal = if exp.argument? then exp.argument.source() else 'null'
+          signature += window.tracer.genTraceVar loc, 'return', scope, returnVal
 
       exp['insert' + insertLocation] signature
 
