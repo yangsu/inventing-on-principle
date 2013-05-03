@@ -3,20 +3,24 @@ GLOBAL = exports ? this
 util = {}
 
 ###*
- * Special handling for regular expression literal since we need to
- * convert it to a string literal, otherwise it will be decoded
+ * Special handling for
+ *
+ * RegExp - converts it to a string literal, otherwise it will be decoded
  * as object "{}" and the regular expression would be lost.
+ *
+ * Array - print all values on a single line
+ *
 ###
-util.adjustRegexLiteral = (key, value) ->
+util.adjustLiteral = (key, value) ->
   if key is 'value' and _.isRegExp value
     value.toString()
   else if _.isArray(value) and _.all(value, (v) -> not _.isObject v)
-    '[' + value.join(', ') + ']'
+    '[' + value.join(' ') + ']'
   else
     value
 
 util.printJSON = (json) ->
-  str = JSON.stringify json, util.adjustRegexLiteral, 4
+  str = JSON.stringify json, util.adjustLiteral, 4
   str.replace(/['"]/g, '')
 
 ###*
