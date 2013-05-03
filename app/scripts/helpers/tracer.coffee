@@ -41,7 +41,7 @@ tracer =
           signature += window.tracer.genTraceStatement
             loc: loc
             data:
-              init: exp.init.source()
+              init: exp.init and exp.init.source()
               test: exp.test.source()
               update: exp.update.source()
 
