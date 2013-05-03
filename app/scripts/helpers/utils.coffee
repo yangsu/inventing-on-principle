@@ -175,8 +175,10 @@ util.formatValWithIndent = (indent, depth) ->
         vals = _.map values, (value) ->
           JSON.stringify value
         line += name + ':\t' + vals.join ' | '
-    else
+    else if _.isObject values
       line += name + ':\t' + util.formatVarJSON(values, depth + 1)
+    else
+      line += name + ':\t' + values
     line
 
 util.formatVal = util.formatValWithIndent('', 0)

@@ -125,26 +125,41 @@ tracer =
 
   traceVar: (loc, name, value) ->
     ln = loc.start.line - 1
-    nameWithLoc = "#{name}.#{ln}"
-    nameAllTraces = "#{name}.all"
 
+    nameWithLoc = "#{name}.#{ln}"
     unless util.objGet(tracer.varDict, nameWithLoc)?
       util.objSet(tracer.varDict, nameWithLoc, [])
-
     util.objGet(tracer.varDict, nameWithLoc).push _.clone value
+    tracer.varLocDict[nameWithLoc] = name;
 
+    nameAllTraces = "#{name}.all"
     unless util.objGet(tracer.varDict, nameAllTraces)?
       util.objSet(tracer.varDict, nameAllTraces, [])
-
     util.objGet(tracer.varDict, nameAllTraces).push _.clone value
-
-    tracer.varLocDict[nameWithLoc] = name;
     tracer.varLocDict[nameAllTraces] = name;
+
+  toIndexMap: (obj) ->
+    _.reduce obj, (memo, value, k) =>
+      memo[k] = if _.isArray value then value.length - 1 else @toIndexMap value
+      memo
+    , {}
 
   traceStatement: (params) ->
     tracer.statementList.push _.extend params,
-      vars : _.cloneDeep @varDict
+      vars : @toIndexMap @varDict
       varLocs : _.cloneDeep @varLocDict
+
+  indexMapToVarDict: (map, prefix = '') ->
+    _.reduce map, (memo, value, key) =>
+      k = "#{prefix}#{key}"
+
+      if _.isObject value
+        memo[key] = @indexMapToVarDict value, "#{k}."
+      else
+        memo[key] = util.objGet @varDict, "#{k}.#{value}"
+
+      memo
+    , {}
 
   traceFunc: (params) ->
     return unless tracer.active

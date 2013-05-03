@@ -223,29 +223,28 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     #   console.log i.type, i.data
 
   renderVarsTraces: (list) ->
-    vars = list.vars
+    vars = tracer.indexMapToVarDict(list.vars)
     varLocs = list.varLocs
 
     for own k, name of varLocs
-      values = util.objGet(vars, k)
-      vals = util.formatVal(values, util.unscopeName name)
+      value = util.objGet vars, k
+
+      formattedValues = util.formatVal(value, util.unscopeName name)
       ln = +(util.unscopeName k)
 
       varTraceElement = $(inventingOnPrinciple.getTemplate('varHint')(
-        vals: vals
+        vals: formattedValues
         show: @showHints
       )).get(0)
 
-      allArrays = _.all(values, (val) -> _.isArray val)
-      if allArrays
+      if _.isArray value
         el = $(inventingOnPrinciple.getTemplate('arrayVis')(
-          values: values
+          value: value
           show: @showHints
         )).get(0)
 
-        plot = _.map values[values.length-1], (v, i) -> [i, v]
+        plot = _.map value, (v, i) -> [i, v]
         if k is 'insertionSort.list.all'
-          console.log (_.map plot, (p) -> "(#{p[0]},#{p[1]})").join(' ')
           window.updateD3(plot)
 
         # @addWidget ln, el if not _.isNaN ln
@@ -253,19 +252,19 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
         # @addWidget ln, varTraceElement if not _.isNaN ln
 
       # CodeMirror.runMode(
-      #   vals,
+      #   formattedValues,
       #     name: "javascript"
       #     # json: true
       #   , varTraceElement
       # );
 
-    # CodeMirror.runMode(
-    #   util.formatVarJSON(vars),
-    #     name: "javascript",
-    #     json: true,
-    #     lineNumbers: true
-    #   , document.getElementById('varsPre')
-    # );
+    CodeMirror.runMode(
+      util.formatVarJSON(vars),
+        name: "javascript",
+        json: true,
+        lineNumbers: true
+      , document.getElementById('varsPre')
+    );
 
     info = inventingOnPrinciple.codeEditor.getScrollInfo()
     after = inventingOnPrinciple.codeEditor.charCoords(

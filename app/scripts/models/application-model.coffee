@@ -134,8 +134,8 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
     list = window.tracer.getStatementList()
     @trigger 'tracedStatements', list
 
-    vars = window.tracer.getVars()
-    @trigger 'tracedVars', vars
+    # vars = window.tracer.getVars()
+    # @trigger 'tracedVars', vars
 
     window.tracer.active = false
 

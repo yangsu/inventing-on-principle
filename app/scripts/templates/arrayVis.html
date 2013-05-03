@@ -1,10 +1,7 @@
 <div class="var-hint arrvis <% if (!show) { %> hidden<% } %>">
-    <% values = values.slice(-1); %>
-    <% _.each(values, function (array, key, list) { %>
-        <% var l = array.length; %>
-        <% var max = _.max(array); %>
-        <% _.each(array, function (v, i) { %>
-          <span class="visblock" style="width: <%= 100/(l + 1) %>%; height: <%= v/(max * 1.1) * 100 %>%; "><%= v %></span>
-        <% }); %>
+    <% var l = value.length; %>
+    <% var max = _.max(value); %>
+    <% _.each(value, function (v, i) { %>
+      <span class="visblock" style="width: <%= 100/(l + 1) %>%; height: <%= v/(max * 1.1) * 100 %>%; "><%= v %></span>
     <% }); %>
 </div>
