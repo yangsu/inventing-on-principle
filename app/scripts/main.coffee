@@ -38,6 +38,7 @@ $ ->
 
     $.get '/scripts/source2.js', (source) ->
       inventingOnPrinciple.codeEditor.setValue source
+    , 'text'
 
     # inventingOnPrinciple.outputcode = CodeMirror.fromTextArea(document.getElementById('outputcode'),
     #   mode: 'javascript'
