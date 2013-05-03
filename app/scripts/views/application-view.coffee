@@ -119,7 +119,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     @$syntax.html @model.astString()
 
   renderGeneratedCode: ->
-    inventingOnPrinciple.outputcode.setValue @model.generatedCode()
+    # inventingOnPrinciple.outputcode.setValue @model.generatedCode()
 
   renderDeclarations: ->
     @$vars.empty()
@@ -153,7 +153,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
       else
         @$vars.append @spacer
 
-    inventingOnPrinciple.stateView.setLines(lines)
+    # inventingOnPrinciple.stateView.setLines(lines)
 
   renderFunctionTraces: (histogram, funcs) ->
 
@@ -289,7 +289,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
   scrollVars: (scrollInfo) ->
     @$('#decsContainer').scrollTop scrollInfo.y
 
-    inventingOnPrinciple.stateView.scrollTo(scrollInfo)
+    # inventingOnPrinciple.stateView.scrollTo(scrollInfo)
 
   render: ->
     @renderUrl()

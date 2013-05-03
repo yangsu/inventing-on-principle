@@ -39,11 +39,11 @@ $ ->
     $.get '/scripts/source2.js', (source) ->
       inventingOnPrinciple.codeEditor.setValue source
 
-    inventingOnPrinciple.outputcode = CodeMirror.fromTextArea(document.getElementById('outputcode'),
-      mode: 'javascript'
-      lineNumbers: true
-      readOnly: true
-    )
+    # inventingOnPrinciple.outputcode = CodeMirror.fromTextArea(document.getElementById('outputcode'),
+    #   mode: 'javascript'
+    #   lineNumbers: true
+    #   readOnly: true
+    # )
 
     inventingOnPrinciple.stateView = new inventingOnPrinciple.Views.StateView
       el: '#stateContainer'
