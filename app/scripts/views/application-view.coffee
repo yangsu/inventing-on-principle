@@ -200,14 +200,14 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     start = 0
     end = locs.length - 1
 
-    @$slider.slider
-      range: 'min',
-      min: start,
-      max: end,
-      value: start,
-      slide: (event, ui) =>
-        @$step.html ui.value
-        trace = list[ui.value - start]
+    if end > 0
+      @$slider.slider
+        min: start
+        max: end
+        value: start
+      .on 'slide', (event) =>
+        @$step.html event.value
+        trace = list[event.value - start]
         loc = trace.loc
         # if not loc?
         #   debugger
@@ -238,18 +238,11 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
       )).get(0)
 
       if _.isArray value
-        el = $(inventingOnPrinciple.getTemplate('arrayVis')(
-          value: value
-          show: @showHints
-        )).get(0)
-
         plot = _.map value, (v, i) -> [i, v]
         if k is 'insertionSort.list.all'
-          window.updateD3(plot)
+          window.updateD3 plot
 
-        # @addWidget ln, el if not _.isNaN ln
-      else
-        # @addWidget ln, varTraceElement if not _.isNaN ln
+      # @addWidget ln, varTraceElement if not _.isNaN ln
 
       # CodeMirror.runMode(
       #   formattedValues,
@@ -259,7 +252,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
       # );
 
     CodeMirror.runMode(
-      util.formatVarJSON(vars),
+      util.printJSON(vars),
         name: "javascript",
         json: true,
         lineNumbers: true

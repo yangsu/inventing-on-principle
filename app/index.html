@@ -24,17 +24,11 @@
             <div class="row">
                 <div class="span6">
                     <div id="codeContainer">
-                        <span class="errorContainer"></span>
                         <textarea id="code" autofocus="autofocus" cols="70" spellcheck="false"></textarea>
                     </div>
 
-                    <div>
-                        <p>
-                            <label for="step">Step: </label>
-                            <span id="step">0</span>/<span id="total">0</span>
-                        </p>
-                        <div id="slider"></div>
-                    </div>
+                    <span>Step: <span id="step">0</span>/<span id="total">0</span></span>
+                    <div id="slider" class="span6"></div>
 
                     <div id="consoleContainer">
                         <h3>Console</h3>
@@ -42,38 +36,39 @@
                     </div>
                 </div>
                 <div class="span6">
-                    <div id="tabs" class="tabs-bottom">
-                        <ul>
-                            <li><a href="#decsContainer">Declarations</a></li>
-                            <!-- <li><a href="#stateContainer">State</a></li> -->
-                            <li><a href="#varsContainer">Variables</a></li>
-                            <li><a href="#tab_syntax">Syntax</a></li>
-                            <li><a href="#tab_tokens">Tokens</a></li>
-                            <!-- <li><a href="#tab_code">Escodegen</a></li> -->
-                            <!-- <li><a href="#tab_url">URL</a></li> -->
-                            <li><a href="#tab_d3">D3</a></li>
-                        </ul>
-                        <div class="tabs-spacer"></div>
-                        <div id="decsContainer">
+                    <div id="tabs" class="tabbable tabs-below">
+                      <div class="tab-content">
+                        <div class="tab-pane active" id="decsContainer">
                             <div id="vars" class="CodeMirror cm-s-default" ></div>
                         </div>
-                        <!-- <div id="stateContainer">
+                        <!-- <div class="tab-pane" id="stateContainer">
                             <textarea id="state" cols="70" spellcheck="false"></textarea>
                         </div> -->
-                        <div id="varsContainer">
+                        <div class="tab-pane" id="varsContainer">
                             <pre id="varsPre" class="CodeMirror cm-s-default"></pre>
                         </div>
-                        <div id="tab_syntax">
+                        <div class="tab-pane" id="tab_syntax">
                             <pre id="syntax" class="pretext"></pre>
                         </div>
-                        <div id="tab_tokens">
+                        <div class="tab-pane" id="tab_tokens">
                             <div id="tokens" class="CodeMirror cm-s-default"></div>
                         </div>
-                        <!-- <div id="tab_code">
+                        <!-- <div class="tab-pane" id="tab_code">
                             <textarea id="outputcode" rows="40" readonly></textarea>
                         </div> -->
-                        <!-- <div id="tab_url"><input id="url" type="text" readonly onclick="this.select()"></div> -->
-                        <div id="tab_d3"></div>
+                        <!-- <div class="tab-pane" id="tab_url"><input id="url" type="text" readonly onclick="this.select()"></div> -->
+                        <div class="tab-pane" id="tab_d3"></div>
+                      </div>
+                      <ul class="nav nav-tabs">
+                        <li class="active"><a href="#decsContainer" data-toggle="tab">Declarations</a></li>
+                        <!-- <li><a href="#stateContainer" data-toggle="tab">State</a></li> -->
+                        <li><a href="#varsContainer" data-toggle="tab">Variables</a></li>
+                        <li><a href="#tab_syntax" data-toggle="tab">Syntax</a></li>
+                        <li><a href="#tab_tokens" data-toggle="tab">Tokens</a></li>
+                        <!-- <li><a href="#tab_code" data-toggle="tab">Escodegen</a></li> -->
+                        <!-- <li><a href="#tab_url" data-toggle="tab">URL</a></li> -->
+                        <li><a href="#tab_d3" data-toggle="tab">D3</a></li>
+                      </ul>
                     </div>
 
                     <div id="options">

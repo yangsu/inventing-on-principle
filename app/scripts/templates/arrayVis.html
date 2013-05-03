@@ -1,7 +1,0 @@
-<div class="var-hint arrvis <% if (!show) { %> hidden<% } %>">
-    <% var l = value.length; %>
-    <% var max = _.max(value); %>
-    <% _.each(value, function (v, i) { %>
-      <span class="visblock" style="width: <%= 100/(l + 1) %>%; height: <%= v/(max * 1.1) * 100 %>%; "><%= v %></span>
-    <% }); %>
-</div>

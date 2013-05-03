@@ -12,23 +12,7 @@ body
 
 #console
   height: 100px
-  margin: 0
-  display: block
   border: 1px solid #bbb
-
-#decsContainer
-  height: $editorHeight
-  // overflow: scroll
-  margin: 0
-  padding: 0
-
-#vars
-  min-height: 27em
-  width: 100%
-  .spacer
-    height: 1em
-  span
-    display: inline-block
 
 .lineinfo
   position: absolute
@@ -36,12 +20,6 @@ body
   z-index: 11
   background-color: transparent
   border-color: 1px solid red
-
-.errorContainer
-  position: absolute
-  right: 0
-  line-height: 1em
-  width: 100%
 
 .CodeMirror
   padding: 0
@@ -61,17 +39,6 @@ body
     background-color: rgba(255, 255, 122, 0.4) !important
     border: 1px solid #ffcc99
     margin: -1px
-
-#stateContainer
-  display: none
-
-#varsContainer
-  display: none
-
-  pre
-    min-height: 100px
-    border: 1px solid #AAA
-    overflow: auto
 
 .var-hint
   @include single-box-shadow(rgba(0, 0, 0, 0.5), 0, 2px, 6px, -3px, true)
@@ -93,40 +60,6 @@ body
     float: left
     margin-right: 0.3em
 
-#tokens
-  overflow-y: scroll
-
-#tabs .tabs-spacer
-  float: left
-  height: 200px
-
-pre
-  margin-bottom: 0
-
-.ui-tabs
-  padding: 0
-  .ui-tabs-panel
-    max-height: $editorHeight
-    overflow-y: scroll
-    padding: 0
-
-.tabs-bottom .ui-tabs-nav
-  padding: 0
-  li
-    top: auto
-    bottom: 0
-    margin: 0 .2em 1px 0
-    border-bottom: auto
-    border-top: 0
-    a
-      padding: 0 5px
-    &.ui-tabs-active
-      margin-top: -1px
-      padding-top: 1px
-
-.visblock
-  display: inline-block
-  border: 1px solid black
-  height: 100%
-.arrvis
-  height: 50px
+.tab-pane, .tab-pane pre
+  height: $editorHeight
+  overflow: scroll
