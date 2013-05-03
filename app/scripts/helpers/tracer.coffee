@@ -27,7 +27,7 @@ tracer =
 
           # signature += window.tracer.genTraceStatement params
           signature += window.tracer.genTraceFunc params
-          signature += window.tracer.genTraceVar loc, 'arguments', scope
+          # signature += window.tracer.genTraceVar loc, 'arguments', scope
 
           # FunctionExpression
           if exp.body? and exp.body.length
