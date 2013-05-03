@@ -108,7 +108,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     @model.parse text, editor
 
   renderUrl: ->
-    @$url.val "#{location.protocol}//#{location.host}#{location.pathname}?code=#{encodeURIComponent(@model.text())}"
+    @$url.val '#{location.protocol}//#{location.host}#{location.pathname}?code=#{encodeURIComponent(@model.text())}'
 
   renderTokens: ->
     tokens = _.map @model.tokens(), (token) -> type: token.type, value: token.value
