@@ -7,11 +7,19 @@ tracer =
   varLocDict: {}
   statementList: []
 
+  reset: ->
+    @funcDict = {}
+    @statementList = []
+    @varDict = {}
+    @varLocDict = {}
+
   # ############################################################################
   # Trace Generators
   # ############################################################################
 
   genTraces: (trackList, scopes) ->
+    @reset()
+
     for exp in trackList
       scope = util.scopeLookup exp, scopes
       loc = exp.loc

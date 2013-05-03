@@ -26,10 +26,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     @$stateTab = $('#tab_state')
 
     # Slider
-    @$slider = $ '#slider'
-    @$step = $ '#step'
-    @$total = $ '#total'
-
+    @$slider = $ '#slidercontainer'
     @highlightedLines = []
 
     @showHints = false
@@ -201,12 +198,14 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
     end = locs.length - 1
 
     if end > 0
-      @$slider.slider
+      @$slider.children().remove().end()
+      .append(inventingOnPrinciple.getTemplate('slider')())
+      .find('#slider')
+      .slider
         min: start
         max: end
-        value: start
+        value: end
       .on 'slide', (event) =>
-        @$step.html event.value
         trace = list[event.value - start]
         loc = trace.loc
         # if not loc?
@@ -216,8 +215,7 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
         @clearWidgets()
         @renderVarsTraces trace
 
-    @$step.html start
-    @$total.html end
+      @renderVarsTraces list[end]
 
     # for i in list
     #   console.log i.type, i.data
