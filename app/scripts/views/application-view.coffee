@@ -239,23 +239,24 @@ inventingOnPrinciple.Views.ApplicationView = Backbone.View.extend
 
       if _.isArray value
         plot = _.map value, (v, i) -> [i, v]
-        if k is 'insertionSort.list.all'
+        if k in ['insertionSort.list.all', 'insert.array.all']
           window.updateD3 plot
 
       # @addWidget ln, varTraceElement if not _.isNaN ln
 
       # CodeMirror.runMode(
       #   formattedValues,
-      #     name: "javascript"
+      #     name: 'javascript'
       #     # json: true
       #   , varTraceElement
       # );
 
     CodeMirror.runMode(
       util.printJSON(vars),
-        name: "javascript",
-        json: true,
-        lineNumbers: true
+        name: 'javascript'
+        json: true
+        # lineNumbers: true
+        # lineWrapping: false
       , document.getElementById('varsPre')
     );
 

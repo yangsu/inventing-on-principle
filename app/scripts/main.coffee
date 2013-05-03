@@ -36,7 +36,7 @@ $ ->
       inventingOnPrinciple.view.parse editor, changeInfo
     )
 
-    $.get '/scripts/source2.js', (source) ->
+    $.get '/scripts/source4.js', (source) ->
       inventingOnPrinciple.codeEditor.setValue source
     , 'text'
 
@@ -72,7 +72,7 @@ $ ->
 
   #Width and height
   w = 500
-  h = 200
+  h = 500
 
   svg = d3.select('#tab_d3')
     .append('svg')
@@ -83,10 +83,11 @@ $ ->
     xs = _.pluck(data, '0');
     ys = _.pluck(data, '1');
 
-    radius = w / data.length / 5
+    radius = w / data.length / 4
+    margin = radius * 4
 
-    xscale = d3.scale.linear().domain([_.min(xs), _.max(xs)]).range([radius, w - radius])
-    yscale = d3.scale.linear().domain([_.min(ys), _.max(ys)]).range([radius, h - radius])
+    xscale = d3.scale.linear().domain([_.min(xs), _.max(xs)]).range([margin, w - margin])
+    yscale = d3.scale.linear().domain([_.min(ys), _.max(ys)]).range([margin, h - margin])
 
     window.xf = (d) -> xscale(d[0])
     window.yf = (d) -> yscale(d[1])
@@ -107,7 +108,7 @@ $ ->
   )
 
   window.updateD3 = (data) ->
-    window.initD3(data);
+    window.initD3 data
 
     svg.selectAll('circle')
       .data(data)
@@ -120,7 +121,3 @@ $ ->
       .text((d) -> "(#{d[0]},#{d[1]})")
       .attr('x', xf)
       .attr('y', yf)
-
-
-
-
