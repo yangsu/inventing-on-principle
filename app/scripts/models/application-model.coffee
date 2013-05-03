@@ -216,30 +216,33 @@ inventingOnPrinciple.Models.ApplicationModel = Backbone.Model.extend
     markers
 
   updateHints: (editor) ->
+    hasError = false
     editor.operation =>
       JSHINT editor.getValue()
 
       for err in JSHINT.errors
         continue unless err?
         @trigger 'error', err
+        hasError = true
+    hasError
 
   parse: (text, editor) ->
     # if (text == @source()) return
 
     return if inventingOnPrinciple.updating
 
-    @updateHints editor
+    if not @updateHints editor
 
-    @setSource text
-    @extractDeclarations?()
-    @buildScope?()
-    @instrumentFunctions?()
-    try
-    catch e
-      # console.log e.name + ': ' + e.message
-      # console.log @source()
-      # console.trace e
-      @trigger 'error', e
+      try
+        @setSource text
+        @extractDeclarations?()
+        @buildScope?()
+        @instrumentFunctions?()
+      catch e
+        # console.log e.name + ': ' + e.message
+        # console.log @source()
+        # console.trace e
+        @trigger 'error', e
 
   tokens: ->
     @get 'tokens'
