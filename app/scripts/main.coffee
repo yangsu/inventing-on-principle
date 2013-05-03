@@ -45,8 +45,8 @@ $ ->
     #   readOnly: true
     # )
 
-    inventingOnPrinciple.stateView = new inventingOnPrinciple.Views.StateView
-      el: '#stateContainer'
+    # inventingOnPrinciple.stateView = new inventingOnPrinciple.Views.StateView
+    #   el: '#stateContainer'
 
 
   catch e
